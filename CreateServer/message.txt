@@ -1,0 +1,1 @@
+Đây là text được nhìn thấy sau khi điều route tới /message với phương thức POST
