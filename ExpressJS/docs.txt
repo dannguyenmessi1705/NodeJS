@@ -1,0 +1,11 @@
+- Trong Folder này nói về:
+ + Cách tạo server bằng ExpressJS (draft.js)
+ + Sử dụng middleware (draft.js)
+ + Sử dụng routes (server.js, /Routes)
+ + Thêm 404 page (server.js)
+ + Thêm phân quyền /admin route (server.js) 
+ + Sử dụng views để thêm các trang html (server.js, /views)
+ + Sử dụng module 'path' để tạo đường dẫn tuyệt đối (/Routes)
+ + Sử dụng công cụ hỗ trợ đường dẫn thay cho '../' (/utils/path.js)
+ + Phân phối các tệp tĩnh (CSS trong /public/css, JS trong /public/js) (server.js, /views/*.html),
+ khi phân phối xong ta có thể truy cập tới các file tĩnh đó thông qua url

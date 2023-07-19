@@ -1,0 +1,11 @@
+Để cài thêm package từ bên thứ 3, vào project muốn cài, mở terminal tại thư mục chứa project đó,
+lần đầu khi chưa có file package.json thì phải nhập 'npm init' để khởi tạo project
++ với các package phục vụ cho việc build, deploy thì cài với 'npm install --save <package>', toàn cục thì thêm từ khoá -g
+Một số package npm cần thiết cho việc dev, test:
++ nodemon : cài nodemon để tự động restart server khi có thay đổi code 
+Một số package npm cần thiết cho việc build, deploy:
++ express : cài express để tạo server
++ body-parser : cài body-parser để parse body của request, trả về dạng object
+Các package nằm trong package.json sẽ được cài đặt khi chạy 'npm install' tại thư mục chứa file package.json
+Để chạy server, thay vì gõ 'node server.js' thì ta có thể thêm từ khoá "start": "node server.js" vào trong file package.json
+sau đó chạy 'npm start' để khởi động server, nếu khác từ khoá "start" thì phải chạy 'npm run <từ khoá>'
