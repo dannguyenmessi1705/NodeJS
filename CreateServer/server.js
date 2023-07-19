@@ -19,13 +19,28 @@ const server = http.createServer((req, res) => {
   const method = req.method; // Lấy Phương thức của request
   if (req.url === "/message" && method === "POST") {
     // Nếu route đang trỏ tại /message và có yêu cầu phương thức POST
-    fs.writeFileSync(
-      "message.txt",
-      "Đây là text được nhìn thấy sau khi điều route tới /message với phương thức POST"
-    ); // Ghi dữ liệu vào file message.txt
-    res.statusCode = 302; // Set statusCode là 302, nghĩa là redirect tới 1 route khác
-    res.setHeader("Location", "/"); // Set header là Location và value là /, nghĩa là redirect tới route /
-    return res.end(); // Kết thúc response, tránh việc chạy tiếp các câu lệnh dưới (gây lỗi).
+    const body = []; // Tạo 1 mảng rỗng để lưu dữ liệu
+    // Tạo các hàm lắng nghe sự kiện
+    req.on("data", (chunk) => {
+      // Khi có dữ liệu gửi lên server thì sẽ chạy function này
+      console.log(chunk); // chunk là 1 buffer, nó sẽ chứa dữ liệu gửi lên server
+      // <Buffer 6d 65 73 73 61 67 65 3d 44 61 6e>
+      body.push(chunk); // Thêm chunk vào mảng body
+    });
+    // Dùng return để trả về luôn ngay cả khi không có request nào, để tránh việc nó sẽ tự động chuyển xuống trang dưới, gây ra lỗi
+    return req.on("close", () => {
+      // Khi request kết thúc thì sẽ chạy function này
+      const parseBody = Buffer.concat(body).toString(); // Chuyển mảng body thành 1 string (do body là mảng buffer mà dữ liệu gửi lên server là 1 string)
+      console.log(parseBody); // In ra dữ liệu gửi lên server
+      // Do input có name = message nên dữ liệu in ra sẽ là message='data'
+      const data = parseBody.split("=")[1]; // Lấy chuỗi sau dấu bằng
+      fs.writeFile("message.txt", data, (err) => {
+        console.log(err);
+        res.statusCode = 302; // Set statusCode là 302, nghĩa là redirect tới 1 route khác
+        res.setHeader("Location", "/"); // Set header là Location và value là /, nghĩa là redirect tới route /
+        return res.end(); // Kết thúc response, tránh việc chạy tiếp các câu lệnh dưới (gây lỗi).
+      }); // Ghi dữ liệu vào file message.txt, khồng nên dùng writeFileSync vì nó sẽ chạy đồng bộ, nghĩa là nó sẽ chạy xong mới chạy các câu lệnh dưới làm cho server bị chậm, thay vào đó nên dùng writeFile truyền thêm callback function để nó chạy bất đồng bộ
+    });
   }
 
   res.setHeader("Content-Type", "text/html"); // setHeader là phương thức để set header cho response, ở đây ta set header là Content-Type và value là text/html
