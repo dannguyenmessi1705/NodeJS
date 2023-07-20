@@ -7,5 +7,5 @@
  + Sử dụng views để thêm các trang html (server.js, /views)
  + Sử dụng module 'path' để tạo đường dẫn tuyệt đối (/Routes)
  + Sử dụng công cụ hỗ trợ đường dẫn thay cho '../' (/utils/path.js)
- + Phân phối các tệp tĩnh (CSS trong /public/css, JS trong /public/js) (server.js, /views/*.html),
+ + Phân phối các tệp tĩnh (CSS trong /public/css, JS trong /public/js, IMG, ....) (server.js, /views/*.html),
  khi phân phối xong ta có thể truy cập tới các file tĩnh đó thông qua url

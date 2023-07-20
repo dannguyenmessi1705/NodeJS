@@ -1,0 +1,10 @@
+Source Code lấy từ folder ExpressJS (đã được tạo sẵn)
+- Trong Folder Render Dynamic này nói về:
+ + Sharing Data Across Request User: Cách chia sẻ dữ liệu yêu cầu giữa những người dùng khác nhau (/Routes/admin.js, /Routes/shop.js)
+ + Template Engine: Công cụ mẫu là mộtcông cụ phần mềm cho phép dev render dyanmic HTML, XML hoặc biến vào các mẫu được xác định trước. Nó đơn giản hóa quá trình hiển thị dữ liệu trong lớp trình bày của các ứng dụng web
+    + Handlebars: Handlebars là một hệ thống mẫu cho phép bạn tạo các mẫu HTML động. Nó sử dụng các mẫu văn bản đơn giản được gọi là Handlebars để tạo các mẫu HTML. Handlebars được xây dựng trên Mustache và cung cấp các tính năng mạnh mẽ cho các mẫu HTML.
+    "fileName.habdlebars" (<p> {data} </p>) 
+    + Pug: Pug là một hệ thống mẫu HTML đơn giản nhưng mạnh mẽ. Nó cho phép bạn viết mã HTML động bằng cách sử dụng các mẫu văn bản đơn giản. Pug được xây dựng trên JavaScript, do đó nó có thể chạy trên trình duyệt hoặc máy chủ.
+    "fileName.pug" (p #{data})
+    + EJS: EJS là một hệ thống mẫu HTML đơn giản nhưng mạnh mẽ. Nó cho phép bạn viết mã HTML động bằng cách sử dụng các mẫu văn bản đơn giản. EJS được xây dựng trên JavaScript, do đó nó có thể chạy trên trình duyệt hoặc máy chủ.
+    "fileName.ejs" (<p> <%= data %> </p>)
