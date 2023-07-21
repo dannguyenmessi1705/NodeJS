@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/addProduct.css">
+    <link rel="stylesheet" href="/css/form.css">
     <!-- không cần phải truyền '../public/css/addProduct.css' vì thư mục public sẽ do expressJS thêm vào hàm tĩnh xử lý ở file server.js tại đường dẫn gốc -->
     <title>Add Product</title>
 </head>
@@ -24,8 +25,16 @@
     <main>
         <form class="product-form" action="/admin/add-product" method="POST">
             <div class="form-control">
-                <label for="title">Title</label>
-                <input type="text" name="name" id="title">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name">
+            </div>
+            <div class="form-control">
+                <label for="description">Description</label>
+                <input type="text" name="description" id="description">
+            </div>
+            <div class="form-control">
+                <label for="price">Price</label>
+                <input type="number" name="price" id="price">
             </div>
 
             <button type="submit">Add Product</button>

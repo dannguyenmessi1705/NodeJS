@@ -6,6 +6,21 @@ Một số package npm cần thiết cho việc dev, test:
 Một số package npm cần thiết cho việc build, deploy:
 + express : cài express để tạo server
 + body-parser : cài body-parser để parse body của request, trả về dạng object
++ cookie-parser : cài cookie-parser để parse cookie của request, trả về dạng object
++ pug, ejs, handlebars : cài các template engine để render html
++ mongoose : cài mongoose để kết nối với mongodb
++ morgan : cài morgan để log request
++ cors : cài cors để cho phép các domain khác gọi api của mình
++ dotenv : cài dotenv để đọc các biến môi trường từ file .env
++ jsonwebtoken : cài jsonwebtoken để tạo token
++ bcryptjs : cài bcryptjs để hash password
++ passport : cài passport để xác thực token
++ passport-jwt : cài passport-jwt để xác thực token
++ passport-local : cài passport-local để xác thực username, password
++ passport-facebook-token : cài passport-facebook-token để xác thực facebook token
++ passport-google-token : cài passport-google-token để xác thực google token
++ passport-twitter-token : cài passport-twitter-token để xác thực twitter token 
+
 Các package nằm trong package.json sẽ được cài đặt khi chạy 'npm install' tại thư mục chứa file package.json
 Để chạy server, thay vì gõ 'node server.js' thì ta có thể thêm từ khoá "start": "node server.js" vào trong file package.json
 sau đó chạy 'npm start' để khởi động server, nếu khác từ khoá "start" thì phải chạy 'npm run <từ khoá>'

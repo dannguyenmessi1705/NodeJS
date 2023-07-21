@@ -43,3 +43,17 @@ main {
 .main-header__item a.active {
     color: #3e00a1;
 }
+
+.empty{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.grid{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
