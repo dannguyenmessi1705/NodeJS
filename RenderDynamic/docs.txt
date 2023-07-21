@@ -1,12 +1,14 @@
 Source Code lấy từ folder ExpressJS (đã được tạo sẵn)
 - Trong Folder Render Dynamic này nói về:
- + Sharing Data Across Request User: Cách chia sẻ dữ liệu yêu cầu giữa những người dùng khác nhau (/Routes/admin.js, /Routes/personal.js)
- + Template Engine: Công cụ mẫu là mộtcông cụ phần mềm cho phép dev render dyanmic HTML, XML hoặc biến vào các mẫu được xác định trước. Nó đơn giản hóa quá trình hiển thị dữ liệu trong lớp trình bày của các ứng dụng web
-    + Handlebars: Handlebars là một hệ thống mẫu cho phép bạn tạo các mẫu HTML động. Nó sử dụng các mẫu văn bản đơn giản được gọi là Handlebars để tạo các mẫu HTML. Handlebars được xây dựng trên Mustache và cung cấp các tính năng mạnh mẽ cho các mẫu HTML.
-    "fileName.habdlebars" (<p> {data} </p>)  
-    + Pug: Pug là một hệ thống mẫu HTML đơn giản nhưng mạnh mẽ. Nó cho phép bạn viết mã HTML động bằng cách sử dụng các mẫu văn bản đơn giản. Pug được xây dựng trên JavaScript, do đó nó có thể chạy trên trình duyệt hoặc máy chủ.
-      "fileName.pug" (p #{data}) 
-      Render + Dynamic + Convert HTML to PUG: (/views/pug/home.pug, /views/pug/addProduct.pug, /views/pug/404.pug, server.js, /Routes/notFound.js, /Routes/admin.js, /Routes/personal.js) 
-      Layout: (/views/pug/layouts/main-layout.pug) dùng để tạo ra các trang web có cùng cấu trúc như header, footer, sidebar, content, ... qua từ khoá block, extends, include,...
-    + EJS: EJS là một hệ thống mẫu HTML đơn giản nhưng mạnh mẽ. Nó cho phép bạn viết mã HTML động bằng cách sử dụng các mẫu văn bản đơn giản. EJS được xây dựng trên JavaScript, do đó nó có thể chạy trên trình duyệt hoặc máy chủ.
+ -> Sharing Data Across Request User: Cách chia sẻ dữ liệu yêu cầu giữa những người dùng khác nhau (/Routes/admin.js, /Routes/personal.js)
+ -> Template Engine: Công cụ mẫu là mộtcông cụ phần mềm cho phép dev render dyanmic HTML, XML hoặc biến vào các mẫu được xác định trước. Nó đơn giản hóa quá trình hiển thị dữ liệu trong lớp trình bày của các ứng dụng web
+    1, Handlebars: Handlebars là một hệ thống mẫu cho phép bạn tạo các mẫu HTML động. Nó sử dụng các mẫu văn bản đơn giản được gọi là Handlebars để tạo các mẫu HTML. Handlebars được xây dựng trên Mustache và cung cấp các tính năng mạnh mẽ cho các mẫu HTML.
+      + "fileName.habdlebars" (<p> {{data}} </p>)  (Các tham số và lệnh logic được đặt trong cặp dấu ngoặc nhọn {{}} nếu là các câu lệnh điều kiện thì chỉ truyền true hoặc false vào)
+      + Render + Dynamic + Convert HTML to Handlebars: (/views/handlebars/home.hbs, /views/handlebars/addProduct.hbs, /views/handlebars/404.hbs, server.js, /Routes/notFound.js, /Routes/admin.js, /Routes/personal.js) 
+      + Layout: (/views/handlebars/layouts/main-layout.hbs) dùng để tạo ra các trang web có cùng cấu trúc như header, footer, sidebar, content, ... qua việc truyền vào các biến như {{{body}}}, {{{title}}}, {{{name}}},...
+    2, Pug: Pug là một hệ thống mẫu HTML đơn giản nhưng mạnh mẽ. Nó cho phép bạn viết mã HTML động bằng cách sử dụng các mẫu văn bản đơn giản. Pug được xây dựng trên JavaScript, do đó nó có thể chạy trên trình duyệt hoặc máy chủ.
+      + "fileName.pug" (p #{data}) 
+      + Render + Dynamic + Convert HTML to PUG: (/views/pug/home.pug, /views/pug/addProduct.pug, /views/pug/404.pug, server.js, /Routes/notFound.js, /Routes/admin.js, /Routes/personal.js) 
+      + Layout: (/views/pug/layouts/main-layout.pug) dùng để tạo ra các trang web có cùng cấu trúc như header, footer, sidebar, content, ... qua từ khoá block, extends, include,...
+    3, EJS: EJS là một hệ thống mẫu HTML đơn giản nhưng mạnh mẽ. Nó cho phép bạn viết mã HTML động bằng cách sử dụng các mẫu văn bản đơn giản. EJS được xây dựng trên JavaScript, do đó nó có thể chạy trên trình duyệt hoặc máy chủ.
     "fileName.ejs" (<p> <%= data %> </p>)
