@@ -11,4 +11,6 @@ Source Code lấy từ folder ExpressJS (đã được tạo sẵn)
       + Render + Dynamic + Convert HTML to PUG: (/views/pug/home.pug, /views/pug/addProduct.pug, /views/pug/404.pug, server.js, /Routes/notFound.js, /Routes/admin.js, /Routes/personal.js) 
       + Layout: (/views/pug/layouts/main-layout.pug) dùng để tạo ra các trang web có cùng cấu trúc như header, footer, sidebar, content, ... qua từ khoá block, extends, include,...
     3, EJS: EJS là một hệ thống mẫu HTML đơn giản nhưng mạnh mẽ. Nó cho phép bạn viết mã HTML động bằng cách sử dụng các mẫu văn bản đơn giản. EJS được xây dựng trên JavaScript, do đó nó có thể chạy trên trình duyệt hoặc máy chủ.
-    "fileName.ejs" (<p> <%= data %> </p>)
+      + "fileName.ejs" (<p> <%= data %> </p>, với data là biến được truyền vào), (<% JavaScript code %>), (<%- include('fileName') %>)
+      + Render + Dynamic + Convert HTML to EJS: (/views/ejs/home.ejs, /views/ejs/addProduct.ejs, /views/ejs/404.ejs, server.js, /Routes/notFound.js, /Routes/admin.js, /Routes/personal.js)
+      + Layout: (/views/ejs/include/) dùng để tạo ra các trang web có cùng cấu trúc như header, footer, sidebar, content, ... qua từ khoá include, yield, ...
