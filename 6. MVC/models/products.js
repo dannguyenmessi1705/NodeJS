@@ -7,9 +7,9 @@ const pathFile = path.join(rootdir, "data", "products.json"); // Tạo đường
 const handleFile = (callback) => {
   fs.readFile(pathFile, (err, fileContent) => {
     if (err) {
-      callback([]);
+      callback([]); // Nếu có lỗi thì trả về mảng rỗng, nếu không trả về mảng rỗng thì toàn bộ code trong project sẽ bị lỗi, bắt buộc phải trả về kiểu mảng
     } else {
-      callback(JSON.parse(fileContent));
+      callback(JSON.parse(fileContent)); // Nếu không có lỗi thì đẩy dữ liệu từ file vào mảng
     } // Đọc file json, nếu có lỗi thì trả về mảng rỗng, nếu không có lỗi thì trả về mảng đã được đẩy dữ liệu
     // sử dụng callback để trả về kết quả, tránh dùng return luôn vì nó sẽ trả về kết quả trước khi đọc file xong (lỗi bất đồng bộ)
   });
