@@ -2,7 +2,18 @@ const path = require("path");
 const rootdir = require("../util/path");
 const fs = require("fs");
 
-const pathFile = path.join(rootdir, "data", "products.json");
+// {Storing with file json} //
+const pathFile = path.join(rootdir, "data", "products.json"); // Tạo đường dẫn đến file json
+const handleFile = (callback) => {
+  fs.readFile(pathFile, (err, fileContent) => {
+    if (err) {
+      callback([]);
+    } else {
+      callback(JSON.parse(fileContent));
+    } // Đọc file json, nếu có lỗi thì trả về mảng rỗng, nếu không có lỗi thì trả về mảng đã được đẩy dữ liệu
+    // sử dụng callback để trả về kết quả, tránh dùng return luôn vì nó sẽ trả về kết quả trước khi đọc file xong (lỗi bất đồng bộ)
+  });
+};
 
 // const products = []; // Tạo mảng rỗng để lưu dữ liệu tạm thời
 class Product {
@@ -14,11 +25,7 @@ class Product {
     // products.push(this);
 
     // {Storing with file json} //
-    fs.readFile(pathFile, (err, fileContent) => {
-      let products = [];
-      if (!err) {
-        products = JSON.parse(fileContent);
-      }
+    handleFile((products) => {
       products.push(this);
       fs.writeFile(pathFile, JSON.stringify(products), (err) => {
         if (err) console.log(err);
@@ -30,15 +37,8 @@ class Product {
     // return products;
 
     // {Storing with file json} //
-    fs.readFile(pathFile, (err, fileContent) => {
-      if (err) {
-        callback([]);
-      } else {
-        callback(JSON.parse(fileContent));
-      }
-    }); // Đọc file json, nếu có lỗi thì trả về mảng rỗng, nếu không có lỗi thì trả về mảng đã được đẩy dữ liệu
-    // sử dụng callback để trả về kết quả, tránh dùng return luôn vì nó sẽ trả về kết quả trước khi đọc file xong (lỗi bất đồng bộ)
-
+    handleFile(callback);
+  
   } // Trả về mảng đã được đẩy dữ liệu, dùng static để có thể truy cập trực tiếp (class.function) mà không cần khởi tạo đối tượng (new)
 }
 module.exports = Product;
