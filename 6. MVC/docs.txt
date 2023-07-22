@@ -1,5 +1,11 @@
 Source code lấy từ folder 5.RenderDynamic
 - Trong folder này nói về MVC: Model, View, Controller dùng để tách biệt các thành phần trong ứng dụng
-    + Model: là nơi chứa các đối tượng, các đối tượng này thường là các đối tượng mô tả dữ liệu, các đối tượng này thường được sử dụng để lưu trữ dữ liệu, truy xuất dữ liệu, xử lý dữ liệu
-    + View: là nơi chứa các giao diện, các giao diện này thường là các giao diện hiển thị dữ liệu, các giao diện này thường được sử dụng để hiển thị dữ liệu
-    + Controller: là nơi chứa các đối tượng, các đối tượng này thường là các đối tượng điều khiển, các đối tượng này thường được sử dụng để điều khiển các đối tượng Model và View
+    1, Model: là nơi chứa các đối tượng, các đối tượng này thường là các đối tượng mô tả dữ liệu, các đối tượng này thường được sử dụng để lưu trữ dữ liệu, truy xuất dữ liệu, xử lý dữ liệu
+        + Các đối tượng xử lý dữ liệu người dùng sẽ được đặt trong folder "./models/"
+    2, View: là nơi chứa các giao diện, các giao diện này thường là các giao diện hiển thị dữ liệu, các giao diện này thường được sử dụng để hiển thị dữ liệu
+        + Các giao diện sẽ được đặt trong folder "./views/"
+    3, Controller: là nơi chứa các đối tượng, các đối tượng này thường là các đối tượng điều khiển, các đối tượng này thường được sử dụng để điều khiển các đối tượng Model và View
+        + Các hàm callback xử lý request, response, middleware sẽ tách ra riêng trong "./controllers/"
+    4, Lưu trữ với file json
+        + Các file json sẽ được lưu trữ trong folder "./data/"
+        + Thể hiện trong các thư mục "./models/", "./controllers/products.js", "./data/products.json"
