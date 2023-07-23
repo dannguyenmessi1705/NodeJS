@@ -1,8 +1,7 @@
-<%- include('./includes/head.ejs') %>
-    <link rel="stylesheet" href="./css/home.css">
+<%- include('../includes/head.ejs') %>
 </head>
 <body>
-    <%- include('./includes/nav.ejs') %>
+    <%- include('../includes/nav.ejs') %>
     <main>
         <% if (items.length > 0) { %>
             <div class="grid">
@@ -19,7 +18,12 @@
                         <p class="product__description"><%= item.product.description %></p>
                     </div>
                     <div class="card__actions">
-                        <button class="btn">Add to Cart</button>
+                        <!-- ADD ID FOR PRODUCT -->
+                        <a href="/product/<%= item.product.id %>" class="btn">Detail</a>
+                        <!-- href = product/0.7834371053383911 -->
+                        <!-- POST CART  -->
+                        <%- include('../includes/addCart.ejs', {item: item}) %>
+                        <!-- Thêm object {item: item} để thẻ chỉ xác định duy nhất 1 item trong vòng lặp có nhiều items -->
                     </div>
                 </article>
                 <% }) %>
@@ -30,4 +34,4 @@
             </div>
         <% } %>
     </main>
-<%- include('./includes/end.ejs') %>
+<%- include('../includes/end.ejs') %>

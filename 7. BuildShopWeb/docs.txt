@@ -1,0 +1,8 @@
+Source code lấy từ folder 6. MVC
+- Trong folder này sẽ thực hiện sắp xếp và xây dựng thêm vài giao diện mới trong thư mục "./views" 
+    + Tách các giao diện ra thành các khu vực riêng biệt (dành cho admin và user)
+        -> Thêm giao diện chỉnh sửa, hiện thông tin products của admin
+        -> Thêm giao diện hiện danh sách products, checkout, cart của user
+    + Thêm thanh điều hướng (products, cart, admin products) trong thư mục "./views/includes/nav.ejs"
+    + Đăng ký tuyến đường và xử lý các lệnh cho các giao diện mới trong thư mục "./Routes" và "./controllers"
+    

@@ -1,8 +1,7 @@
-<%- include('./includes/head.ejs') %>
-    <link rel="stylesheet" href="./css/home.css">
+<%- include('../includes/head.ejs') %>
 </head>
 <body>
-    <%- include('./includes/nav.ejs') %>
+    <%- include('../includes/nav.ejs') %>
     <main>
         <% if (items.length > 0) { %>
             <div class="grid">
@@ -18,8 +17,13 @@
                         <h2 class="product__price">$<%= item.product.price %></h2>
                         <p class="product__description"><%= item.product.description %></p>
                     </div>
-                    <div class="card__actions">
-                        <button class="btn">Add to Cart</button>
+                    <div class="card__actions" style="display: flex; justify-content: center; align-items: center;">
+                        <form action="/admin/edit-product" method="POST">
+                            <button class="btn">Edit</button>
+                        </form>
+                        <form action="/admin/delete-product" method="POST">
+                            <button class="btn">Delete</button>
+                        </form>
                     </div>
                 </article>
                 <% }) %>
@@ -30,4 +34,4 @@
             </div>
         <% } %>
     </main>
-<%- include('./includes/end.ejs') %>
+<%- include('../includes/end.ejs') %>

@@ -1,0 +1,8 @@
+Source code lấy từ folder 7. BuildShopWeb
+- Trong folder này sẽ thực hiện xây dựng các routes url động theo từng id sản phẩm
+    + Using routes parameters: là các tham số được truyền vào trong url, được đặt sau dấu / và cách nhau bởi dấu /, nếu đứng trước là dấu : thì là dynamic routes
+        -> Thêm productID, lấy ra sản phẩm cần tìm vào trong file "./models/products.js , "./routes/user.js", "./controllers/user.js , "./views/user/detail.ejs", "./views/user/productList.ejs"
+        -> Thêm giao diện sản phẩm chi tiết (detail) trong thư mục "./views/user/detail.ejs"
+        -> Thêm tính năng add product giỏ hàng (POST cart) trong file "./routes/user.js", "./controllers/user.js , "./views/includes/addCart.ejs"
+    + Using query parameters: query parameters được truyền vào trong url, được đặt sau dấu ? và cách nhau bởi dấu &
+    
