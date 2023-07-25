@@ -18,5 +18,5 @@ app.use("/admin", adminRoute);
 app.use(personRoute);
 app.use(notFoundRoute);
 
-const IP = "192.168.1.6";
+const IP = "192.168.1.15";
 app.listen(3000, IP || "localhost");

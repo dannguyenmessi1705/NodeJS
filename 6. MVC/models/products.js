@@ -19,7 +19,7 @@ const handleFile = (callback) => {
 class Product {
   // Tạo class Product
   constructor(data) {
-    this.data = data;
+    this.product = data;
   } // Tạo constructor, truyền vào data request từ người dùng
   save() {
     // products.push(this);

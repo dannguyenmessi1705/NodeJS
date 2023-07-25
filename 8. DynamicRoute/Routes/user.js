@@ -15,6 +15,7 @@ route.get("/checkout", userController.getCheckout);
 
 route.get("/order", userController.getOrder);
 
+route.get("/cart", userController.getCart)
 route.post("/cart", userController.postCart)
 
 module.exports = route;

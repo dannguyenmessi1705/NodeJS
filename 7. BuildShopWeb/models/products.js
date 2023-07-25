@@ -14,7 +14,7 @@ const handleFile = (callback) => {
 
 class Product {
   constructor(data) {
-    this.data = data;
+    this.product = data;
   }
   save() {
     handleFile((products) => {

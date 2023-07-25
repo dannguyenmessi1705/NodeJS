@@ -18,9 +18,7 @@
                         <p class="product__description"><%= item.product.description %></p>
                     </div>
                     <div class="card__actions" style="display: flex; justify-content: center; align-items: center;">
-                        <form action="/admin/edit-product" method="POST">
-                            <button class="btn">Edit</button>
-                        </form>
+                        <a href="/admin/edit-product/<%= item.product.id %>/?edit=true" class="btn">Edit</a>
                         <form action="/admin/delete-product" method="POST">
                             <button class="btn">Delete</button>
                         </form>
