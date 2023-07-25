@@ -110,6 +110,18 @@ class Cart {
       });
     });
   }
+  // {UI CART} //
+  // Lấy ra tất cả dữ liệu từ file
+  static fetchCart(callback) {
+    fs.readFile(pathFile, (err, fileContent) => {
+      if(err){
+        callback(null)
+      }
+      else {
+        callback(JSON.parse(fileContent))
+      }
+    })
+  }
 }
 
 module.exports = Cart;

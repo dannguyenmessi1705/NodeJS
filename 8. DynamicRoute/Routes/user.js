@@ -15,6 +15,7 @@ route.get("/checkout", userController.getCheckout);
 
 route.get("/order", userController.getOrder);
 
+// {CART} //
 route.get("/cart", userController.getCart)
 route.post("/cart", userController.postCart)
 

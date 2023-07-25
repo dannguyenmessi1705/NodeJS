@@ -34,10 +34,29 @@ const getDetail = (req, res) => {
     });
   });
 };
+
+// {UI CART} //
 const getCart = (req, res) => {
-  res.render("./user/cart", {
-    title: "Cart",
-    path: "/cart",
+  // Lấy tất cả dữ liệu trong cart
+  Cart.fetchCart((carts) => {
+    // Lấy tất cả dữ liệu trong product
+    Product.fetchAll((allProducts) => {
+      const productInCart = []; // Tạo 1 mảng lưu các giá trị ID trong cart = product
+      allProducts.forEach((item) => {
+        const hasProduct = carts.products.find(cartProduct => cartProduct.id == item.product.id)
+        // hasProduct trả về 1 product trong cart trùng với product bên ngoài
+        if (hasProduct) {
+          productInCart.push({cartItem: item, count: hasProduct.count}); // đưa product bên ngoài và số lượng product trong giỏ hàng vào mảng
+        }
+      });
+      // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
+      res.render("./user/cart", {
+        title: "Cart",
+        path: "/cart",
+        totalPrice: carts.totalPrice,
+        items: productInCart
+      });
+    });
   });
 };
 

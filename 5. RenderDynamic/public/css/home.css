@@ -44,7 +44,7 @@ main {
     color: #3e00a1;
 }
 
-.empty{
+.empty, .center{
     display: flex;
     justify-content: center;
     align-items: center;

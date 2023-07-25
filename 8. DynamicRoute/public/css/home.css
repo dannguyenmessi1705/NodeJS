@@ -218,3 +218,8 @@ form {
     display: none;
   }
 }
+
+.empty, .center{
+  display: flex;
+  justify-content: center;
+}
