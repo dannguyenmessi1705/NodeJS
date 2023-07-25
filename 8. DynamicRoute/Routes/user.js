@@ -18,5 +18,6 @@ route.get("/order", userController.getOrder);
 // {CART} //
 route.get("/cart", userController.getCart)
 route.post("/cart", userController.postCart)
+route.post("/delete-cart", userController.deleteCart)
 
 module.exports = route;

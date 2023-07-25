@@ -43,10 +43,12 @@ const getCart = (req, res) => {
     Product.fetchAll((allProducts) => {
       const productInCart = []; // Tạo 1 mảng lưu các giá trị ID trong cart = product
       allProducts.forEach((item) => {
-        const hasProduct = carts.products.find(cartProduct => cartProduct.id == item.product.id)
+        const hasProduct = carts.products.find(
+          (cartProduct) => cartProduct.id == item.product.id
+        );
         // hasProduct trả về 1 product trong cart trùng với product bên ngoài
         if (hasProduct) {
-          productInCart.push({cartItem: item, count: hasProduct.count}); // đưa product bên ngoài và số lượng product trong giỏ hàng vào mảng
+          productInCart.push({ cartItem: item, count: hasProduct.count }); // đưa product bên ngoài và số lượng product trong giỏ hàng vào mảng
         }
       });
       // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
@@ -54,7 +56,7 @@ const getCart = (req, res) => {
         title: "Cart",
         path: "/cart",
         totalPrice: carts.totalPrice,
-        items: productInCart
+        items: productInCart,
       });
     });
   });
@@ -67,6 +69,19 @@ const postCart = (req, res) => {
     Cart.addCart(ID, item.product.price);
   });
   res.redirect("/cart");
+};
+
+// {DELETE CART} //
+const deleteCart = (req, res) => {
+  const ID = req.body.id; // Lấy giá id từ trong thẻ input đã được hidden trong cart.ejs (mục đích dùng input là để lấy ra id của product đã có sẵn trong database, không cần phải thông qua việc kiểm tra id đó có tồn tại hay không)
+  // Tìm ID sản phẩm
+  Product.findByID(ID, (item) => {
+    // Nếu tìm được
+    if (item)
+      // Xoá sản phẩm trong giỏ hàng
+      Cart.deleteCartItem(ID, item.product.price);
+    res.redirect("/cart");
+  });
 };
 
 const getCheckout = (req, res) => {
@@ -89,6 +104,7 @@ module.exports = {
   getDetail,
   getCart,
   postCart,
+  deleteCart,
   getCheckout,
   getOrder,
 };

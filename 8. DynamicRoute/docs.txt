@@ -9,3 +9,4 @@ Source code lấy từ folder 7. BuildShopWeb
     + Thêm tính năng Update sản phẩm đồng thời Update sản phẩm trong Cart ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/editProduct.ejs), ("./models/products.js), ("./models/carts.js)"
     + Thêm tính năng Delete sản phẩm đồng thời xoá sản phẩm trong Cart ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/products.ejs), ("./models/products.js)", ("./models/carts.js)
     + Thêm giao diện cho giỏ hàng ("./views/user/cart.ejs), ("./controllers/user.js), ("./routes/user.js), ("./models/carts.js)
+    + Thêm tính năng xoá sản phẩm trong giỏ hàng ("./views/user/cart.ejs), ("./controllers/user.js), ("./routes/user.js)
