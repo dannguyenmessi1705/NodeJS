@@ -46,7 +46,7 @@ class Cart {
         cart.products = [...cart.products]; // Lấy mảng danh sách các sản phâm có trong giỏ hàng đưa lại vào mảng
         cart.products[isExistProductIndex] = updateCart; // cập nhật lại sản phẩm (cụ thể là số lượng) khi thêm vào giỏ sản phẩm đã có sẵn
       }
-      cart.totalPrice = +cart.totalPrice + +price; // Cập nhật lại tổng giá sản phẩm sau khi thêm giỏ hàng
+      cart.totalPrice = (+cart.totalPrice + +price).toFixed(2); // Cập nhật lại tổng giá sản phẩm sau khi thêm giỏ hàng
       // Thêm lại dữ liệu vào file cart.json
       fs.writeFile(pathFile, JSON.stringify(cart), (err) => {
         if (err) {
@@ -72,8 +72,8 @@ class Cart {
       }
       // Nếu tìm được
       let updateCart = {...carts}; // Lấy dữ liệu của file truyền vào biến mới
-      updateCart.totalPrice -=
-        updateCart.products[deleteCartIndex].count * +price; // Cập nhật lại tổng giá sản phẩm trong giỏ sau khi xoá
+      let updatePrice =  updateCart.products[deleteCartIndex].count * +price;
+      updateCart.totalPrice = (updateCart.totalPrice-updatePrice).toFixed(2); // Cập nhật lại tổng giá sản phẩm trong giỏ sau khi xoá
       updateCart.products.splice(deleteCartIndex, 1); // Xoá sản phẩm trong giỏ hàng
       // Ghi lại dữ liệu ra file
       fs.writeFile(pathFile, JSON.stringify(updateCart), (err) => {
@@ -100,7 +100,8 @@ class Cart {
       }
       // Nếu tìm được
       let updateCart = {...carts}; // Lấy dữ liệu của file truyền vào biến mới
-      updateCart.totalPrice = (updateCart.totalPrice - updateCart.products[updateCartIndex].count * +oldPrice) + (updateCart.products[updateCartIndex].count * +newPrice); // Cập nhật lại tổng giá sản phẩm trong giỏ sau khi Update lại giá
+      let updatePrice = (updateCart.totalPrice - updateCart.products[updateCartIndex].count * +oldPrice) + (updateCart.products[updateCartIndex].count * +newPrice);
+      updateCart.totalPrice =  updatePrice.toFixed(2)// Cập nhật lại tổng giá sản phẩm trong giỏ sau khi Update lại giá
       // Ghi lại dữ liệu ra file
       fs.writeFile(pathFile, JSON.stringify(updateCart), (err) => {
         if (err) {

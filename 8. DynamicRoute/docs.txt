@@ -6,5 +6,5 @@ Source code lấy từ folder 7. BuildShopWeb
         -> Thêm tính năng add product giỏ hàng (POST cart) trong file "./routes/user.js", "./controllers/user.js , "./views/includes/addCart.ejs"
     + Using query parameters: query parameters được truyền vào trong url, được đặt sau dấu ? và cách nhau bởi dấu &, dùng để truy vấn đến 1 biến trong url (http://...?key1=value&key2=value...)
         -> Thêm route động đến đường dẫn chỉnh sửa sản phẩm ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/editProduct.ejs)
-        -> Thêm tính năng Update sản phẩm ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/editProduct.ejs), ("./models/products.js)"
+        -> Thêm tính năng Update sản phẩm đồng thời Update sản phẩm trong Cart ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/editProduct.ejs), ("./models/products.js), ("./models/carts.js)"
         -> Thêm tính năng Delete sản phẩm đồng thời xoá sản phẩm trong Cart ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/products.ejs), ("./models/products.js)", ("./models/carts.js)
