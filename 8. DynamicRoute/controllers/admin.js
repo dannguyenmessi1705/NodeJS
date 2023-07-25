@@ -52,11 +52,21 @@ const getEditProduct = (req, res) => {
 };
 // {UPDATE PRODUCT} //
 const postEditProduct = (req, res) => {
-  const idUpdate = req.body.id // Lấy productID từ thẻ input đã được hidden trong editProduct.ejs (mục đích dùng input là để lấy ra id của product đã có sẵn trong database, không cần phải thông qua việc kiểm tra id đó có tồn tại hay không)
-  const data = JSON.parse(JSON.stringify(req.body))
-  const updateProduct = new Product(data, idUpdate)
-  updateProduct.save()
-  res.redirect("/admin/product")
+  const idUpdate = req.body.id; // Lấy id của product từ thẻ input đã được hidden trong editProduct.ejs (mục đích dùng input là để lấy ra id của product đã có sẵn trong database, không cần phải thông qua việc kiểm tra id đó có tồn tại hay không)
+  const data = JSON.parse(JSON.stringify(req.body));
+  const updateProduct = new Product(data, idUpdate);
+  updateProduct.save();
+  res.redirect("/admin/product");
+};
+
+// {DELETE PRODUCT} //
+const deleteProduct = (req, res) => {
+  const idDelete = req.body.id;
+  Product.findByID(idDelete, (item) => {
+    const delProduct = new Product(item, idDelete);
+    delProduct.save("isDelete");
+    res.redirect("/admin/product");
+  });
 };
 
 module.exports = {
@@ -65,4 +75,5 @@ module.exports = {
   getProduct,
   getEditProduct,
   postEditProduct,
+  deleteProduct,
 };
