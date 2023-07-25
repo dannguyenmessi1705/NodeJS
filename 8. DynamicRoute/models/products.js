@@ -1,3 +1,4 @@
+const Cart = require("./carts")
 const path = require("path");
 const rootdir = require("../util/path");
 const fs = require("fs");
@@ -27,13 +28,19 @@ class Product {
         const updateProduct = [...products]; // Sao chép dữ liệu của data sang biến mới là updateProduct
         if(isDelete){ // Nếu có tham số truyền vào
           updateProduct.splice(updateProductIndex, 1) // Xoá phần tử ở vị trí vừa tìm được
+          // {DELETE CART} //
+          Cart.deleteCartItem(this.product.id, this.product.product.price)
         }
         else{ // Ngược lại sẽ là cập nhật dữ liệu
           updateProduct[updateProductIndex] = this; // Cập nhật dữ liệu của sản phẩm đã tìm được ở trên
+          // {UPDATE CART} //
+          Cart.UpdateCartItem(this.product.id, products[updateProductIndex].product.price, this.product.price)
         }
         // Ghi lại dữ liệu vào database
         fs.writeFile(pathFile, JSON.stringify(updateProduct), (err) => {
-          if (err) console.log(err);
+          if (err){
+            console.log(err)              
+          }
         });
       }
       // Nếu không có id truyền vào, ngầm hiểu là đang thêm 1 sản phẩm mới
@@ -42,7 +49,7 @@ class Product {
         this.product.id = Math.random().toString(); // random id cho từng sản phẩm
         products.push(this);
         fs.writeFile(pathFile, JSON.stringify(products), (err) => {
-          if (err) console.log(err);
+          if (!err) console.log(err);
         });
       }
     });

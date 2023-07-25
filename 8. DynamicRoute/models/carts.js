@@ -55,6 +55,60 @@ class Cart {
       });
     });
   }
+
+  // {DELETE CART} //
+  static deleteCartItem(ID, price) {
+    // Đọc DL từ file
+    fs.readFile(pathFile, (err, fileContent) => {
+      if (err) return;
+      const carts = JSON.parse(fileContent);
+      // Tìm vị trísản phẩm trong giỏ muốn xoá thông qua ID
+      const deleteCartIndex = carts.products.findIndex(
+        (product) => product.id == ID
+      );
+      // Nếu không tìm được thì chứng tỏ không có sản phẩm nào trong giỏ hàng
+      if (deleteCartIndex < 0) {
+        return;
+      }
+      // Nếu tìm được
+      let updateCart = {...carts}; // Lấy dữ liệu của file truyền vào biến mới
+      updateCart.totalPrice -=
+        updateCart.products[deleteCartIndex].count * +price; // Cập nhật lại tổng giá sản phẩm trong giỏ sau khi xoá
+      updateCart.products.splice(deleteCartIndex, 1); // Xoá sản phẩm trong giỏ hàng
+      // Ghi lại dữ liệu ra file
+      fs.writeFile(pathFile, JSON.stringify(updateCart), (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
+  }
+
+  // {UPDATE CART} //
+  static UpdateCartItem(ID, oldPrice, newPrice) {
+    // Đọc DL từ file
+    fs.readFile(pathFile, (err, fileContent) => {
+      if (err) return;
+      const carts = JSON.parse(fileContent);
+      // Tìm vị trísản phẩm trong giỏ muốn cập nhật giá thông qua ID
+      const updateCartIndex = carts.products.findIndex(
+        (product) => product.id == ID
+      );
+      // Nếu không tìm được thì chứng tỏ không có sản phẩm nào trong giỏ hàng
+      if (updateCartIndex < 0) {
+        return;
+      }
+      // Nếu tìm được
+      let updateCart = {...carts}; // Lấy dữ liệu của file truyền vào biến mới
+      updateCart.totalPrice = (updateCart.totalPrice - updateCart.products[updateCartIndex].count * +oldPrice) + (updateCart.products[updateCartIndex].count * +newPrice); // Cập nhật lại tổng giá sản phẩm trong giỏ sau khi Update lại giá
+      // Ghi lại dữ liệu ra file
+      fs.writeFile(pathFile, JSON.stringify(updateCart), (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
+  }
 }
 
-module.exports = Cart
+module.exports = Cart;

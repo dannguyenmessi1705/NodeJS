@@ -7,4 +7,4 @@ Source code lấy từ folder 7. BuildShopWeb
     + Using query parameters: query parameters được truyền vào trong url, được đặt sau dấu ? và cách nhau bởi dấu &, dùng để truy vấn đến 1 biến trong url (http://...?key1=value&key2=value...)
         -> Thêm route động đến đường dẫn chỉnh sửa sản phẩm ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/editProduct.ejs)
         -> Thêm tính năng Update sản phẩm ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/editProduct.ejs), ("./models/products.js)"
-        -> Thêm tính năng Delete sản phẩm ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/products.ejs), ("./models/products.js)"
+        -> Thêm tính năng Delete sản phẩm đồng thời xoá sản phẩm trong Cart ("./controllers/admin.js), ("./routes/admin.js), ("./views/admin/products.ejs), ("./models/products.js)", ("./models/carts.js)
