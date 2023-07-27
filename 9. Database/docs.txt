@@ -1,0 +1,21 @@
+Source code lấy từ folder 8. DynamicRoute, thêm module mysql2 để kết nối tới mysql2
+
+Trong folder này nói về database: Dùng database thay cho file, vì nó sẽ dễ dàng truy cập trực tiếp đến các phần tử nhanh hơn file (vì file phải đọc toàn bộ hết tất cả dữ liệu rồi mới tìm => file lớn sẽ gây chậm)
+ 1, Sự khác nhau cơ bản giữa NoSQL và SQL
+    a, Các loại SQL: MySQL, Oracle, SQL Server, Postgres, DB2, SQLite, MariaDB
+        -> là các database quan hệ (Relational Database) (Dữ liệu truyền vào qua các khoá (KEY) và khi muốn thay đổi 1 thuộc tính thì chỉ cần thay đổi 1 đối tượng có thuộc tính đó)
+        -> có các bảng, các hàng, các cột, các khóa chính, các khóa ngoại
+        -> Dữ liệu được lưu trữ dưới dạng các bảng (table) và chúng phải tuân theo một schema cụ thể (đối tượng này phải có các thuộc tính nhất định)
+        -> có các câu lệnh: SELECT, INSERT, UPDATE, DELETE, JOIN, ...
+        -> có các ràng buộc: NOT NULL, UNIQUE, PRIMARY KEY, FOREIGN KEY, CHECK, DEFAULT
+        -> có các hàm tính toán: SUM, COUNT, AVG, MIN, MAX, ... 
+    b, Các loại NoSQL: MongoDB, CouchDB, Redis, Cassandra, HBase, Neo4j
+        -> là các database phi quan hệ (Non-Relational Database) (Dữ liệu được truyền từ scheme này sang scheme khác (lồng nhau), khi muốn thay đổi 1 thuộc tính thì phải thay đổi hết các đối tượng có thuộc tính đó)
+        -> không có các bảng, các hàng, các cột, các khóa chính, các khóa ngoại (mà chúng là các schema tập hợp trong collection) 
+        -> Dữ liệu được lưu trữ dưới dạng JSON, XML, BSON, ...và chúng không cần phải tuân theo một schema cụ thể (đối tượng này có thể có các thuộc tính khác nhau)
+        -> không có các câu lệnh: SELECT, INSERT, UPDATE, DELETE, JOIN, ...
+        -> không có các ràng buộc: NOT NULL, UNIQUE, PRIMARY KEY, FOREIGN KEY, CHECK, DEFAULT
+        -> không có các hàm tính toán: SUM, COUNT, AVG, MIN, MAX, ...
+    
+    2, Khai báo, thực thi cơ sở dữ liệu MySQL trong project ("./util/database.js"), (server.js)
+    3, Lấy tất cả dữ liệu, dữ liệu cụ thể trong database ("./models/product.js") ("./models/carts.js"), ("./controllers/") 
