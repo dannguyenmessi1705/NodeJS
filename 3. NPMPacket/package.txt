@@ -6,7 +6,7 @@ Một số package npm cần thiết cho việc dev, test:
 + nodemon : cài nodemon để tự động restart server khi có thay đổi code 
 Một số package npm cần thiết cho việc build, deploy:
 + express : cài express để tạo server
-+ body-parser : cài body-parser để parse body của request, trả về dạng object
++ body-parser : cài body-parser để parse body của request, trả về dạng object (json, urlencoded, text, raw) thay vì là 1 Buffer như mặc định
 + cookie-parser : cài cookie-parser để parse cookie của request, trả về dạng object
 + pug, ejs, handlebars : cài các template engine để render html
 + mongoose : cài mongoose để kết nối với mongodb
