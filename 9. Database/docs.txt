@@ -1,4 +1,9 @@
-Source code lấy từ folder 8. DynamicRoute, thêm module mysql2 để kết nối tới mysql2
+Source code lấy từ folder 8. DynamicRoute, thêm module mysql2 để kết nối tới MYSQL
+Ngoài ra để làm việc với Postgresql thì cần thêm module pg, pg-hstore
+Ngoài ra để làm việc với SQL Server thì cần thêm module tedious 
+Ngoài ra để làm việc với SQLite thì cần thêm module sqlite3
+Ngoài ra để làm việc với Oracle thì cần thêm module oracledb
+Ngoài ra để làm việc với MariaDB thì cần thêm module mariadb
 
 Trong folder này nói về database: Dùng database thay cho file, vì nó sẽ dễ dàng truy cập trực tiếp đến các phần tử nhanh hơn file (vì file phải đọc toàn bộ hết tất cả dữ liệu rồi mới tìm => file lớn sẽ gây chậm)
  1, Sự khác nhau cơ bản giữa NoSQL và SQL
