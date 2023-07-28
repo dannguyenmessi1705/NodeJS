@@ -6,7 +6,7 @@ const app = express();
 // {USE DATABASE} //
 const db = require("./util/database");
 // Thực hiện câu lệnh SQL ở bên trong dấu nháy (sau đó trả về 1 promise)
-db.execute("SELECT * FROM `node-shop`.products")
+db.execute("SELECT * FROM `node-shop`.`product-test`")
   .then(([data, field]) => {
     console.log(data); // Trả về 1 array chứa các dữ liệu data của đối tượng
     console.log(field); // Trả về 1 array chứa các trường dữ liệu của đối tượng
