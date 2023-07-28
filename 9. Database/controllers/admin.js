@@ -7,21 +7,28 @@ const addProduct = (req, res) => {
   });
 };
 
+// {ADD TO DATABASE} //
 const postProduct = (req, res) => {
   const data = JSON.parse(JSON.stringify(req.body));
   const product = new Product(data, null);
-  product.save();
-  res.redirect("/");
+  product.save().then(() => {
+    res.redirect("/");
+  })
+  .catch(err => console.log(err));
 };
 
+// {GET ALL PRODUCTS FROM MYSQL} //
 const getProduct = (req, res) => {
-  Product.fetchAll((products) => {
-    res.render("./admin/products", {
-      title: "Admin Product",
-      items: products,
-      path: "/admin/product",
-    });
-  });
+  Product.fetchAll()
+    .then(([value, field]) => {
+      // Kết quả trả về của promise là 1 array chứa 2 phần tử là [data] và field [[data], field] => dùng destructuring để lấy ra trong hàm callback của then
+      res.render("./admin/products", {
+        title: "Admin Product",
+        items: value,
+        path: "/admin/product",
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 // {ADD EDIT PRODUCT} //

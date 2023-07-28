@@ -1,38 +1,47 @@
 const Product = require("../models/products");
 const Cart = require("../models/carts");
 
+// {GET ALL PRODUCTS FROM MYSQL} //
 const getIndex = (req, res) => {
-  Product.fetchAll((products) => {
-    res.render("./user/index", {
-      title: "Home",
-      items: products,
-      path: "/",
-    });
-  });
+  Product.fetchAll()
+    .then(([value, field]) => {
+      // Kết quả trả về của promise là 1 array chứa 2 phần tử là [data] và field [[data], field] => dùng destructuring để lấy ra trong hàm callback của then
+      res.render("./user/index", {
+        title: "Home",
+        items: value,
+        path: "/",
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
+// {GET ALL PRODUCTS FROM MYSQL} //
 const getProduct = (req, res) => {
-  Product.fetchAll((products) => {
-    res.render("./user/productList", {
-      title: "Product",
-      items: products,
-      path: "/product",
-    });
-  });
+  Product.fetchAll()
+    .then(([value, field]) => {
+      // Kết quả trả về của promise là 1 array chứa 2 phần tử là [data] và field [[data], field] => dùng destructuring để lấy ra trong hàm callback của then
+      res.render("./user/productList", {
+        title: "Product",
+        items: value,
+        path: "/product",
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
-// {ADD PRODUCT ID} //
+// {GET PRODUCT BY ID FROM MYSQL} //
 const getDetail = (req, res) => {
   const ID = req.params.productID; // lấy id của sản phẩm từ dynamic route, params là thuộc tính của req, productID là tên dynamic route
   // VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
-  Product.findByID(ID, (product) => {
-    console.log(product);
-    res.render("./user/productDetail", {
-      title: "Product Detail",
-      path: "/product",
-      item: product,
-    });
-  });
+  Product.findByID(ID)
+    .then(([[value], field]) => {
+      res.render("./user/productDetail", {
+        title: "Product Detail",
+        path: "/product",
+        item: value,
+      }); // promise trả về result = [[value], field] trong database => dùng destructuring trong hàm then
+    })
+    .catch((err) => console.log(err));
 };
 
 // {UI CART} //
@@ -40,25 +49,28 @@ const getCart = (req, res) => {
   // Lấy tất cả dữ liệu trong cart
   Cart.fetchCart((carts) => {
     // Lấy tất cả dữ liệu trong product
-    Product.fetchAll((allProducts) => {
-      const productInCart = []; // Tạo 1 mảng lưu các giá trị ID trong cart = product
-      allProducts.forEach((item) => {
-        const hasProduct = carts.products.find(
-          (cartProduct) => cartProduct.id == item.product.id
-        );
-        // hasProduct trả về 1 product trong cart trùng với product bên ngoài
-        if (hasProduct) {
-          productInCart.push({ cartItem: item, count: hasProduct.count }); // đưa product bên ngoài và số lượng product trong giỏ hàng vào mảng
-        }
-      });
-      // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
-      res.render("./user/cart", {
-        title: "Cart",
-        path: "/cart",
-        totalPrice: carts.totalPrice,
-        items: productInCart,
-      });
-    });
+    Product.fetchAll()
+      .then(([value, field]) => {
+        // Kết quả trả về của promise là 1 array chứa 2 phần tử là [data] và field [[data], field] => dùng destructuring để lấy ra trong hàm callback của then
+        const productInCart = []; // Tạo 1 mảng lưu các giá trị ID trong cart = product
+        value.forEach((item) => {
+          const hasProduct = carts.products.find(
+            (cartProduct) => cartProduct.id == item.id
+          );
+          // hasProduct trả về 1 product trong cart trùng với product bên ngoài
+          if (hasProduct) {
+            productInCart.push({ cartItem: item, count: hasProduct.count }); // đưa product bên ngoài và số lượng product trong giỏ hàng vào mảng
+          }
+          // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
+          res.render("./user/cart", {
+            title: "Cart",
+            path: "/cart",
+            totalPrice: carts.totalPrice,
+            items: productInCart,
+          });
+        });
+      })
+      .catch((err) => console.log(err));
   });
 };
 

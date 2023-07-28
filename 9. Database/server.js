@@ -1,5 +1,8 @@
 const express = require("express");
 const app = express();
+
+
+/*
 // {USE DATABASE} //
 const db = require("./util/database");
 // Thực hiện câu lệnh SQL ở bên trong dấu nháy (sau đó trả về 1 promise)
@@ -11,6 +14,7 @@ db.execute("SELECT * FROM `node-shop`.products")
   .catch((err) => {
     console.log(err); // Trả về lỗi nếu có
   });
+*/
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));

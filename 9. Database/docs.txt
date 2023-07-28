@@ -18,4 +18,6 @@ Trong folder này nói về database: Dùng database thay cho file, vì nó sẽ
         -> không có các hàm tính toán: SUM, COUNT, AVG, MIN, MAX, ...
     
     2, Khai báo, thực thi cơ sở dữ liệu MySQL trong project ("./util/database.js"), (server.js)
-    3, Lấy tất cả dữ liệu, dữ liệu cụ thể trong database ("./models/product.js") ("./models/carts.js"), ("./controllers/") 
+    3, Lấy tất cả dữ liệu, dữ liệu cụ thể của products trong database ("./models/product.js")  ("./controllers/") ("./views/")
+    4, Thêm dữ liệu vào database ("./models/product.js")  ("./controllers/") ("./views/") 
+    --> Folder này chỉ thực hiện đến chức năng như vậy, ở Folder 10. Sequelize sẽ thực hiện đầy đủ tính năng
