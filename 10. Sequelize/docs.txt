@@ -38,4 +38,10 @@ Source code lấy từ folder 9. Database, thêm module sequelize
     -> Thêm product 
     -> Xóa product
     -> Lấy danh sách product
-    -> Sửa product
+    -> Sửa product 
+8, Tạo thêm model cart, cartItem, các phương thức của cart ("./models/cart.js"), ("./models/cartitem.js"), ("./server.js")
+    -> mỗi user có 1 cart, mỗi cart có nhiều product, mỗi product có nhiều cart
+    => cartItem là bảng trung gian giữa cart và product, cartItem có thêm thuộc tính count
+    -> cart có thêm thuộc tính totalPrice (tổng của tất cả totalPrice của các cartItem)
+    -> cart có thêm phương thức addProduct(), removeProduct(), getProducts(), setProducts(), ... ("./controllers/user.js")
+    
