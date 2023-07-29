@@ -18,3 +18,24 @@ Source code lấy từ folder 9. Database, thêm module sequelize
     -> findOne() để lấy dữ liệu theo điều kiện, VD: findOne({where: {id: 1}})
     -> update() để cập nhật dữ liệu, VD: update({name: 'new name'}, {where: {id: 1}}) (Sau khi tìm được đối tượng cụ thể trong database)
     -> destroy() để xóa dữ liệu, VD: destroy({where: {id: 1}}) (Sau khi tìm được đối tượng cụ thể trong database)
+5, Xác định mối quan hệ giữa các bảng, model với nhau trong sequelize (server.js)
+    -> 1-1: hasOne(), belongsTo() (VD: 1 user có 1 cart, 1 cart thuộc về 1 user)
+    -> 1-n: hasMany(), belongsTo() (VD: 1 user có nhiều product, 1 product thuộc về 1 user)
+    -> n-n: belongsToMany() (VD: 1 product có nhiều category, 1 category có nhiều product) 
+    Từ các mối quan hệ này, các đối tượng có thể có các phương thức đặc biệt thay cho 1 số phương thức mặc định
+    (Special methods, giúp cho việc tạo, cập nhật, xóa dữ liệu từ các bảng liên quan dễ dàng hơn, như không cần phải thêm Khoá ngoại, ... vào)
+    VD: 
+    + A.hasOne(B)
+        -> A.getB() để lấy đối tượng B, A.setB() để gán đối tượng B, A.createB() để tạo đối tượng B và ngược lại
+    + A.belongsTo(B) 
+        -> A.getB() để lấy đối tượng B, A.setB() để gán đối tượng B, A.createB() để tạo đối tượng B và ngược lại
+    + A.hasMany(B)
+        -> A.getBs() để lấy danh sách đối tượng B, A.setBs() để gán danh sách đối tượng B, A.createB() để tạo đối tượng B và ngược lại, A.addB() để thêm 1 đối tượng B vào danh sách, A.removeB() để xóa 1 đối tượng B khỏi danh sách, A.removeBs() để xóa tất cả đối tượng B khỏi danh sách, A.countBs() để đếm số lượng đối tượng B trong danh sách, A.hasB() để kiểm tra đối tượng B có trong danh sách hay không, A.hasBs(),... và ngược lại
+    + A.belongsToMany(B)
+        -> Tương tự như A.hasMany(B)
+6, Tạo 1 user và middleware giả cho nó để test các phương thức của sequelize (server.js)
+7, Tạo các phương thức của user ("./controllers/admin.js") (Phân quyền user)
+    -> Thêm product 
+    -> Xóa product
+    -> Lấy danh sách product
+    -> Sửa product
