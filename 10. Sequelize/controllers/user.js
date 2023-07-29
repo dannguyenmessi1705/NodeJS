@@ -1,44 +1,43 @@
 const Product = require("../models/products");
 const Cart = require("../models/carts");
 
-// {GET ALL PRODUCTS FROM MYSQL} //
+// {GET ALL PRODUCTS DATABASE} //
 const getIndex = (req, res) => {
-  Product.fetchAll()
-    .then(([value, field]) => {
-      // Kết quả trả về của promise là 1 array chứa 2 phần tử là [data] và field [[data], field] => dùng destructuring để lấy ra trong hàm callback của then
+  Product.findAll()
+    .then((products) => {
       res.render("./user/index", {
         title: "Home",
-        items: value,
+        items: products,
         path: "/",
       });
     })
     .catch((err) => console.log(err));
 };
 
-// {GET ALL PRODUCTS FROM MYSQL} //
+// {GET ALL PRODUCTS DATABASE} //
 const getProduct = (req, res) => {
-  Product.fetchAll()
-    .then(([value, field]) => {
+  Product.findAll()
+    .then((products) => {
       // Kết quả trả về của promise là 1 array chứa 2 phần tử là [data] và field [[data], field] => dùng destructuring để lấy ra trong hàm callback của then
       res.render("./user/productList", {
         title: "Product",
-        items: value,
+        items: products,
         path: "/product",
       });
     })
     .catch((err) => console.log(err));
 };
 
-// {GET PRODUCT BY ID FROM MYSQL} //
+// {FIND BY ID} //
 const getDetail = (req, res) => {
   const ID = req.params.productID; // lấy id của sản phẩm từ dynamic route, params là thuộc tính của req, productID là tên dynamic route
   // VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
-  Product.findByID(ID)
-    .then(([[value], field]) => {
+  Product.findByPk(ID)
+    .then((product) => {
       res.render("./user/productDetail", {
         title: "Product Detail",
         path: "/product",
-        item: value,
+        item: product,
       }); // promise trả về result = [[value], field] trong database => dùng destructuring trong hàm then
     })
     .catch((err) => console.log(err));

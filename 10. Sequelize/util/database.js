@@ -1,10 +1,8 @@
-const mysql = require("mysql2"); // Nhâp thư viện mysql2
+const {Sequelize} = require("sequelize"); // Thêm module sequelize vào biến Sequelize (object)
 
-// Tạo 1 pool để kết nối tới database (pool là 1 tập hợp các kết nối)
-const pool = mysql.createPool({
-  host: "localhost", // Địa chỉ host
-  user: "root", // Tên user
-  database: "node-shop", // Tên database
-  password: "17052002", // Mật khẩu
+// Tạo 1 connect đến database: new Sequelize(database, user, password, {host: địa chỉ, dialect: tên db})
+const sequelize = new Sequelize("node-shop", "root", "17052002", {
+  host: "localhost",
+  dialect: "mysql",
 });
-module.exports = pool.promise(); // Xuất pool để sử dụng ở các file khác là 1 promise, trả về then(), catch() để xử lý tránh bị callback hell
+module.exports = sequelize;

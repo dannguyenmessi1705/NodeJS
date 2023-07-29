@@ -1,21 +1,6 @@
 const express = require("express");
 const app = express();
 
-
-/*
-// {USE DATABASE} //
-const db = require("./util/database");
-// Thực hiện câu lệnh SQL ở bên trong dấu nháy (sau đó trả về 1 promise)
-db.execute("SELECT * FROM `node-shop`.`product-test`")
-  .then(([data, field]) => {
-    console.log(data); // Trả về 1 array chứa các dữ liệu data của đối tượng
-    console.log(field); // Trả về 1 array chứa các trường dữ liệu của đối tượng
-  }) // Kết quả trả về của promise là 1 array chứa 2 phần tử là [data] và field [[data], field] => dùng destructuring để lấy ra trong hàm callback của then
-  .catch((err) => {
-    console.log(err); // Trả về lỗi nếu có
-  });
-*/
-
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -34,5 +19,16 @@ app.use("/admin", adminRoute);
 app.use(personRoute);
 app.use(notFoundRoute);
 
-const IP = "192.168.1.15";
-app.listen(3000, "localhost" || IP);
+// {Tạo bảng trong database} //
+// Nếu bảng đã tồn tại thì không tạo lại, nếu chưa tồn tại thì tạo mới
+const sequelize = require("./util/database");
+sequelize
+  .sync()
+  .then((result) => {
+    // Vì promise là 1 bất đồng bộ, nên phải đưa việc khởi động server vào trong hàm promise đê đợi kết quả trả về
+    const IP = "192.168.1.15";
+    app.listen(3000, "localhost" || IP);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
