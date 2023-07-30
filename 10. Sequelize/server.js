@@ -24,6 +24,8 @@ const Product = require("./models/products");
 const User = require("./models/users");
 const Cart = require("./models/carts");
 const CartItem = require("./models/cartItems");
+const Order = require("./models/orders");
+const OrderItem = require("./models/orderItems");
 
 // Tạo quan hệ 1-1 giữa Product và User (1 product chỉ có 1 user tạo ra)
 Product.belongsTo(User, {
@@ -37,6 +39,12 @@ User.hasOne(Cart); // Tạo quan hệ 1-1 giữa User và Cart (1 user chỉ có
 
 Cart.belongsToMany(Product, { through: CartItem }); // Tạo quan hệ n-n giữa Cart và Product (1 cart có thể có nhiều product), thông qua bảng trung gian CartItem
 Product.belongsToMany(Cart, { through: CartItem }); // Tạo quan hệ n-n giữa Product và Cart (1 product có thể thuộc về nhiều cart), thông qua bảng trung gian CartItem
+
+Order.belongsTo(User); // Tạo quan hệ 1-1 giữa Order và User (1 order chỉ thuộc về 1 user)
+User.hasMany(Order); // Tạo quan hệ 1-n giữa User và Order (1 user có thể tạo nhiều order)
+
+Order.belongsToMany(Product, { through: OrderItem }); // Tạo quan hệ n-n giữa Order và Product (1 order có thể có nhiều product), thông qua bảng trung gian OrderItem
+Product.belongsToMany(Order, { through: OrderItem }); // Tạo quan hệ n-n giữa Product và Order (1 product có thể thuộc về nhiều order), thông qua bảng trung gian OrderItem
 
 // {Check, tạo User và Model trong Database} //
 sequelize

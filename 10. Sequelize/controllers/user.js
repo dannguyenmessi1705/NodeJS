@@ -1,5 +1,4 @@
 const Product = require("../models/products");
-const Cart = require("../models/carts");
 
 // {GET ALL PRODUCTS DATABASE} //
 const getIndex = (req, res) => {
@@ -125,7 +124,7 @@ const postCart = (req, res) => {
     })
     .then(([product]) => {
       // Dùng destructuring để lấy ra product trong array
-      return storeCart.addProduct(product, { through: { count: count } }); // Thêm product vào cart, thông qua bảng trung gian CartItem, với số lượng product là count
+      return storeCart.addProduct(product, { through: { count: count } }); // Thêm product vào cart, thông qua bảng trung gian CartItem (productId, cartId thêm vào đây), với số lượng product là count
     })
     .then(() => {
       // Sau khi thêm product vào cart
@@ -158,8 +157,7 @@ const deleteCart = (req, res) => {
       return cart.getProducts({ where: { id: ID } });
     }) // Trả về product trong cart có id vừa nhận trong request
     .then(([product]) => {
-      if(product)
-        return product.cartitems.destroy();
+      if (product) return product.cartitems.destroy();
     }) // Xoá product trong cart thông qua bảng trung gian CartItem
     .then(() => res.redirect("/cart")) // Sau khi xoá product trong cart thì chuyển hướng đến trang cart
     .catch((err) => console.log(err)); // Nếu không tìm được product trong cart
@@ -179,18 +177,46 @@ const deleteCart = (req, res) => {
 };
 */
 
-const getCheckout = (req, res) => {
-  res.render("./user/checkout", {
-    title: "Checkout",
-    path: "/checkout",
-  });
-};
-
 const getOrder = (req, res) => {
-  res.render("./user/order", {
-    title: "Order",
-    path: "/order",
-  });
+  req.user
+    .getOrders({ include: ["products"] }) // Lấy tất cả order của user, include: ['products'] để add thêm tất cả products vào thuộc tính products của order
+    .then((orders) => {
+      res.render("./user/order", {
+        title: "Order",
+        path: "/order",
+        items: orders,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+const postOrder = (req, res) => {
+  let storeCart; // Lưu lại cart
+  req.user
+    .getCart() // Lấy cart của user
+    .then((cart) => {
+      storeCart = cart; // Lưu lại cart
+      return cart.getProducts(); // Lấy tất cả product trong cart
+    })
+    .then((products) => {
+      return req.user
+        .createOrder() // Tạo order cho user
+        .then((order) => {
+          return order.addProducts(
+            products.map((product) => {
+              product.orderitems = {
+                count: product.cartitems.count,
+              }; // Thêm thuộc tính count vào orderitems của product thong qua bảng trung gian cartitems
+              return product;
+            })
+          ); // Thêm product vào order, thông qua bảng trung gian OrderItem (productId, orderId thêm vào đây)
+        })
+        .then(() => {
+          storeCart.setProducts(null); // Xoá tất cả product trong cart khi đã thêm vào order
+          res.redirect("/order"); // Sau khi thêm product vào order thì chuyển hướng đến trang order
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
 };
 
 module.exports = {
@@ -200,6 +226,6 @@ module.exports = {
   getCart,
   postCart,
   deleteCart,
-  getCheckout,
   getOrder,
+  postOrder,
 };

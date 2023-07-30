@@ -16,7 +16,8 @@ Source code lấy từ folder 9. Database, thêm module sequelize
     -> findAll() để lấy tất cả dữ liệu, VD: findAll({where: {id: 1}}) để lấy dữ liệu có id = 1
     -> findByPk() để lấy dữ liệu theo id, VD: findByPk(1)
     -> findOne() để lấy dữ liệu theo điều kiện, VD: findOne({where: {id: 1}})
-    -> update() để cập nhật dữ liệu, VD: update({name: 'new name'}, {where: {id: 1}}) (Sau khi tìm được đối tượng cụ thể trong database)
+    -> update() để cập nhật dữ liệu, VD: update({name: 'new name'}, {where
+    : {id: 1}}) (Sau khi tìm được đối tượng cụ thể trong database)
     -> destroy() để xóa dữ liệu, VD: destroy({where: {id: 1}}) (Sau khi tìm được đối tượng cụ thể trong database)
 5, Xác định mối quan hệ giữa các bảng, model với nhau trong sequelize (server.js)
     -> 1-1: hasOne(), belongsTo() (VD: 1 user có 1 cart, 1 cart thuộc về 1 user)
@@ -44,4 +45,8 @@ Source code lấy từ folder 9. Database, thêm module sequelize
     => cartItem là bảng trung gian giữa cart và product, cartItem có thêm thuộc tính count
     -> cart có thêm thuộc tính totalPrice (tổng của tất cả totalPrice của các cartItem)
     -> cart có thêm phương thức addProduct(), removeProduct(), getProducts(), setProducts(), ... ("./controllers/user.js")
-    
+9, Tạo thêm model order, orderItem, các phương thức của order ("./models/orders.js"), ("./models/orderItems.js"), ("./server.js")
+    -> mỗi user có nhiều order, mỗi order có nhiều product, mỗi product có nhiều order
+    => orderItem là bảng trung gian giữa order và product, orderItem có thêm thuộc tính count
+    -> order có thêm thuộc tính totalPrice (tổng của tất cả totalPrice của các orderItem)
+    -> order có thêm phương thức addProduct(), removeProduct(), getProducts(), setProducts(), ... ("./controllers/user.js")
