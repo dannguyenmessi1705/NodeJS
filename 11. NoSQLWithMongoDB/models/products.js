@@ -1,28 +1,22 @@
-// const { DataTypes } = require("sequelize"); // Thêm module DataTypes có chức năng tạo các kiểu dữ liệu cho database từ sequelize
-// const sequelize = require("../util/database"); // Thêm module sequelize đã tạo ở file database.js
+const getDB = require("../util/database").getDB; // Nhập vào object getDB lấy từ file database.js
 
-// // Tạo 1 model có tên là products (khi chạy, MySQL tự chuyển tên thành in thường và thêm 's')
-// // có các thuộc tính là id, name, price, description đã tạo sẵn và tự thêm 2 thuộc tính createdAt và updatedAt
-// const Product = sequelize.define("products", {
-//   id: {
-//     type: DataTypes.INTEGER,
-//     autoIncrement: true,
-//     allowNull: false,
-//     unique: true,
-//     primaryKey: true,
-//   },
-//   name: {
-//     type: DataTypes.CHAR(50),
-//     allowNull: false,
-//   },
-//   price: {
-//     type: DataTypes.DOUBLE,
-//     allowNull: false,
-//   },
-//   description: {
-//     type: DataTypes.TEXT,
-//     allowNull: false,
-//   },
-// });
+// Tạo class Product
+class Product {
+  constructor(name, price, desciption, url) {
+    (this.name = name),
+      (this.price = price),
+      (this.desciption = desciption),
+      (this.url = url);
+  }
+  // Lưu product vào database
+  save() {
+    let db = getDB(); // Lấy database từ server MongoDB (xử lý trong file database.js)
+    return db
+      .collection("products") // Lấy collection products trong database (nếu chưa có sẽ tự động tạo mới)
+      .insertOne(this) // Thêm product vào collection products (this ở đây chính là object product được tạo ra từ class Product)
+      .then((result) => console.log(result))
+      .catch((err) => console.log(err));
+  }
+}
 
-// module.exports = Product;
+module.exports = Product;

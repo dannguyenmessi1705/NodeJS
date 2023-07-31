@@ -3,3 +3,16 @@ Source code lấy từ folder 10. Sequelize, thêm module mongodb
 - Folder 11. NoSQLWithMongoDB, nói về cách sử dụng NoSQl với MongoDB
 
 1, Connect tới MongoDB ("./util/database.js"), ("server.js")
+2, Tạo model, collection 'products' ("./models/product.js") và thêm dữ liệu products vào collection ("./controllers/admin.js")
+
+
+-> Các thao tác CRUD với MongoDB ("./controllers/admin.js")
+    -> insertOne() : thêm 1 document vào collection
+    -> insertMany() : thêm nhiều document vào collection
+    -> find() : tìm kiếm document trong collection
+    -> findOne() : tìm kiếm 1 document trong collection
+    -> updateOne() : cập nhật 1 document trong collection
+    -> updateMany() : cập nhật nhiều document trong collection
+    -> deleteOne() : xóa 1 document trong collection
+    -> deleteMany() : xóa nhiều document trong collection
+    

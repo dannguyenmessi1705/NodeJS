@@ -16,6 +16,10 @@
                 <input type="number" name="price" id="price" step="0.01" value="<%if(editing){%><%=item.price%><%}%>">
             </div>
             <div class="form-control">
+                <label for="url">URL</label>
+                <input type="text" name="url" id="url" rows="5" value="<%if(editing){%><%=item.url%><%}%>">
+            </div>
+            <div class="form-control">
                 <label for="description">Description</label>
                 <textarea type="text" name="description" id="description" rows="5"><%if(editing){%><%=item.description%><%}%></textarea>
             </div>

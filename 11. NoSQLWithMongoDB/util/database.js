@@ -10,12 +10,13 @@ const client = new MongoClient(URL, {
   },
 }); // Tạo client kết nối với database
 
-const mongoConnect = () => {
+const mongoConnect = (callback) => {
   client
     .connect() // Kết nối với database
     .then((result) => {
       console.log("Connected!");
       _db = result.db();
+      callback()
       // console.log(_db)
     }) // Lưu trữ database vào biến _db
     .catch((err) => {

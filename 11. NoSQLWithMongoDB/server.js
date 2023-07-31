@@ -14,14 +14,14 @@ const notFoundRoute = require("./Routes/notFound");
 const path = require("path");
 const rootDir = require("./util/path.js");
 app.use(express.static(path.join(rootDir, "public")));
-const IP = "192.168.1.15";
+const IP = "192.168.1.6";
 
 app.use("/admin", adminRoute);
 app.use(personRoute);
 app.use(notFoundRoute);
 
 
-const {mongoConnect} = require("./util/database"); // Nhập vào object lấy từ file database.js
+const mongoConnect = require("./util/database").mongoConnect; // Nhập vào object lấy từ file database.js
 mongoConnect(() => { 
   app.listen(3000, "localhost" || IP);
 }); // Kết nối với database
