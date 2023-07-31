@@ -1,52 +1,5 @@
-Source code lấy từ folder 9. Database, thêm module sequelize
+Source code lấy từ folder 10. Sequelize, thêm module mongodb
 
-- Folder 10. Sequelize, nói về cách sử dụng Sequelize trong NodeJS: tạo model, migration, seed, cách tạo quan hệ giữa các model, cách tạo quan hệ giữa các bảng trong database
-- Sequelize (ORM) Object Relational Mapping là một kỹ thuật lập trình cho phép chúng ta truy cập vào database thông qua các đối tượng và thuộc tính của chúng (được tạo từ ngôn ngữ lập trình), thay vì phải viết các câu lệnh SQL truy vấn trực tiếp (như ở folder 9).
-- Để sử dụng sequelize, cài thêm module sequelize kết hợp với module quản lý database (mysql2, pg, sqlite3, ...)
-=> Trong project này sử dụng mysql2
-1, Tạo kết nối đến MySQL ("./util/database.js")
-2, Tạo model products("./models/product.js"), users("./models/users") bằng phương thức define của sequelize
-    -> khi chạy, MySQL tự chuyển tên thành in thường và thêm 's' vào cuối
-    -> Nó ngoài có các thuộc tính đã tạo sẵn thì còn tự thêm 2 thuộc tính createdAt và updatedAt vào (tự động tạo ra khi tạo mới và cập nhật)
-3, Tạo bảng trong database bằng phương thức sync của sequelize ("./server.js)
-    -> sync({force: true}) để xóa bảng cũ và tạo bảng mới
-    -> sync() để tạo bảng mới nếu chưa có, nếu có sắn thì không làm gì cả
-4, Sử dụng các thuộc tính của model để tạo dữ liệu, thuộc tính sẽ trả về 1 promise ("./controllers/admin.js"), ("./controllers/user.js")
-    -> create() để tạo dữ liệu mới, VD: create({name: 'name', price: 1000})
-    -> findAll() để lấy tất cả dữ liệu, VD: findAll({where: {id: 1}}) để lấy dữ liệu có id = 1
-    -> findByPk() để lấy dữ liệu theo id, VD: findByPk(1)
-    -> findOne() để lấy dữ liệu theo điều kiện, VD: findOne({where: {id: 1}})
-    -> update() để cập nhật dữ liệu, VD: update({name: 'new name'}, {where
-    : {id: 1}}) (Sau khi tìm được đối tượng cụ thể trong database)
-    -> destroy() để xóa dữ liệu, VD: destroy({where: {id: 1}}) (Sau khi tìm được đối tượng cụ thể trong database)
-5, Xác định mối quan hệ giữa các bảng, model với nhau trong sequelize (server.js)
-    -> 1-1: hasOne(), belongsTo() (VD: 1 user có 1 cart, 1 cart thuộc về 1 user)
-    -> 1-n: hasMany(), belongsTo() (VD: 1 user có nhiều product, 1 product thuộc về 1 user)
-    -> n-n: belongsToMany() (VD: 1 product có nhiều category, 1 category có nhiều product) 
-    Từ các mối quan hệ này, các đối tượng có thể có các phương thức đặc biệt thay cho 1 số phương thức mặc định
-    (Special methods, giúp cho việc tạo, cập nhật, xóa dữ liệu từ các bảng liên quan dễ dàng hơn, như không cần phải thêm Khoá ngoại, ... vào)
-    VD: 
-    + A.hasOne(B)
-        -> A.getB() để lấy đối tượng B, A.setB() để gán đối tượng B, A.createB() để tạo đối tượng B và ngược lại
-    + A.belongsTo(B) 
-        -> A.getB() để lấy đối tượng B, A.setB() để gán đối tượng B, A.createB() để tạo đối tượng B và ngược lại
-    + A.hasMany(B)
-        -> A.getBs() để lấy danh sách đối tượng B, A.setBs() để gán danh sách đối tượng B, A.createB() để tạo đối tượng B và ngược lại, A.addB() để thêm 1 đối tượng B vào danh sách, A.removeB() để xóa 1 đối tượng B khỏi danh sách, A.removeBs() để xóa tất cả đối tượng B khỏi danh sách, A.countBs() để đếm số lượng đối tượng B trong danh sách, A.hasB() để kiểm tra đối tượng B có trong danh sách hay không, A.hasBs(),... và ngược lại
-    + A.belongsToMany(B)
-        -> Tương tự như A.hasMany(B)
-6, Tạo 1 user và middleware giả cho nó để test các phương thức của sequelize (server.js)
-7, Tạo các phương thức của user ("./controllers/admin.js") (Phân quyền user)
-    -> Thêm product 
-    -> Xóa product
-    -> Lấy danh sách product
-    -> Sửa product 
-8, Tạo thêm model cart, cartItem, các phương thức của cart ("./models/cart.js"), ("./models/cartitem.js"), ("./server.js")
-    -> mỗi user có 1 cart, mỗi cart có nhiều product, mỗi product có nhiều cart
-    => cartItem là bảng trung gian giữa cart và product, cartItem có thêm thuộc tính count
-    -> cart có thêm thuộc tính totalPrice (tổng của tất cả totalPrice của các cartItem)
-    -> cart có thêm phương thức addProduct(), removeProduct(), getProducts(), setProducts(), ... ("./controllers/user.js")
-9, Tạo thêm model order, orderItem, các phương thức của order ("./models/orders.js"), ("./models/orderItems.js"), ("./server.js")
-    -> mỗi user có nhiều order, mỗi order có nhiều product, mỗi product có nhiều order
-    => orderItem là bảng trung gian giữa order và product, orderItem có thêm thuộc tính count
-    -> order có thêm thuộc tính totalPrice (tổng của tất cả totalPrice của các orderItem)
-    -> order có thêm phương thức addProduct(), removeProduct(), getProducts(), setProducts(), ... ("./controllers/user.js")
+- Folder 11. NoSQLWithMongoDB, nói về cách sử dụng NoSQl với MongoDB
+
+1, Connect tới MongoDB ("./util/database.js"), ("server.js")
