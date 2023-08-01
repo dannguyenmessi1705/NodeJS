@@ -1,8 +1,8 @@
 const Product = require("../models/products");
 
-// {GET ALL PRODUCTS DATABASE} //
+// {GET ALL PRODUCTS MONGODB} //
 const getIndex = (req, res) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("./user/index", {
         title: "Home",
@@ -13,9 +13,9 @@ const getIndex = (req, res) => {
     .catch((err) => console.log(err));
 };
 
-// {GET ALL PRODUCTS DATABASE} //
+// {GET ALL PRODUCTS MONGODB} //
 const getProduct = (req, res) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       // Kết quả trả về của promise là 1 array chứa 2 phần tử là [data] và field [[data], field] => dùng destructuring để lấy ra trong hàm callback của then
       res.render("./user/productList", {
@@ -27,11 +27,11 @@ const getProduct = (req, res) => {
     .catch((err) => console.log(err));
 };
 
-// {FIND BY ID} //
+// {FIND BY ID IN MONGODB} //
 const getDetail = (req, res) => {
   const ID = req.params.productID; // lấy id của sản phẩm từ dynamic route, params là thuộc tính của req, productID là tên dynamic route
   // VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
-  Product.findByPk(ID)
+  Product.findById(ID)
     .then((product) => {
       res.render("./user/productDetail", {
         title: "Product Detail",
@@ -68,37 +68,6 @@ const getCart = (req, res) => {
     .catch((err) => console.log(err))
     .catch((err) => console.log(err));
 };
-/*
-// {UI CART} //
-const getCart = (req, res) => {
-  // Lấy tất cả dữ liệu trong cart
-  Cart.fetchCart((carts) => {
-    // Lấy tất cả dữ liệu trong product
-    Product.fetchAll()
-      .then(([value, field]) => {
-        // Kết quả trả về của promise là 1 array chứa 2 phần tử là [data] và field [[data], field] => dùng destructuring để lấy ra trong hàm callback của then
-        const productInCart = []; // Tạo 1 mảng lưu các giá trị ID trong cart = product
-        value.forEach((item) => {
-          const hasProduct = carts.products.find(
-            (cartProduct) => cartProduct.id == item.id
-          );
-          // hasProduct trả về 1 product trong cart trùng với product bên ngoài
-          if (hasProduct) {
-            productInCart.push({ cartItem: item, count: hasProduct.count }); // đưa product bên ngoài và số lượng product trong giỏ hàng vào mảng
-          }
-          // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
-          res.render("./user/cart", {
-            title: "Cart",
-            path: "/cart",
-            totalPrice: carts.totalPrice,
-            items: productInCart,
-          });
-        });
-      })
-      .catch((err) => console.log(err));
-  });
-};
-*/
 
 // {POST CART} //
 // {USE SPECIAL METHOD SEQUELIZE} //

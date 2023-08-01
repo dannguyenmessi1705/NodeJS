@@ -4,8 +4,11 @@ Source code lấy từ folder 10. Sequelize, thêm module mongodb
 
 1, Connect tới MongoDB ("./util/database.js"), ("server.js")
 2, Tạo model, collection 'products' ("./models/product.js") và thêm dữ liệu products vào collection ("./controllers/admin.js")
-
-
+3, Lấy tất cả products từ collection 'products', lấy cụ thề 1 product  ("./controllers/user.js"), ("./controllers/admin.js"), ("./model/products.js")
+4, Cập nhật 1 product trong collection 'products' ("./controllers/admin.js") ("./models/products.js)
+5, Xóa 1 product trong collection 'products' ("./controllers/admin.js") ("./models/products.js)
+6, Tạo model, collection 'users' ("./models/user.js") và thêm dữ liệu users vào collection ("./controllers/auth.js")
+Vì user có quan hệ 1-n với products, nên trong products chứa id của user
 -> Các thao tác CRUD với MongoDB ("./controllers/admin.js")
     -> insertOne() : thêm 1 document vào collection
     -> insertMany() : thêm nhiều document vào collection

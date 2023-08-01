@@ -19,7 +19,7 @@
                     </div>
                     <div class="card__actions">
                         <!-- ADD ID FOR PRODUCT -->
-                        <a href="/product/<%= item.id %>" class="btn">Detail</a>
+                        <a href="/product/<%= item._id %>" class="btn">Detail</a>
                         <!-- href = product/0.7834371053383911 -->
                         <!-- POST CART  -->
                         <%- include('../includes/addCart.ejs', {item: item}) %>

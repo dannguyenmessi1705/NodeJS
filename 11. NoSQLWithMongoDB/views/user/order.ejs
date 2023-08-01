@@ -6,7 +6,7 @@
         <ul class="cart__item-list">
             <% items.forEach(item => { %>
                 <li class="cart__item" style="list-style-type: none;">
-                    <h1># <%= item.id %></h1>
+                    <h1># <%= item._id %></h1>
                     <% item.products.forEach(product => { %> 
                         <h1><%= product.name %></h1>
                         <h2>Quantity: <%= product.orderitems.count %></h2>
