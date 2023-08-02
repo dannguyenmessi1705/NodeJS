@@ -1,0 +1,25 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <% if(orders.length > 0){ %>
+        <ul>
+            <% orders.forEach(order => { %>
+                <li style="list-style-type: none;">
+                    <h1 class="center"># <%= order._id %></h1>
+                    <% order.items.forEach(item => { %> 
+                        <div style="display: flex; justify-content: space-around; border-bottom: 0.2px solid aliceblue">                    
+                            <h2><%= item.name %></h2>
+                            <h3>Quantity: <%= item.quantity %></h3>
+                        </div>
+                    <% }) %>
+                </li>
+                <hr>
+            <% }) %>
+        </ul>
+    <% }else{ %>
+        <div class="empty">
+            <h1>There is nothing here</h1>
+        </div>
+    <% } %>
+<%- include('../includes/end.ejs') %>
