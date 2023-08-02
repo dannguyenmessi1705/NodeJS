@@ -46,26 +46,20 @@ const getDetail = (req, res) => {
 // {USE SPECIAL METHOD SEQUELIZE} //
 const getCart = (req, res) => {
   // Lấy tất cả dữ liệu trong cart
-  let storeCart; // Lưu lại cart
   req.user
-    .getCart() // Lấy cart của user
-    .then((cart) => {
-      storeCart = cart;
-      return cart.getProducts();
-    }) // Lấy tất cả product trong cart
+    .getCartUser() // Lấy cart của user
     .then((products) => {
-      storeCart.totalPrice = products.reduce((sum, product) => {
-        return (sum += product.price * product.cartitems.count);
-      }, 0); // Tính tổng giá tiền của tất cả product trong cart
+      // products = [{} ,{}]
+      let totalPrice = products.reduce((sum, product, index) => {
+        return +product.price * product.quantity + sum;
+      }, 0); // Tính tổng tiền của tất cả product trong cart
       res.render("./user/cart", {
         title: "Cart",
         path: "/cart",
-        totalPrice: storeCart.totalPrice,
         items: products,
+        totalPrice: totalPrice,
       }); // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
-    })
-    .catch((err) => console.log(err))
-    .catch((err) => console.log(err))
+    }) // Lấy tất cả product trong cart
     .catch((err) => console.log(err));
 };
 
@@ -74,7 +68,7 @@ const postCart = (req, res) => {
   const ID = req.body.id; // Lấy giá id từ trong thẻ input đã được hidden trong addCart.ejs (mục đích dùng input là để lấy ra id của product đã có sẵn trong database, không cần phải thông qua việc kiểm tra id đó có tồn tại hay không)
   Product.findById(ID).then((product) => {
     // Tìm ID sản phẩm và thêm vào cart qua phương thức addToCart của req.user (đã được lưu ở middleware phân quyền)
-    req.user
+    return req.user
       .addToCart(product)
       .then((result) => {
         res.redirect("/cart");
@@ -84,35 +78,21 @@ const postCart = (req, res) => {
 };
 
 // {DELETE CART} //
-// {USE SPECIAL METHOD SEQUELIZE} //
 const deleteCart = (req, res) => {
   const ID = req.body.id; // Lấy giá id từ trong thẻ input đã được hidden trong cart.ejs (mục đích dùng input là để lấy ra id của product đã có sẵn trong database, không cần phải thông qua việc kiểm tra id đó có tồn tại hay không)
   // Tìm ID sản phẩm
-  req.user
-    .getCart() // Lấy cart của user
-    .then((cart) => {
-      return cart.getProducts({ where: { id: ID } });
-    }) // Trả về product trong cart có id vừa nhận trong request
-    .then(([product]) => {
-      if (product) return product.cartitems.destroy();
-    }) // Xoá product trong cart thông qua bảng trung gian CartItem
-    .then(() => res.redirect("/cart")) // Sau khi xoá product trong cart thì chuyển hướng đến trang cart
-    .catch((err) => console.log(err)); // Nếu không tìm được product trong cart
+  Product.findById(ID)
+    .then((product) => {
+      if (product) {
+        return req.user.deleteCartUser(product);
+      }
+    })
+    .then((result) => {
+      console.log("Deleted!");
+      res.redirect("/cart");
+    })
+    .catch((err) => console.log(err));
 };
-/*
-// {DELETE CART} //
-const deleteCart = (req, res) => {
-  const ID = req.body.id; // Lấy giá id từ trong thẻ input đã được hidden trong cart.ejs (mục đích dùng input là để lấy ra id của product đã có sẵn trong database, không cần phải thông qua việc kiểm tra id đó có tồn tại hay không)
-  // Tìm ID sản phẩm
-  Product.findByID(ID, (item) => {
-    // Nếu tìm được
-    if (item)
-      // Xoá sản phẩm trong giỏ hàng
-      Cart.deleteCartItem(ID, item.product.price);
-    res.redirect("/cart");
-  });
-};
-*/
 
 const getOrder = (req, res) => {
   req.user

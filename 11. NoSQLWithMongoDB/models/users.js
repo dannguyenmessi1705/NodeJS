@@ -25,18 +25,17 @@ class User {
       .collection("users") // Lấy collection users trong database (nếu chưa có sẽ tự động tạo mới)
       .findOne({ _id: ID }) // Tìm kiếm user trong collection users có id là ID (Nếu muốn trả về object không cần next() thì dùng findOne())
       .then((result) => {
-        console.log(result);
         return result;
       })
       .catch((err) => console.log(err));
   }
   // Thêm product vào cart
   addToCart(product) {
+    let updateQuantity = 1; // Khởi tạo biến lưu số lượng product
+    let cartUpdate = [...this.cart.items]; // Tạo một array mới bằng cách copy từ array cũ
     const cartIndex = this.cart.items.findIndex((item) => {
       return item.productId.toString() === product._id.toString();
     }); // Tìm kiếm product trong cart có id trùng với id của product được truyền vào
-    let cartUpdate = [...this.cart.items]; // Tạo một array mới bằng cách copy từ array cũ
-    let updateQuantity = 1; // Khởi tạo biến lưu số lượng product
     if (cartIndex >= 0) {
       // Nếu tìm thấy product trong cart
       updateQuantity = cartUpdate[cartIndex].quantity + 1; // Tăng số lượng product lên 1
@@ -58,6 +57,51 @@ class User {
       { _id: new ObjectId(this._id) }, // Tìm kiếm user có id là this._id
       { $set: { cart: updateItem } } // Cập nhật lại cart của user
     );
+  }
+
+  // Lấy cart của user
+  getCartUser() {
+    const db = getDB(); // Lấy database từ server MongoDB (xử lý trong file database.js)
+    const cartUser = this.cart.items.map((item) => {
+      return item.productId;
+    }); // Lấy ra mảng các id của product trong cart
+    return db
+      .collection("products")
+      .find({ _id: { $in: cartUser } })
+      .toArray() // Tìm kiếm các product có id nằm trong mảng cartUser trong collection products qua từ khoá tìm kiếm $in: [], sau đó chuyển kết quả thành array
+      .then((products) => {
+        // Trả về mảng các product có id nằm trong mảng cartUser (thuộc tính product giữ nguyên qua toán tử spread, thêm thuộc tính quantity)
+        return products.map((product) => {
+          return {
+            ...product,
+            quantity: this.cart.items.find((item) => {
+              return product._id.toString() === item.productId.toString(); // Tìm kiếm product trong cart có id trùng với id của product được truyền vào, dùng toString() để so sánh 2 string vì ban đầu item.productId, product._id là object
+            }).quantity, // Lấy ra thuộc tính quantity của cart.item trong user
+          };
+        });
+      })
+      .catch((err) => console.log(err));
+  }
+  // Xoá cart trong User
+  deleteCartUser(product) {
+    const cart = this.cart.items; // Lấy ra mảng các product trong cart
+    const cartIndex = cart.findIndex((item) => {
+      // Tìm kiếm product trong cart có id trùng với id của product được truyền vào
+      return item.productId.toString() === product._id.toString(); // Dùng toString() để so sánh 2 string vì ban đầu item.productId, product._id là object
+    });
+    cart.splice(cartIndex, 1); // Xoá product trong cart
+    const cartUpdate = {
+      // Tạo object cartUpdate để cập nhật cart
+      items: cart,
+    };
+    const db = getDB(); // Lấy database từ server MongoDB (xử lý trong file database.js)
+    return db // Cập nhật lại cart của user
+      .collection("users")
+      .updateOne({ _id: new Object(this._id) }, { $set: { cart: cartUpdate } }) // Tìm kiếm user có id là this._id, sau đó cập nhật lại cart của user
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => console.log(err));
   }
 }
 
