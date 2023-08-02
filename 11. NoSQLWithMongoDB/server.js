@@ -18,7 +18,7 @@ const User = require("./models/users"); // Nhập vào class User lấy từ fil
 app.use((req, res, next) => {
   User.findById("64c88f273be19a3b8663c9aa") // Tìm kiếm user có id là "64c88f273be19a3b8663c9aa"
     .then((user) => {
-      req.user = user; // Lưu lại user vào request để sử dụng ở các middleware tiếp theo
+      req.user = new User(user.username, user.email, user.cart, user._id); // Lưu lại user vào request để sử dụng ở các middleware tiếp theo
       next(); // Tiếp tục chạy các middleware tiếp theo
     })
     .catch((err) => console.log(err));

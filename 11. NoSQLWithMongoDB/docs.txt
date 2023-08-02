@@ -9,13 +9,33 @@ Source code lấy từ folder 10. Sequelize, thêm module mongodb
 5, Xóa 1 product trong collection 'products' ("./controllers/admin.js") ("./models/products.js)
 6, Tạo model, collection 'users' ("./models/user.js") và thêm dữ liệu users vào collection ("./controllers/auth.js")
 Vì user có quan hệ 1-n với products, nên trong products chứa id của user
+7, Tạo thuộc tính giỏ hàng trong user, chứa các products đã mua, quan hệ 1-1 với user ("./models/user.js"), ("./controllers/user.js")
+
 -> Các thao tác CRUD với MongoDB ("./controllers/admin.js")
-    -> insertOne() : thêm 1 document vào collection
-    -> insertMany() : thêm nhiều document vào collection
-    -> find() : tìm kiếm document trong collection
-    -> findOne() : tìm kiếm 1 document trong collection
-    -> updateOne() : cập nhật 1 document trong collection
-    -> updateMany() : cập nhật nhiều document trong collection
-    -> deleteOne() : xóa 1 document trong collection
-    -> deleteMany() : xóa nhiều document trong collection
-    
+    -> insertOne() : thêm 1 document vào collection (Trả về Promise)
+    -> insertMany() : thêm nhiều document vào collection (Trả về Promise)
+    -> find() : tìm kiếm document trong collection (Trả về Cursor)
+    -> findOne() : tìm kiếm 1 document trong collection (Trả về Promise)
+    -> updateOne() : cập nhật 1 document trong collection (Trả về Promise)
+    -> updateMany() : cập nhật nhiều document trong collection (Trả về Promise)
+    -> deleteOne() : xóa 1 document trong collection (Trả về Promise)
+    -> deleteMany() : xóa nhiều document trong collection (Trả về Promise)
+    -> aggregate() : thực hiện các phép toán trên collection (Trả về Promise)
+    -> countDocuments() : đếm số document trong collection (Trả về Promise)
+    -> estimatedDocumentCount() : đếm số document trong collection (Trả về Promise)
+    -> distinct() : trả về các giá trị duy nhất của 1 field trong collection (Trả về Promise)
+    -> findOneAndDelete() : tìm kiếm và xóa 1 document trong collection (Trả về Promise)
+    -> findOneAndReplace() : tìm kiếm và thay thế 1 document trong collection (Trả về Promise)
+    -> findOneAndUpdate() : tìm kiếm và cập nhật 1 document trong collection (Trả về Promise)
+    -> findOneAndUpsert() : tìm kiếm và cập nhật 1 document trong collection, nếu không tìm thấy thì thêm mới (Trả về Promise)
+    -> replaceOne() : thay thế 1 document trong collection (Trả về Promise)
+    -> watch() : theo dõi các thay đổi trên collection (Trả về ChangeStream)
+    -> createIndex() : tạo index cho collection (Trả về Promise)
+    -> createIndexes() : tạo nhiều index cho collection (Trả về Promise)
+    -> dropIndex() : xóa index của collection (Trả về Promise)
+    -> dropIndexes() : xóa nhiều index của collection (Trả về Promise)
+    -> listIndexes() : liệt kê các index của collection (Trả về Cursor)
+    -> indexExists() : kiểm tra index có tồn tại trong collection không (Trả về Promise)
+    -> indexInformation() : trả về thông tin index của collection (Trả về Promise)
+    -> stats() : trả về thông tin thống kê của collection (Trả về Promise)
+

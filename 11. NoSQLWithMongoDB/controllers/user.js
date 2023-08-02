@@ -69,51 +69,19 @@ const getCart = (req, res) => {
     .catch((err) => console.log(err));
 };
 
-// {POST CART} //
-// {USE SPECIAL METHOD SEQUELIZE} //
+// {POST CART IN MONGODB} //
 const postCart = (req, res) => {
   const ID = req.body.id; // Lấy giá id từ trong thẻ input đã được hidden trong addCart.ejs (mục đích dùng input là để lấy ra id của product đã có sẵn trong database, không cần phải thông qua việc kiểm tra id đó có tồn tại hay không)
-  let storeCart; // Lưu lại cart
-  let count = 1; // Số lượng product trong cart
-  req.user
-    .getCart() // Lấy cart của user
-    .then((cart) => {
-      storeCart = cart; // Lưu lại cart
-      return cart.getProducts({ where: { id: ID } }); // Trả về product trong cart có id vừa nhận trong request
-    })
-    .then((product) => {
-      if (product.length > 0) {
-        // Nếu product đã tồn tại trong cart
-        count = product[0].cartitems.count + 1; // Tăng số lượng product trong cart lên 1
-        return product; // Trả về product
-      } else {
-        // Nếu product chưa tồn tại trong cart
-        return req.user.getProducts({ where: { id: ID } }); // Trả về product trong database có id vừa nhận trong request
-      }
-    })
-    .then(([product]) => {
-      // Dùng destructuring để lấy ra product trong array
-      return storeCart.addProduct(product, { through: { count: count } }); // Thêm product vào cart, thông qua bảng trung gian CartItem (productId, cartId thêm vào đây), với số lượng product là count
-    })
-    .then(() => {
-      // Sau khi thêm product vào cart
-      res.redirect("/cart"); // Chuyển hướng đến trang cart
-    })
-    .catch((err) => console.log(err))
-    .catch((err) => console.log(err))
-    .catch((err) => console.log(err))
-    .catch((err) => console.log(err));
-};
-/*
-// {POST CART} //
-const postCart = (req, res) => {
-  const ID = req.body.id; // Lấy giá id từ trong thẻ input đã được hidden trong addCart.ejs (mục đích dùng input là để lấy ra id của product đã có sẵn trong database, không cần phải thông qua việc kiểm tra id đó có tồn tại hay không)
-  Product.findByID(ID, (item) => {
-    Cart.addCart(ID, item.product.price);
+  Product.findById(ID).then((product) => {
+    // Tìm ID sản phẩm và thêm vào cart qua phương thức addToCart của req.user (đã được lưu ở middleware phân quyền)
+    req.user
+      .addToCart(product)
+      .then((result) => {
+        res.redirect("/cart");
+      })
+      .catch((err) => console.log(err));
   });
-  res.redirect("/cart");
 };
-*/
 
 // {DELETE CART} //
 // {USE SPECIAL METHOD SEQUELIZE} //
