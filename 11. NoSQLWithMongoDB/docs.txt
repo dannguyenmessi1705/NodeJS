@@ -10,6 +10,7 @@ Source code lấy từ folder 10. Sequelize, thêm module mongodb
 6, Tạo model, collection 'users' ("./models/user.js") và thêm dữ liệu users vào collection ("./controllers/auth.js")
 Vì user có quan hệ 1-n với products, nên trong products chứa id của user
 7, Tạo thuộc tính giỏ hàng trong user, chứa các products đã mua, quan hệ 1-1 với user, thêm chức năng addtoCart, getCart và deleteCart ("./models/user.js"), ("./controllers/user.js")
+8, Tạo thuộc tính order trong user, chứa các products đã mua, thêm chức năng addOrder, getOrders ("./models/user.js"), ("./controllers/user.js")
 
 -> Các thao tác CRUD với MongoDB ("./controllers/admin.js")
     -> insertOne() : thêm 1 document vào collection (Trả về Promise)

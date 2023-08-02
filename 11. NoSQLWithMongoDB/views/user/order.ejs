@@ -2,16 +2,19 @@
 </head>
 <body>
     <%- include('../includes/nav.ejs') %>
-    <% if(items.length > 0){ %>
-        <ul class="cart__item-list">
-            <% items.forEach(item => { %>
-                <li class="cart__item" style="list-style-type: none;">
-                    <h1># <%= item._id %></h1>
-                    <% item.products.forEach(product => { %> 
-                        <h1><%= product.name %></h1>
-                        <h2>Quantity: <%= product.orderitems.count %></h2>
+    <% if(orders.length > 0){ %>
+        <ul>
+            <% orders.forEach(order => { %>
+                <li style="list-style-type: none;">
+                    <h1 class="center"># <%= order._id %></h1>
+                    <% order.items.forEach(item => { %> 
+                        <div style="display: flex; justify-content: space-around; border-bottom: 0.2px solid aliceblue">                    
+                            <h2><%= item.name %></h2>
+                            <h3>Quantity: <%= item.quantity %></h3>
+                        </div>
                     <% }) %>
                 </li>
+                <hr>
             <% }) %>
         </ul>
     <% }else{ %>

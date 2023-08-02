@@ -31,6 +31,10 @@ class User {
   }
   // Thêm product vào cart
   addToCart(product) {
+    // Nếu ban đầu cart chưa có thuộc tính items (array) thì tạo
+    if (!this.cart?.items) {
+      this.cart = { items: [] };
+    }
     let updateQuantity = 1; // Khởi tạo biến lưu số lượng product
     let cartUpdate = [...this.cart.items]; // Tạo một array mới bằng cách copy từ array cũ
     const cartIndex = this.cart.items.findIndex((item) => {
@@ -60,7 +64,7 @@ class User {
   }
 
   // Lấy cart của user
-  getCartUser() {
+  getCartByUser() {
     const db = getDB(); // Lấy database từ server MongoDB (xử lý trong file database.js)
     const cartUser = this.cart.items.map((item) => {
       return item.productId;
@@ -83,7 +87,7 @@ class User {
       .catch((err) => console.log(err));
   }
   // Xoá cart trong User
-  deleteCartUser(product) {
+  deleteCartByUser(product) {
     const cart = this.cart.items; // Lấy ra mảng các product trong cart
     const cartIndex = cart.findIndex((item) => {
       // Tìm kiếm product trong cart có id trùng với id của product được truyền vào
@@ -102,6 +106,44 @@ class User {
         console.log(result);
       })
       .catch((err) => console.log(err));
+  }
+  // Thêm order vào database
+  addOrderByUser() {
+    const db = getDB(); // Lấy database từ server MongoDB (xử lý trong file database.js)
+    return this.getCartByUser() // Lấy hết products trong cart của user
+      .then((products) => {
+        // Sau khi lấy hết products trong cart của user thì thêm vào collection orders qua object orderAdd
+        const orderAdd = {
+          items: products,
+          user: {
+            userId: new ObjectId(this._id),
+            username: this.username,
+            email: this.email,
+          },
+        };
+        return db
+          .collection("orders")
+          .insertOne(orderAdd) // Thêm tất cả product trong cart user vào collection orders
+          .then((result) => {
+            // Sau khi thêm order vào collection orders, xoá cart của user đi
+            db.collection("users").updateOne(
+              { _id: new ObjectId(this._id) },
+              { $set: { cart: { items: [] } } } // Cập nhật lại cart của user là một object chưa array rỗng
+            );
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }
+  // Lấy order của user
+  getOrderByUser() {
+    const db = getDB();
+    return db.collection("orders").find({"user.userId": new ObjectId(this._id)}).toArray()
+    .then(orderItems => { 
+      console.log(orderItems)
+      return orderItems
+    })
+    .catch(err => console.log(err))
   }
 }
 

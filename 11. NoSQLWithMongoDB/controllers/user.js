@@ -42,12 +42,11 @@ const getDetail = (req, res) => {
     .catch((err) => console.log(err));
 };
 
-// {GET ALL PRODUCTS In CART AT DATABASE FROM USER} //
-// {USE SPECIAL METHOD SEQUELIZE} //
+// {GET ALL PRODUCTS In CART MONGODB} //
 const getCart = (req, res) => {
   // Lấy tất cả dữ liệu trong cart
   req.user
-    .getCartUser() // Lấy cart của user
+    .getCartByUser() // Lấy cart của user
     .then((products) => {
       // products = [{} ,{}]
       let totalPrice = products.reduce((sum, product, index) => {
@@ -77,14 +76,14 @@ const postCart = (req, res) => {
   });
 };
 
-// {DELETE CART} //
+// {DELETE CART IN MONGODB} //
 const deleteCart = (req, res) => {
   const ID = req.body.id; // Lấy giá id từ trong thẻ input đã được hidden trong cart.ejs (mục đích dùng input là để lấy ra id của product đã có sẵn trong database, không cần phải thông qua việc kiểm tra id đó có tồn tại hay không)
   // Tìm ID sản phẩm
   Product.findById(ID)
     .then((product) => {
       if (product) {
-        return req.user.deleteCartUser(product);
+        return req.user.deleteCartByUser(product);
       }
     })
     .then((result) => {
@@ -94,44 +93,25 @@ const deleteCart = (req, res) => {
     .catch((err) => console.log(err));
 };
 
+// {GET ALL ORDERS IN MONGODB} //
 const getOrder = (req, res) => {
   req.user
-    .getOrders({ include: ["products"] }) // Lấy tất cả order của user, include: ['products'] để add thêm tất cả products vào thuộc tính products của order
-    .then((orders) => {
+    .getOrderByUser() // Lấy tất cả order của user, include: ['products'] để add thêm tất cả products vào thuộc tính products của order
+    .then((orderItems) => {
       res.render("./user/order", {
         title: "Order",
         path: "/order",
-        items: orders,
+        orders: orderItems,
       });
     })
     .catch((err) => console.log(err));
 };
+// {POST ORDER IN MONGODB} //
 const postOrder = (req, res) => {
-  let storeCart; // Lưu lại cart
   req.user
-    .getCart() // Lấy cart của user
-    .then((cart) => {
-      storeCart = cart; // Lưu lại cart
-      return cart.getProducts(); // Lấy tất cả product trong cart
-    })
-    .then((products) => {
-      return req.user
-        .createOrder() // Tạo order cho user
-        .then((order) => {
-          return order.addProducts(
-            products.map((product) => {
-              product.orderitems = {
-                count: product.cartitems.count,
-              }; // Thêm thuộc tính count vào orderitems của product thong qua bảng trung gian cartitems
-              return product;
-            })
-          ); // Thêm product vào order, thông qua bảng trung gian OrderItem (productId, orderId thêm vào đây)
-        })
-        .then(() => {
-          storeCart.setProducts(null); // Xoá tất cả product trong cart khi đã thêm vào order
-          res.redirect("/order"); // Sau khi thêm product vào order thì chuyển hướng đến trang order
-        })
-        .catch((err) => console.log(err));
+    .addOrderByUser()
+    .then(() => {
+      res.redirect("/order");
     })
     .catch((err) => console.log(err));
 };
