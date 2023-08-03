@@ -1,5 +1,53 @@
+const products = require("../models/products");
 const Product = require("../models/products");
+// {GET ALL PRODUCTS BY MONGOOSE} //
+const getIndex = (req, res) => {
+  Product.find()
+    .then((products) => {
+      res.render("./user/index", {
+        title: "Home",
+        items: products,
+        path: "/",
+      });
+    })
+    .catch((err) => console.log(err));
+};
 
+// {GET ALL PRODUCTS BY MONGOOSE} //
+const getProduct = (req, res) => {
+  Product.find()
+    .then((products) => {
+      res.render("./user/productList", {
+        title: "Product",
+        items: products,
+        path: "/product",
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// {GET PRODUCT DETAIL BY MONGOOSE} //
+const getDetail = (req, res) => {
+  const ID = req.params.productID // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
+  Product.findById(ID)
+  .then(product => {
+    res.render("./user/productDetail", {
+      title: "Product Detail",
+      path: "/product",
+      item: product,
+    });
+  }).catch(err => console.log(err))
+}
+module.exports = { 
+  getIndex,
+  getProduct,
+  getDetail,
+
+
+};
+
+/* 11. MongoDB
+const Product = require("../models/products");
 // {GET ALL PRODUCTS MONGODB} //
 const getIndex = (req, res) => {
   Product.fetchAll()
@@ -126,3 +174,4 @@ module.exports = {
   getOrder,
   postOrder,
 };
+*/

@@ -1,4 +1,18 @@
 Source code lấy từ folder 11. NoSQLWithMongoDB, thêm module mongoose
 
-- Folder 12. Mongoose, nói về cách sử dụng NoSQl với MongoDB
+- Folder 12. Mongoose (ODM) - Object Document Mapping là một thư viện giúp tương tác với NoSQL dễ dàng hơn (tương tự như sequelize ORM trong SQL)
+-> giúp tạo schema, model, validate, query, populate, aggregate, ... dễ dàng hơn
+-> Lược bỏ nhiều bước phức tạp so với dùng trực tiếp với MongoDB như:
+    + Khi query các dữ liệu, không cần phải chuyển id từ string sang ObjectId, ...
+    + Khi tạo schema, không cần phải tạo các collection, các method để query, validate, ...
 
+1, Tạo connection với MongoDB bằng mongoose.connect() ("./utils/database.js") ("./server.js")
+2, Tạo schema products ("./models/product.js") và các method cho schema ("./controller/admin.js"), ("./controller/user.js")
+-> Lưu ý: khi tạo schema, mongoose sẽ tự động tạo collection trong MongoDB với tên là số nhiều của schema (ví dụ: Product -> products)
+    -> save(): Lưu products vào collection products trong MongoDB ("./controller/admin.js")
+    -> find(): Tìm tất cả products trong collection products trong MongoDB ("./controller/admin.js")
+    -> findById(): Tìm product có id trong collection products trong MongoDB ("./controller/admin.js")
+    -> findByIdAndRemove(): Xóa product có id trong collection products trong MongoDB ("./controller/admin.js")
+    -> findByIdAndUpdate(): Cập nhật product có id trong collection products trong MongoDB ("./controller/admin.js")
+    -> findOne(): Tìm 1 product trong collection products trong MongoDB ("./controller/user.js")
+-> Lưu ý: Kết quả trả về của các method là 1 promise và không phải là dạng cursor như khi dùng MongoDB
