@@ -1,4 +1,4 @@
-const products = require("../models/products");
+const Order = require("../models/orders");
 const Product = require("../models/products");
 // {GET ALL PRODUCTS BY MONGOOSE} //
 const getIndex = (req, res) => {
@@ -94,6 +94,55 @@ const deleteCart = (req, res) => {
     .catch((err) => console.log(err));
 };
 
+// {POST ORDER BY USER IN MONGOOSE}
+const postOrder = (req, res) => {
+  req.user
+    .populate("cart.items.productId") // Lấy tất cả dữ liệu user, populate để lấy thêm dữ liệu từ collection products vào thuộc tính productId của cart
+    .then((user) => {
+      const products = [...user.cart.items]; // Sau khi lấy được dữ liệu từ collection products qua populate, copy lại vào biến products
+      return products;
+    })
+    .then((products) => {
+      const productArray = products.map((item) => {
+        // Tạo mảng mới chứa các object product và quantity
+        return {
+          product: item.productId._doc, // _doc là thuộc tính của mongoose, nó sẽ lấy ra tất cả các thuộc tính của object productId
+          quantity: item.quantity, // Lấy quantity từ cart
+        };
+      });
+      const order = new Order({
+        // Tạo order mới
+        products: productArray,
+        user: {
+          username: req.user.username,
+          email: req.user.email,
+          userId: req.user._id,
+        },
+      });
+      return order.save(); // Lưu order vào database
+    })
+    .then(() => {
+      return req.user.clearCart(); // Xoá cart của user
+    })
+    .then(() => res.redirect("/order"))
+    .catch((err) => console.log(err));
+};
+
+// {GET ORDER BY USER IN MONGOOSE} //
+const getOrder = (req, res) => {
+  Order.find({ "user.userId": req.user._id }) // Tìm kiếm order có userId = userId của user hiện tại
+    .then((orders) => {
+      // orders = [{ {products: {}, quantity}, user{}}, {}]
+      console.log(orders);
+      res.render("./user/order", {
+        title: "Order",
+        path: "/order",
+        orders: orders,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
 module.exports = {
   getIndex,
   getProduct,
@@ -101,6 +150,8 @@ module.exports = {
   postCart,
   getCart,
   deleteCart,
+  postOrder,
+  getOrder,
 };
 
 /* 11. MongoDB
