@@ -28,22 +28,79 @@ const getProduct = (req, res) => {
 
 // {GET PRODUCT DETAIL BY MONGOOSE} //
 const getDetail = (req, res) => {
-  const ID = req.params.productID // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
+  const ID = req.params.productID; // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
   Product.findById(ID)
-  .then(product => {
-    res.render("./user/productDetail", {
-      title: "Product Detail",
-      path: "/product",
-      item: product,
-    });
-  }).catch(err => console.log(err))
-}
-module.exports = { 
+    .then((product) => {
+      res.render("./user/productDetail", {
+        title: "Product Detail",
+        path: "/product",
+        item: product,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// {POST CART USER BY MONGOOSE} //
+const postCart = (req, res) => {
+  const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
+  Product.findById(ID) // Tìm product có _id = ID
+    .then((product) => {
+      req.user
+        .postCartByUser(product) // Thêm product vào cart User
+        .then(() => {
+          return res.redirect("/cart");
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+};
+
+// {GET CART USER BY MONGOOSE} //
+const getCart = (req, res) => {
+  req.user
+    .populate("cart.items.productId") // Lấy tất cả dữ liệu user, populate để lấy thêm dữ liệu từ collection products vào thuộc tính productId của cart
+    .then((user) => {
+      let products = [...user.cart.items]; // Sau khi lấy được dữ liệu từ collection products qua populate, copy lại vào biến products
+      return products; // Trả về kết quả
+    })
+    .then((products) => {
+      // products = [{productId: {}, quantity, _id} ,{}]
+      let totalPrice = products.reduce((sum, product, index) => {
+        // Tính tổng tiền của tất cả product trong cart
+        return +product.productId.price * product.quantity + sum;
+      }, 0); // Tính tổng tiền của tất cả product trong cart
+      return res.render("./user/cart", {
+        title: "Cart",
+        path: "/cart",
+        items: products,
+        totalPrice: totalPrice,
+      }); // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
+    })
+    .catch((err) => console.log(err));
+};
+
+// {DELETE CART USER BY MONGOOSE} //
+const deleteCart = (req, res) => {
+  const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
+  Product.findById(ID) // Tìm product có _id = ID
+    .then((product) => {
+      req.user
+        .deleteCartByUser(product) // Xoá product trong cart User
+        .then((result) => {
+          return res.redirect("/cart");
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+};
+
+module.exports = {
   getIndex,
   getProduct,
   getDetail,
-
-
+  postCart,
+  getCart,
+  deleteCart,
 };
 
 /* 11. MongoDB

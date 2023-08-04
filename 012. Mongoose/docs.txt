@@ -9,10 +9,23 @@ Source code lấy từ folder 11. NoSQLWithMongoDB, thêm module mongoose
 1, Tạo connection với MongoDB bằng mongoose.connect() ("./utils/database.js") ("./server.js")
 2, Tạo schema products ("./models/product.js") và các method cho schema ("./controller/admin.js"), ("./controller/user.js")
 -> Lưu ý: khi tạo schema, mongoose sẽ tự động tạo collection trong MongoDB với tên là số nhiều của schema (ví dụ: Product -> products)
-    -> save(): Lưu products vào collection products trong MongoDB ("./controller/admin.js")
-    -> find(): Tìm tất cả products trong collection products trong MongoDB ("./controller/admin.js")
-    -> findById(): Tìm product có id trong collection products trong MongoDB ("./controller/admin.js")
-    -> findByIdAndRemove(): Xóa product có id trong collection products trong MongoDB ("./controller/admin.js")
-    -> findByIdAndUpdate(): Cập nhật product có id trong collection products trong MongoDB ("./controller/admin.js")
-    -> findOne(): Tìm 1 product trong collection products trong MongoDB ("./controller/user.js")
 -> Lưu ý: Kết quả trả về của các method là 1 promise và không phải là dạng cursor như khi dùng MongoDB
+
+3, Tạo schema users ("./models/user.js") ("./server.js") và các method cho schema ("./controller/user.js")
+    -> Sử dụng SchemaTypes relationship để tạo quan hệ giữa các schema productId của users và userId của product 
+4, Thêm các method dành cho cart từ users (thêm thuộc tính bên ngoài cho schema users) ("./models/user.js") ("./controller/user.js")   
+   
+*** Các METHOD thường dùng của mongoose:
+    -> save(): Lưu dữ liệu vào collection trong NoSQL
+    -> find(): Tìm tất cả products trong collection products trong NoSQL
+    -> findById(): Tìm product có id trong collection products trong NoSQL
+    -> findByIdAndRemove(): Xóa product có id trong collection products trong NoSQL
+    -> findByIdAndUpdate(): Cập nhật product có id trong collection products trong NoSQL
+    -> findOne(): Tìm 1 product trong collection products trong NoSQL, nếu không truyền gì vào nó sẽ trả về phần tử đầu tiên
+    -> Product.find().populate("userId", "...").exec(): Tìm tất cả products trong collection products trong NoSQL, lấy được userId của product rồi tìm các collection có id == products.userId trong NoSQL rồi trả về kết quả đã tìm kiếm, có thể trả về hết hoặc chỉ trả về các field được chọn trong dấu 3 chấm
+    -> Product.find().select("title price -_id").exec(): Tìm tất cả products trong collection products trong NoSQL, chỉ lấy title và price của product, không lấy _id
+    -> Product.find().sort({price: -1}).exec(): Tìm tất cả products trong collection products trong NoSQL, sắp xếp theo giá giảm dần
+    -> Product.find().skip(1).limit(1).exec(): Tìm tất cả products trong collection products trong NoSQL, bỏ qua 1 phần tử đầu tiên, chỉ lấy 1 phần tử
+    -> Product.find().countDocuments().exec(): Tìm tất cả products trong collection products trong NoSQL, đếm số lượng phần tử  
+*** populate(), select(), sort(), skip(), limit(), countDocuments() phải thêm exec() nếu đằng sau nó không có then()
+để thực thi vì nó không phải là bất đồng bộ nên không trả về promise, thêm exec() mục đích để trả về 1 promise, có thể thêm callback vào exec() để xử lý kết quả trả về

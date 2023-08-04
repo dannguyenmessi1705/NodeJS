@@ -13,18 +13,18 @@
             <% items.forEach((item) => { %>
             <article class="card product-item">
                 <header class="card__header">
-                    <h1 class="product__title"><%=item.name%>(<%=item.quantity%>)</h1>
+                    <h1 class="product__title"><%=item.productId.name%>(<%=item.quantity%>)</h1>
                 </header>
                 <div class="card__image">
                     <img src="https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png" alt="A Book">
                 </div>
                 <div class="card__content">
-                    <h2 class="product__price">$<%= item.price %></h2>
-                    <p class="product__description"><%= item.description %></p>
+                    <h2 class="product__price">$<%= item.productId.price %></h2>
+                    <p class="product__description"><%= item.productId.description %></p>
                 </div>
                 <div class="card__actions">
                     <form action="/delete-cart" method="POST">
-                        <input type="hidden" name="id" value="<%=item._id%>">
+                        <input type="hidden" name="id" value="<%=item.productId._id%>">
                         <button class="btn" type="submit">Delete</button>
                     </form>
                 </div>

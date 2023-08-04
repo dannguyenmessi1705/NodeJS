@@ -19,10 +19,15 @@ const Product = new Schema({
     type: SchemaTypes.String, // Kiểu dữ liệu
     require: true, // Bắt buộc phải có
   },
+  // {Realation} //
+  userId: {
+    type: SchemaTypes.ObjectId,
+    required: true,
+    ref: "users",
+  },
 });
 
 module.exports = mongoose.model("products", Product); // Tạo model products vào collection từ Schema Product và export ra ngoài để sử dụng
-
 
 /* 11. MongoDB
 const getDB = require("../util/database").getDB; // Nhập vào object getDB lấy từ file database.js

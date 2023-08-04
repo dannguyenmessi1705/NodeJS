@@ -17,6 +17,7 @@ const postProduct = (req, res) => {
     price: data.price,
     url: data.url,
     description: data.description,
+    userId: req.user._id,
   });
   product
     .save()
@@ -30,7 +31,10 @@ const postProduct = (req, res) => {
 // {GET ALL PRODUCTS BY MONGOOSE} //
 const getProduct = (req, res) => {
   Product.find()
+    .select("name price url description -_id")
+    .exec() // Chỉ lấy các thuộc tính name, price, url, description, bỏ thuộc tính _id
     .then((products) => {
+      console.log(products);
       res.render("./admin/products", {
         title: "Admin Product",
         items: products,
