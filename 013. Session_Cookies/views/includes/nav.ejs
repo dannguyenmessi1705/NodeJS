@@ -15,17 +15,21 @@
             <li class="main-header__item">
                 <a href="/order" class="<%= path === '/order' ? 'active' : ''  %>" >Order</a>
             </li>
-            <!-- <li class="main-header__item">
-                <a href="/admin/add-product" class="<%= path === '/admin/add-product' ? 'active' : '' %>" >Add Product</a> 
-            </li>
-            <li class="main-header__item">
-                <a href="/admin/product" class="<%= path === '/admin/product' ? 'active' : '' %>" >Admin Products</a> 
-            </li> -->
+            <% if(authenticate) { %>
+                <li class="main-header__item">
+                    <a href="/admin/add-product" class="<%= path === '/admin/add-product' ? 'active' : '' %>" >Add Product</a> 
+                </li>
+                <li class="main-header__item">
+                    <a href="/admin/product" class="<%= path === '/admin/product' ? 'active' : '' %>" >Admin Products</a> 
+                </li>
+            <% } %>
+            </ul>
+        </nav>
+        <nav class="main-header__nav">
             <ul class="main-header__item-list">
                 <li class="main-header__item">
                     <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Login</a>
                 </li>
-            </ul>
             </ul>
         </nav>
 </header>

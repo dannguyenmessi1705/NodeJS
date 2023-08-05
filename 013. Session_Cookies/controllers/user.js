@@ -6,6 +6,7 @@ const getIndex = (req, res) => {
     .then((products) => {
       res.render("./user/index", {
         title: "Home",
+        authenticate: false,
         items: products,
         path: "/",
       });
@@ -19,6 +20,7 @@ const getProduct = (req, res) => {
     .then((products) => {
       res.render("./user/productList", {
         title: "Product",
+        authenticate: false,
         items: products,
         path: "/product",
       });
@@ -33,6 +35,7 @@ const getDetail = (req, res) => {
     .then((product) => {
       res.render("./user/productDetail", {
         title: "Product Detail",
+        authenticate: false,
         path: "/product",
         item: product,
       });
@@ -71,6 +74,7 @@ const getCart = (req, res) => {
       }, 0); // Tính tổng tiền của tất cả product trong cart
       return res.render("./user/cart", {
         title: "Cart",
+        authenticate: false,
         path: "/cart",
         items: products,
         totalPrice: totalPrice,
@@ -135,6 +139,7 @@ const getOrder = (req, res) => {
       // orders = [{ {products: {}, quantity}, user{}}, {}]
       res.render("./user/order", {
         title: "Order",
+        authenticate: false,
         path: "/order",
         orders: orders,
       });

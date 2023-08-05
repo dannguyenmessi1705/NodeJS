@@ -1,6 +1,10 @@
 const express = require("express");
 const app = express();
 
+// {COOKIE FOR EXPRESS} //
+const cookies = require("cookie-parser")
+app.use(cookies())
+
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
