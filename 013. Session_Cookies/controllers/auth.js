@@ -15,7 +15,8 @@ const postAuth = (req, res, next) => {
   /* Nếu khồng dùng Cookie hay Session, 
   res.isLogin = true // Khi sang route khác, sẽ bị reset tất cả response => Không thể gọi được isLogin, trừ khi đặt làm middleware trước khi đến các route khác
   */
-  res.cookie("isLogin", "true"); // NodeJs đã thêm module ExpressJS + cookie-parser
+  // Thêm vào phần Header của Response mục Cookie có tên là "isLogin", giá trị là "true" và thời gian tồn tại là 5s
+  res.cookie("isLogin", "true", { maxAge: 5000 }); // NodeJs đã thêm module ExpressJS + cookie-parser
   // res.setHeader("Set-Cookie", "isLogin=true")  // NodeJS
   res.redirect("/login");
 };
