@@ -1,0 +1,6 @@
+Source code lấy từ folder 12. Mongoose, thêm module mongoose
+
+- Folder 13. Session, Cookies nói về session và cookies dùng để lưu trữ thông tin người dùng 
+trên server (server side) và client (client side)
+
+1, Thêm login page route ("./views/auth/login.ejs"), ("./routes/auth.js") ("./controllers/auth.js")
