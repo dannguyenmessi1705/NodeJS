@@ -1,7 +1,7 @@
 Source code lấy từ folder 12. Mongoose, thêm module express-session (dùng session với expressJS) và cookie-parser (dùng cookie với expressJS)
 
 - Folder 13. Session, Cookies nói về session và cookies dùng để lưu trữ thông tin người dùng 
-trên server (server side) và client (client side)
+trên server (server side - session) và client (client side - cookies)
 
 1, Thêm login page route ("./views/auth/login.ejs"), ("./routes/auth.js") ("./controllers/auth.js")
 
@@ -12,7 +12,8 @@ trên server (server side) và client (client side)
  muốn vậy thì ta phải lưu vào middleware đặt trước các route (như req.user ở trong server.js), nhưng nếu lưu vào middleware thì mỗi lần request sẽ phải kiểm tra lại, rất tốn tài nguyên
 => Do đó để giải quyết vấn đề này, ta sử dụng session và cookies để lưu trữ thông tin người dùng trên server và client (phần 3)
 
-3, Set Cookies khi đăng nhập ("./controllers/auth.js")
+3, Set Cookies khi đăng nhập ("./controllers/auth.js") ("server.js")
+- Cookies là một cách lưu trữ thông tin người dùng trên client
 - Cách set cookies với EXPRESS JS + module cookie-parser:
     + Dùng res.cookie("cookieName", "cookieValue", {option}) để set cookies (express đã hỗ trợ)
     + Dùng res.clearCookie("cookieName") để xóa cookies (express đã hỗ trợ)
@@ -39,4 +40,19 @@ trên server (server side) và client (client side)
 
 => LƯU Ý: Khi dùng cookie sẽ dễ bị sửa giá trị của cookie, bị hack khi mở dev tool, nên dùng session để lưu trữ thông tin người dùng
 
-4, Set Session khi đăng nhập ("./controllers/auth.js")
+4, Set Session khi đăng nhập ("./controllers/auth.js") ("server.js")
+- Session là một cách lưu trữ thông tin người dùng trên server, thông tin này được mã hóa và gửi về client dưới dạng cookie (ID của session)
+ => Nó được phân biệt với các phiên khác bởi người truy cập, trình duyệt và thời gian... nên có nhiều phiên có thể được mở cùng một lúc
+- Các phương thức dùng với Session:
+    + req.session."sessionName" = "sessionValue" để set session (express đã hỗ trợ)
+    + req.session.destroy() để xóa session (express đã hỗ trợ)
+    + req.session.cookie để lấy thông tin của session (express đã hỗ trợ)
+    + req.session.cookie.maxAge để lấy thời gian tồn tại của session (express đã hỗ trợ)
+    + req.session.cookie.expires để lấy thời gian hết hạn của session (express đã hỗ trợ)
+    + req.session.cookie.originalMaxAge để lấy thời gian tồn tại của session (express đã hỗ trợ)
+    + req.session.cookie.httpOnly để lấy giá trị của cookies (express đã hỗ trợ)
+    + req.session.cookie.path để lấy đường dẫn của session (express đã hỗ trợ)
+    + req.session.cookie.domain để lấy domain của session (express đã hỗ trợ)
+    + req.session.cookie.sameSite để lấy giá trị của session (express đã hỗ trợ)
+    + req.session.cookie.secure để lấy giá trị của session (express đã hỗ trợ)
+    + req.session.cookie.signed để lấy giá trị của session (express đã hỗ trợ)

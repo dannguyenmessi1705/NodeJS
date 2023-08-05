@@ -1,9 +1,19 @@
 const express = require("express");
 const app = express();
 
-// {COOKIE FOR EXPRESS} //
-const cookies = require("cookie-parser");
+// {SET COOKIE FOR EXPRESS} //
+const cookies = require("cookie-parser"); // q
 app.use(cookies("secret")); // Truyền "secret" để dùng các lệnh mã hoá Cookie
+
+// {SET SESSION FOR EXPRESS} //
+const session = require("express-session") // Nhập module express-session
+// Cấu hình session
+app.use(session({ 
+  secret: "Nguyen Di Dan", // Chuỗi bí mật để mã hoá session
+  resave: false, // resave: false => Không lưu lại session nếu không có sự thay đổi (Không cần thiết)
+  saveUninitialized: false // saveUninitialized: false => Không lưu lại session nếu không có sự thay đổi (Không cần thiết)
+  // resave vs saveUninitialized: https://stackoverflow.com/questions/40381401/when-use-saveuninitialized-and-resave-in-express-session
+}))
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
