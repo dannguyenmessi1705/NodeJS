@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 
 // {COOKIE FOR EXPRESS} //
-const cookies = require("cookie-parser")
-app.use(cookies())
+const cookies = require("cookie-parser");
+app.use(cookies("secret")); // Truyền "secret" để dùng các lệnh mã hoá Cookie
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
