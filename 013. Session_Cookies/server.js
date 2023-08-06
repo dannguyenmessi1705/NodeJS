@@ -72,7 +72,8 @@ app.use((req, res, next) => {
     .then((user) => {
       // Nếu tìm thấy user thì lưu vào req
       if (user) {
-        req.user = new User(user); // Lưu lại user vào request để sử dụng ở các middleware tiếp theo (không cần dùng new User vì user đã là object rồi, có thể dùng các method của mongoose cũng như từ class User luôn )
+         req.user = new User(user); // Lưu lại user vào request để sử dụng ở các middleware tiếp theo (không cần dùng new User vì user đã là object rồi, có thể dùng các method của mongoose cũng như từ class User luôn )
+        // Tuy nhiên, Ko cần req.user nữa vì dùng session rồi (biến user sẽ lưu vào req.session.user)
         next(); // Tiếp tục chạy các middleware tiếp theo
       }
     })

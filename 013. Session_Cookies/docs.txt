@@ -48,8 +48,9 @@ trên server (server side - session) và client (client side - cookies)
  => Nó được phân biệt với các phiên khác bởi người truy cập, trình duyệt và thời gian... nên có nhiều phiên có thể được mở cùng một lúc
 - Các phương thức dùng với Session:
     + req.session."sessionName" = "sessionValue" để set session (express đã hỗ trợ)
-    + req.session.destroy() để xóa session (express đã hỗ trợ)
+    + req.session.destroy(callback) để xóa session (express đã hỗ trợ)
     + req.session.cookie để lấy thông tin của session (express đã hỗ trợ)
+    + req.session.save(callback) để lưu session (express đã hỗ trợ)
     + req.session.cookie.maxAge để lấy thời gian tồn tại của session (express đã hỗ trợ)
     + req.session.cookie.expires để lấy thời gian hết hạn của session (express đã hỗ trợ)
     + req.session.cookie.originalMaxAge để lấy thời gian tồn tại của session (express đã hỗ trợ)
@@ -61,3 +62,5 @@ trên server (server side - session) và client (client side - cookies)
     + req.session.cookie.signed để lấy giá trị của session (express đã hỗ trợ)
 
 5, Sử dụng MongoDB để lưu trữ session ("server.js")
+
+6, Xoá session khi đăng xuất ("./controllers/auth.js")
