@@ -1,7 +1,7 @@
+const User = require("../models/users");
 // {SESSION + COOKIES} // Đối với Session, phải tạo Session trước khi tạo Cookie
 const getAuth = (req, res, next) => {
   let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
-  console.log(isLogin);
   res.render("./auth/login", {
     title: "Login",
     path: "/login",
@@ -9,15 +9,22 @@ const getAuth = (req, res, next) => {
   });
 };
 const postAuth = (req, res, next) => {
-  req.session.isLogin = true; // Tạo Session có tên là "isLogin", giá trị là "true"
-  // req.session.cookie.maxAge = 3000; // Thời gian tồn tại của Session là 3s
-  res.redirect("/");
+  User.findById("64cc7af71adf0619fa3e8481") // Tìm kiếm 1 user trong collection có id là "64cc7af71adf0619fa3e8481"
+    .then((user) => {
+      req.session.isLogin = true; // Tạo Session có tên là "isLogin", giá trị là "true"
+      req.session.user = user; // Tạo Session có tên là "user", giá trị là user vừa tìm được
+      // req.session.cookie.maxAge = 3000; // Thời gian tồn tại của Session là 3s
+      req.session.save(() => { // Lưu lại Session
+        res.redirect("/"); // Sau khi lưu lại Session thì mới chuyển hướng sang trang chủ (vì lưu lại Session là bất đồng bộ)
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 // LOGOUT => SESSION SẼ XOÁ
-const postLogout = (req, res, next) => {
-  req.session.destroy(() => {
-    res.redirect("/");
+const postLogout = (req, res, next) => { 
+  req.session.destroy(() => { // Xoá Session
+    res.redirect("/"); // Sau khi xoá Session thì mới chuyển hướng sang trang chủ (vì xoá Session là bất đồng bộ)
   });
 };
 

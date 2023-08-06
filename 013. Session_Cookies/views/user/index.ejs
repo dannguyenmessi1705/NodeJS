@@ -19,8 +19,10 @@
                     </div>
                     <div class="card__actions">
                         <!-- POST CART  -->
-                        <%- include('../includes/addCart.ejs', {item: item}) %> 
-                        <!-- Thêm object {item: item} để thẻ chỉ xác định duy nhất 1 item trong vòng lặp có nhiều items -->
+                        <% if(authenticate) { %>
+                            <%- include('../includes/addCart.ejs', {item: item}) %>
+                            <!-- Thêm object {item: item} để thẻ chỉ xác định duy nhất 1 item trong vòng lặp có nhiều items -->
+                        <% } %> 
                     </div>
                 </article>
                 <% }) %>

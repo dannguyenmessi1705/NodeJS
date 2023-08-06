@@ -66,15 +66,19 @@ mongoose
   }) // Kết nối với database, sau đó mới chạy server
   .catch((err) => console.log(err));
 
-// {MIDDLEWARE PHÂN QUYỀN} //
+// {MIDDLEWARE PHÂN QUYỀN DÙNG SESSION} //
 app.use((req, res, next) => {
-  User.findById("64cc7af71adf0619fa3e8481") // Tìm kiếm user vừa tạo
+  if (!req.session?.user) {
+    // Nếu không có session user thì return next() để chạy các middleware tiếp theo mà không có phân quyền
+    return next();
+  }
+  User.findById(req.session.user._id) // Tìm kiếm user trong collection users có id trùng với id của session user
     .then((user) => {
-      // Nếu tìm thấy user thì lưu vào req
+      // Nếu tìm thấy user thì lưu vào req.user
       if (user) {
-         req.user = new User(user); // Lưu lại user vào request để sử dụng ở các middleware tiếp theo (không cần dùng new User vì user đã là object rồi, có thể dùng các method của mongoose cũng như từ class User luôn )
+        req.user = new User(user); // Lưu lại user vào request để sử dụng ở các middleware tiếp theo (không cần dùng new User vì user đã là object rồi, có thể dùng các method của mongoose cũng như từ class User luôn )
         // Tuy nhiên, Ko cần req.user nữa vì dùng session rồi (biến user sẽ lưu vào req.session.user)
-        next(); // Tiếp tục chạy các middleware tiếp theo
+        next(); // Tiếp tục chạy các middleware tiếp theo với phân quyền
       }
     })
     .catch((err) => console.log(err));

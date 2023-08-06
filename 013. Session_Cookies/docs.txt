@@ -64,3 +64,7 @@ trên server (server side - session) và client (client side - cookies)
 5, Sử dụng MongoDB để lưu trữ session ("server.js")
 
 6, Xoá session khi đăng xuất ("./controllers/auth.js")
+
+7, Lưu thông tin người dùng vào Session khi đăng nhập,
+Thêm thông tin người dùng vào session khi đăng nhập vào req.user để sử dụng cho các route khác ("./controllers/auth.js"), ("server.js")
+Và thêm biến isLogin vào các route render để xác minh người dùng đã đăng nhập hay chưa ("./controllers/user.js"), ("./controllers/admin.js")

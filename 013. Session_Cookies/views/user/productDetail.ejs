@@ -17,7 +17,9 @@
                 </div>
                 <div class="card__actions">
                     <!-- POST CART  -->
-                    <%- include('../includes/addCart.ejs') %>
+                    <% if(authenticate) { %>
+                        <%- include('../includes/addCart.ejs') %>
+                    <% } %> 
                 </div>
             </article>
         </div>

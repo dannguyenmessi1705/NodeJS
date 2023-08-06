@@ -2,9 +2,10 @@ const products = require("../models/products");
 const Product = require("../models/products");
 // {ADD PRODUCT PAGE} //
 const addProduct = (req, res) => {
+  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   res.render("./admin/editProduct", {
     title: "Add Product",
-    authenticate: false,
+    authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
     path: "/admin/add-product",
     editing: false, // Phân biệt với trạng thái Edit vs Add Product
   });
@@ -31,13 +32,14 @@ const postProduct = (req, res) => {
 
 // {GET ALL PRODUCTS BY MONGOOSE} //
 const getProduct = (req, res) => {
+  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   Product.find()
     .select("name price url description -_id")
     .exec() // Chỉ lấy các thuộc tính name, price, url, description, bỏ thuộc tính _id
     .then((products) => {
       res.render("./admin/products", {
         title: "Admin Product",
-        authenticate: false,
+        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
         items: products,
         path: "/admin/product",
       });
@@ -47,6 +49,7 @@ const getProduct = (req, res) => {
 
 // {GET EDIT PRODUCT BY MONGOOSE} //
 const getEditProduct = (req, res) => {
+  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   const isEdit = req.query.edit;
   if (!isEdit) {
     return res.redirect("/");
@@ -56,7 +59,7 @@ const getEditProduct = (req, res) => {
     .then((product) => {
       res.render("./admin/editProduct", {
         title: "Edit Product",
-        authenticate: false,
+        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
         path: "/admin/add-product",
         editing: isEdit, // truyền giá trị của query 'edit' vào biến editing để kiểm tra xem có phải đang ở trạng thái edit hay không
         item: product, // gán product vừa tìm được vào biến item để đưa vào file ejs
@@ -90,7 +93,6 @@ const postEditProduct = (req, res) => {
 
 // {DELETE PRODUCT BY MONGOOSE} //
 const deleteProduct = (req, res) => {
-  const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
   Product.findByIdAndRemove(ID)
     .then(() => {
       res.redirect("/admin/product");
@@ -105,4 +107,3 @@ module.exports = {
   postEditProduct,
   deleteProduct,
 };
-
