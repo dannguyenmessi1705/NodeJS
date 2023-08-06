@@ -43,7 +43,7 @@ trên server (server side - session) và client (client side - cookies)
 
 => LƯU Ý: Khi dùng cookie sẽ dễ bị sửa giá trị của cookie, bị hack khi mở dev tool, nên dùng session để lưu trữ thông tin người dùng
 
-4, Set Session khi đăng nhập ("./controllers/auth.js") ("server.js")
+4, Set Session khi đăng nhập (Cookies có thể được cấu hình cùng với session luôn mà không cần mục 3 ở trên) ("./controllers/auth.js") ("server.js")
 - Session là một cách lưu trữ thông tin người dùng trên server, thông tin này được mã hóa và gửi về client dưới dạng cookie (ID của session)
  => Nó được phân biệt với các phiên khác bởi người truy cập, trình duyệt và thời gian... nên có nhiều phiên có thể được mở cùng một lúc
 - Các phương thức dùng với Session:

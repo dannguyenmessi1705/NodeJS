@@ -1,9 +1,11 @@
 const express = require("express");
 const app = express();
 
+/* FOR COOKIES ONLY 
 // {SET COOKIE FOR EXPRESS} //
 const cookies = require("cookie-parser"); // q
 app.use(cookies("secret")); // Truyền "secret" để dùng các lệnh mã hoá Cookie
+*/
 
 // {DÙNG MONGODB ĐỂ LƯU TRỮ SESSION} //
 const session = require("express-session"); // Nhập module express-session
@@ -15,7 +17,7 @@ const storeDB = new MongoDBStore({
   collection: "sessions", // Tên collection để lưu session
 });
 
-// {SET SESSION FOR EXPRESS} //
+// {SET SESSION + COOKIES FOR EXPRESS} //
 // Cấu hình session
 app.use(
   session({
@@ -24,6 +26,10 @@ app.use(
     saveUninitialized: false, // saveUninitialized: false => Không lưu lại session nếu không có sự thay đổi (Không cần thiết)
     // resave vs saveUninitialized: https://stackoverflow.com/questions/40381401/when-use-saveuninitialized-and-resave-in-express-session
     store: storeDB, // Lưu session vào database
+    // Ngoài ra có thể tuỳ chỉnh thêm cho cookie: secure, path, signed,... ở cấu hình session
+    cookie: {
+      signed: true,
+    },
   })
 );
 
