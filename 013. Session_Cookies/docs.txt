@@ -1,4 +1,7 @@
-Source code lấy từ folder 12. Mongoose, thêm module express-session (dùng session với expressJS) và cookie-parser (dùng cookie với expressJS)
+Source code lấy từ folder 12. Mongoose, 
+-> thêm module express-session (dùng session với expressJS)
+-> thêm module cookie-parser (dùng cookie với expressJS)
+-> thêm module connect-mongodb-session (lưu trữ session vào mongodb)
 
 - Folder 13. Session, Cookies nói về session và cookies dùng để lưu trữ thông tin người dùng 
 trên server (server side - session) và client (client side - cookies)
@@ -56,3 +59,5 @@ trên server (server side - session) và client (client side - cookies)
     + req.session.cookie.sameSite để lấy giá trị của session (express đã hỗ trợ)
     + req.session.cookie.secure để lấy giá trị của session (express đã hỗ trợ)
     + req.session.cookie.signed để lấy giá trị của session (express đã hỗ trợ)
+
+5, Sử dụng MongoDB để lưu trữ session ("server.js")

@@ -10,7 +10,7 @@ const getAuth = (req, res, next) => {
 };
 const postAuth = (req, res, next) => {
   req.session.isLogin = true; // Tạo Session có tên là "isLogin", giá trị là "true"
-  req.session.cookie.maxAge = 3000; // Thời gian tồn tại của Session là 3s
+  // req.session.cookie.maxAge = 3000; // Thời gian tồn tại của Session là 3s
   res.redirect("/login");
 };
 
