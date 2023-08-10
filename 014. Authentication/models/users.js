@@ -10,6 +10,10 @@ const User = new Schema({
     type: SchemaTypes.String,
     required: true,
   },
+  password: {
+    type: SchemaTypes.String,
+    required: true,
+  },
   cart: {
     items: [
       {
@@ -81,4 +85,3 @@ User.methods.clearCart = function () {
 };
 
 module.exports = mongoose.model("users", User); // Tạo collection users trong database và export ra để sử dụng
-

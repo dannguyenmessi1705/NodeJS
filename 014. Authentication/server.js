@@ -46,21 +46,6 @@ const User = require("./models/users"); // Nhập vào class User lấy từ fil
 mongoose
   .connect(URL)
   .then(() => {
-    User.findOne() // Tìm kiếm 1 user trong collection users (user đầu tiên)
-      .then((user) => {
-        if (!user) {
-          // Nếu không có user nào thì tạo user mới
-          const user = new User({
-            username: "DanNguyen",
-            email: "danprohy@gmail.com",
-            cart: {
-              items: [],
-            },
-          });
-          user.save(); // Lưu user vào database
-        }
-      })
-      .catch((err) => console.log(err));
     app.listen(3000, "localhost" || IP);
     console.log("Connected!");
   }) // Kết nối với database, sau đó mới chạy server

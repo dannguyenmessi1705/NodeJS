@@ -1,70 +1,15 @@
-Source code lấy từ folder 12. Mongoose, 
--> thêm module express-session (dùng session với expressJS)
--> thêm module cookie-parser (dùng cookie với expressJS)
--> thêm module connect-mongodb-session (lưu trữ session vào mongodb)
+Source code lấy từ folder 13. Session & Cookie
+-> Thêm module bcryptjs để mã hóa password
+Folder 14. Authentication nói về việc xác thực người dùng
+Cơ chế: Khi người dùng đăng nhập, server sẽ check thông tin người dùng ở trên database, nếu đúng
+thì nó sẽ tạo ra 1 session lưu trữ thông tin người dùng đó, và gửi cho người dùng 1 cookie để lưu trữ session id
 
-- Folder 13. Session, Cookies nói về session và cookies dùng để lưu trữ thông tin người dùng 
-trên server (server side - session) và client (client side - cookies)
+1, Thêm chức năng signUp, thêm thuộc tính password vào model user (".views/auth/signup.ejs"), ("./controllers/auth.js"), ("./models/users.js)
 
-1, Thêm login page route ("./views/auth/login.ejs"), ("./routes/auth.js") ("./controllers/auth.js")
+2, Xác thực người dùng và lưu vào session sau khi login (".views/auth/login.ejs"), ("./controllers/auth.js")
 
-2, Tại sao phải dùng session và cookies? 
-- Vì HTTP là stateless protocol, nghĩa là mỗi request là một request mới, không có liên quan gì với nhau
-    + Ví dụ: Khi người dùng login vào hệ thống, lưu biến req.isLogin = true, khi người dùng request trang khác thì req.isLogin != true
- bởi vì khi người dùng request trang khác thì server sẽ tạo ra một req mới, không có liên quan gì với req trước đó nữa
- muốn vậy thì ta phải lưu vào middleware đặt trước các route (như req.user ở trong server.js), nhưng nếu lưu vào middleware thì mỗi lần request sẽ phải kiểm tra lại, rất tốn tài nguyên
-=> Do đó để giải quyết vấn đề này, ta sử dụng session và cookies để lưu trữ thông tin người dùng trên server và client (phần 3)
+3, Bỏ chức năng tạo 1 user mới khi truy cập vào web ("server.js")
 
-3, Set Cookies khi đăng nhập ("./controllers/auth.js") ("server.js")
-- Cookies là một cách lưu trữ thông tin người dùng trên client
-- Cách set cookies với EXPRESS JS + module cookie-parser:
-    + Dùng res.cookie("cookieName", "cookieValue", {option}) để set cookies (express đã hỗ trợ)
-    + Dùng res.clearCookie("cookieName") để xóa cookies (express đã hỗ trợ)
-    + Dùng req.cookies.cookieName để lấy giá trị của cookies (express đã hỗ trợ)
-    + Dùng req.signedCookies.cookieName để lấy giá trị của cookies đã được mã hóa (express đã hỗ trợ)
-    + Dùng res.cookie("cookieName", "cookieValue", {signed: true}) để mã hóa cookies (express đã hỗ trợ)
-    + Dùng res.cookie("cookieName", "cookieValue", {maxAge: 1000}) để set thời gian tồn tại của cookies (express đã hỗ trợ)
-    + Dùng res.cookie("cookieName", "cookieValue", {httpOnly: true}) để set cookies chỉ có thể được truy cập bởi server (express đã hỗ trợ)
-    + Dùng res.cookie("cookieName", "cookieValue", {secure: true}) để set cookies chỉ có thể được truy cập bởi https (express đã hỗ trợ)
-    + Dùng res.cookie("cookieName", "cookieValue", {sameSite: true}) để set cookies chỉ có thể được truy cập bởi cùng một domain (express đã hỗ trợ)
-    + Dùng res.cookie("cookieName", "cookieValue", {path: "/login"}) để set cookies chỉ có thể được truy cập bởi đường dẫn "/login" (express đã hỗ trợ)
-    + Dùng res.cookie("cookieName", "cookieValue", {domain: "localhost"}) để set cookies chỉ có thể được truy cập bởi domain "localhost" (express đã hỗ trợ)
-    + Dùng res.cookie("cookieName", "cookieValue", {expires: new Date(Date.now() + 1000)}) để set thời gian tồn tại của cookies (express đã hỗ trợ)
+4, Ẩn các routes khi chưa login bằng cách kiểm tra session ("./controllers/admin.js") ("./controllers/user.js")
 
-- Cách set cookies với NODE JS không thêm module nào cả:
-    + res.setHeader("Set-Cookie", "cookieName=cookieValue; HttpOnly") để set cookies
-    + req.headers.cookie để lấy giá trị của cookies
-    + res.setHeader("Set-Cookie", "cookieName=cookieValue; Max-Age=1000") để set thời gian tồn tại của cookies
-    + res.setHeader("Set-Cookie", "cookieName=cookieValue; Secure") để set cookies chỉ có thể được truy cập bởi https
-    + res.setHeader("Set-Cookie", "cookieName=cookieValue; SameSite=Strict") để set cookies chỉ có thể được truy cập bởi cùng một domain
-    + res.setHeader("Set-Cookie", "cookieName=cookieValue; Path=/login") để set cookies chỉ có thể được truy cập bởi đường dẫn "/login"
-    + res.setHeader("Set-Cookie", "cookieName=cookieValue; Domain=localhost") để set cookies chỉ có thể được truy cập bởi domain "localhost"
-    + res.setHeader("Set-Cookie", "cookieName=cookieValue; Expires=Thu, 01 Jan 1970 00:00:00 GMT") để set thời gian tồn tại của cookies
-
-=> LƯU Ý: Khi dùng cookie sẽ dễ bị sửa giá trị của cookie, bị hack khi mở dev tool, nên dùng session để lưu trữ thông tin người dùng
-
-4, Set Session khi đăng nhập (Cookies có thể được cấu hình cùng với session luôn mà không cần mục 3 ở trên) ("./controllers/auth.js") ("server.js")
-- Session là một cách lưu trữ thông tin người dùng trên server, thông tin này được mã hóa và gửi về client dưới dạng cookie (ID của session)
- => Nó được phân biệt với các phiên khác bởi người truy cập, trình duyệt và thời gian... nên có nhiều phiên có thể được mở cùng một lúc
-- Các phương thức dùng với Session:
-    + req.session."sessionName" = "sessionValue" để set session (express đã hỗ trợ)
-    + req.session.destroy(callback) để xóa session (express đã hỗ trợ)
-    + req.session.cookie để lấy thông tin của session (express đã hỗ trợ)
-    + req.session.save(callback) để lưu session (express đã hỗ trợ)
-    + req.session.cookie.maxAge để lấy thời gian tồn tại của session (express đã hỗ trợ)
-    + req.session.cookie.expires để lấy thời gian hết hạn của session (express đã hỗ trợ)
-    + req.session.cookie.originalMaxAge để lấy thời gian tồn tại của session (express đã hỗ trợ)
-    + req.session.cookie.httpOnly để lấy giá trị của cookies (express đã hỗ trợ)
-    + req.session.cookie.path để lấy đường dẫn của session (express đã hỗ trợ)
-    + req.session.cookie.domain để lấy domain của session (express đã hỗ trợ)
-    + req.session.cookie.sameSite để lấy giá trị của session (express đã hỗ trợ)
-    + req.session.cookie.secure để lấy giá trị của session (express đã hỗ trợ)
-    + req.session.cookie.signed để lấy giá trị của session (express đã hỗ trợ)
-
-5, Sử dụng MongoDB để lưu trữ session ("server.js")
-
-6, Xoá session khi đăng xuất ("./controllers/auth.js")
-
-7, Lưu thông tin người dùng vào Session khi đăng nhập,
-Thêm thông tin người dùng vào session khi đăng nhập vào req.user để sử dụng cho các route khác ("./controllers/auth.js"), ("server.js")
-Và thêm biến isLogin vào các route render để xác minh người dùng đã đăng nhập hay chưa ("./controllers/user.js"), ("./controllers/admin.js")
+5, BẢo vệ các routes không cho phép truy cập khi chưa login ("middleware/auth.js") ("./routes/admin.js") ("./routes/user.js")
