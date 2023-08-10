@@ -2,14 +2,13 @@ const Order = require("../models/orders");
 const Product = require("../models/products");
 // {GET ALL PRODUCTS BY MONGOOSE} //
 const getIndex = (req, res) => {
-  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   Product.find()
     .then((products) => {
       res.render("./user/index", {
         title: "Home",
         items: products,
         path: "/",
-        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
+        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
       });
     })
     .catch((err) => console.log(err));
@@ -17,14 +16,13 @@ const getIndex = (req, res) => {
 
 // {GET ALL PRODUCTS BY MONGOOSE} //
 const getProduct = (req, res) => {
-  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   Product.find()
     .then((products) => {
       res.render("./user/productList", {
         title: "Product",
         items: products,
         path: "/product",
-        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
+        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
       });
     })
     .catch((err) => console.log(err));
@@ -32,7 +30,6 @@ const getProduct = (req, res) => {
 
 // {GET PRODUCT DETAIL BY MONGOOSE} //
 const getDetail = (req, res) => {
-  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   const ID = req.params.productID; // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
   Product.findById(ID)
     .then((product) => {
@@ -40,7 +37,7 @@ const getDetail = (req, res) => {
         title: "Product Detail",
         path: "/product",
         item: product,
-        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
+        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
       });
     })
     .catch((err) => console.log(err));
@@ -63,7 +60,6 @@ const postCart = (req, res) => {
 
 // {GET CART USER BY MONGOOSE} //
 const getCart = (req, res) => {
-  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   req.user
     .populate("cart.items.productId") // Lấy tất cả dữ liệu user, populate để lấy thêm dữ liệu từ collection products vào thuộc tính productId của cart
     .then((user) => {
@@ -81,7 +77,7 @@ const getCart = (req, res) => {
         path: "/cart",
         items: products,
         totalPrice: totalPrice,
-        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
+        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
       }); // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
     })
     .catch((err) => console.log(err));
@@ -138,13 +134,12 @@ const postOrder = (req, res) => {
 
 // {GET ORDER BY USER IN MONGOOSE} //
 const getOrder = (req, res) => {
-  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   Order.find({ "user.userId": req.user._id }) // Tìm kiếm order có userId = userId của user hiện tại
     .then((orders) => {
       // orders = [{ {products: {}, quantity}, user{}}, {}]
       res.render("./user/order", {
         title: "Order",
-        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
+        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
         path: "/order",
         orders: orders,
       });
