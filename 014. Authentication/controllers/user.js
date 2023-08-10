@@ -63,7 +63,7 @@ const postCart = (req, res) => {
 
 // {GET CART USER BY MONGOOSE} //
 const getCart = (req, res) => {
-  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin" 
+  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   req.user
     .populate("cart.items.productId") // Lấy tất cả dữ liệu user, populate để lấy thêm dữ liệu từ collection products vào thuộc tính productId của cart
     .then((user) => {
@@ -81,7 +81,7 @@ const getCart = (req, res) => {
         path: "/cart",
         items: products,
         totalPrice: totalPrice,
-        authenticate: isLogin // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
+        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
       }); // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
     })
     .catch((err) => console.log(err));
@@ -144,7 +144,7 @@ const getOrder = (req, res) => {
       // orders = [{ {products: {}, quantity}, user{}}, {}]
       res.render("./user/order", {
         title: "Order",
-        authenticate: isLogin,  // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
+        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
         path: "/order",
         orders: orders,
       });

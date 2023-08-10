@@ -10,15 +10,30 @@ const getAuth = (req, res, next) => {
   });
 };
 const postAuth = (req, res, next) => {
-  User.findById("64cc7af71adf0619fa3e8481") // Tìm kiếm 1 user trong collection có id là "64cc7af71adf0619fa3e8481"
+  const email = req.body.email; // Lấy giá trị email từ form
+  const password = req.body.password; // Lấy giá trị password từ form
+  User.findOne({ email: email }) // Tìm user có email = email
     .then((user) => {
-      req.session.isLogin = true; // Tạo Session có tên là "isLogin", giá trị là "true"
-      req.session.user = user; // Tạo Session có tên là "user", giá trị là user vừa tìm được
-      // req.session.cookie.maxAge = 3000; // Thời gian tồn tại của Session là 3s
-      req.session.save(() => {
-        // Lưu lại Session
-        res.redirect("/"); // Sau khi lưu lại Session thì mới chuyển hướng sang trang chủ (vì lưu lại Session là bất đồng bộ)
-      });
+      if (!user) { // Nếu không tìm thấy user
+        console.log("Email or Password do not match");
+        return res.redirect("/login"); // Chuyển hướng về trang login
+      }
+      bcrypt
+        .compare(password, user.password) // So sánh password nhập vào với password đã mã hoá trong database
+        .then((isMatch) => {
+          if (isMatch) { // Nếu password trùng khớp
+            req.session.isLogin = true; // Tạo Session có tên là "isLogin", giá trị là "true"
+            req.session.user = user; // Tạo Session có tên là "user", giá trị là user vừa tìm được
+            // req.session.cookie.maxAge = 3000; // Thời gian tồn tại của Session là 3s
+            return req.session.save(() => { // Lưu Session
+              res.redirect("/");  // Sau khi lưu Session thì mới chuyển hướng sang trang chủ (vì lưu Session là bất đồng bộ)
+            });
+          } else {
+            console.log("Email or Password do not match"); // Nếu password không trùng khớp
+            return res.redirect("/login"); // Chuyển hướng về trang login
+          } 
+        })
+        .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
 };
