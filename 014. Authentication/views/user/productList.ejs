@@ -18,6 +18,8 @@
                         <p class="product__description"><%= item.description %></p>
                     </div>
                     <div class="card__actions">
+                        <!-- TOKEN CSRF -->
+                        <input type="hidden" name="_csrf" value="<%=csrfToken%>">
                         <!-- ADD ID FOR PRODUCT -->
                         <a href="/product/<%= item._id %>" class="btn">Detail</a>
                         <!-- href = product/0.7834371053383911 -->

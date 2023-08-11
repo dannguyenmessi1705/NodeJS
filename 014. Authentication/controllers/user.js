@@ -8,7 +8,6 @@ const getIndex = (req, res) => {
         title: "Home",
         items: products,
         path: "/",
-        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
       });
     })
     .catch((err) => console.log(err));
@@ -22,7 +21,6 @@ const getProduct = (req, res) => {
         title: "Product",
         items: products,
         path: "/product",
-        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
       });
     })
     .catch((err) => console.log(err));
@@ -37,7 +35,6 @@ const getDetail = (req, res) => {
         title: "Product Detail",
         path: "/product",
         item: product,
-        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
       });
     })
     .catch((err) => console.log(err));
@@ -77,7 +74,6 @@ const getCart = (req, res) => {
         path: "/cart",
         items: products,
         totalPrice: totalPrice,
-        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
       }); // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
     })
     .catch((err) => console.log(err));
@@ -139,7 +135,6 @@ const getOrder = (req, res) => {
       // orders = [{ {products: {}, quantity}, user{}}, {}]
       res.render("./user/order", {
         title: "Order",
-        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
         path: "/order",
         orders: orders,
       });

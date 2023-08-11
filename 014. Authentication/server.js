@@ -36,6 +36,11 @@ app.use(
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// {CSRF khai báo sau khi định nghĩa SESSION} //
+const csrf = require("csurf"); // Nhập module csurf
+const csrfProtect = csrf(); // Tạo 1 middleware để bảo vệ các route
+app.use(csrfProtect); // Sử dụng middleware bảo vệ các route, nếu không có token thì các lệnh request sẽ báo lỗi
+
 app.set("view engine", "ejs");
 app.set("views", "./views");
 
@@ -67,6 +72,13 @@ app.use((req, res, next) => {
       }
     })
     .catch((err) => console.log(err));
+});
+
+// {MIDDLEWARE ĐỂ TRUYỀN BIẾN LOCALS CHO TẤT CẢ CÁC ROUTE} //
+app.use((req, res, next) => {
+  res.locals.authenticate = req.session.isLogin; // Truyền biến authenticate vào locals để sử dụng ở tất cả các route
+  res.locals.csrfToken = req.csrfToken(); // Truyền biến csrfToken vào locals để sử dụng ở tất cả các route
+  next(); // Tiếp tục chạy các middleware tiếp theo
 });
 
 // {LOGIN ROUTE} //

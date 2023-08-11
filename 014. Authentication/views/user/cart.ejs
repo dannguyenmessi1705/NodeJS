@@ -9,6 +9,8 @@
                 <h1>Total Price: <b>$<%=totalPrice%></b></h1> 
             </div>
             <form class="center" action="/add-order" method="POST">
+                <!-- TOKEN CSRF -->
+                <input type="hidden" name="_csrf" value="<%=csrfToken%>">
                 <button class="btn" type="submit">ORDER ALL</button>
             </form>
             <ul class="cart__item-list">
@@ -18,6 +20,8 @@
                         <h2>Quantity: <%=item.quantity%></h2>
                         <div class="card__actions">
                             <form action="/delete-cart" method="POST">
+                                <!-- TOKEN CSRF -->
+                                <input type="hidden" name="_csrf" value="<%=csrfToken%>">
                                 <input type="hidden" name="id" value="<%=item.productId._id%>">
                                 <button class="btn danger" type="submit">Delete</button>
                             </form>

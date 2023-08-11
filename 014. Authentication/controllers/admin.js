@@ -4,7 +4,6 @@ const Product = require("../models/products");
 const addProduct = (req, res) => {
   res.render("./admin/editProduct", {
     title: "Add Product",
-    authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
     path: "/admin/add-product",
     editing: false, // Phân biệt với trạng thái Edit vs Add Product
   });
@@ -38,7 +37,6 @@ const getProduct = (req, res) => {
     .then((products) => {
       res.render("./admin/products", {
         title: "Admin Product",
-        authenticate: isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
         items: products,
         path: "/admin/product",
       });
@@ -57,7 +55,6 @@ const getEditProduct = (req, res) => {
     .then((product) => {
       res.render("./admin/editProduct", {
         title: "Edit Product",
-        authenticate: req.session.isLogin, // Truyền giá trị của Session "isLogin" vào biến authenticate để kiểm tra xem có phải đang ở trạng thái login hay không
         path: "/admin/add-product",
         editing: isEdit, // truyền giá trị của query 'edit' vào biến editing để kiểm tra xem có phải đang ở trạng thái edit hay không
         item: product, // gán product vừa tìm được vào biến item để đưa vào file ejs

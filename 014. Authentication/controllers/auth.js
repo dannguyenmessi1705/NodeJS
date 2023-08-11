@@ -5,7 +5,6 @@ const getAuth = (req, res, next) => {
   res.render("./auth/login", {
     title: "Login",
     path: "/login",
-    authenticate: req.session.isLogin,
   });
 };
 const postAuth = (req, res, next) => {
@@ -53,7 +52,6 @@ const getSignup = (req, res, next) => {
   res.render("./auth/signup", {
     title: "SignUp",
     path: "/signup",
-    authenticate: false,
   });
 };
 

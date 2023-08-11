@@ -1,5 +1,7 @@
 Source code lấy từ folder 13. Session & Cookie
 -> Thêm module bcryptjs để mã hóa password
+-> Thêm module csrf (kèm với module cookie-parser) để bảo vệ form tránh bị tấn công CSRF (Cross-site request forgery)
+
 Folder 14. Authentication nói về việc xác thực người dùng
 Cơ chế: Khi người dùng đăng nhập, server sẽ check thông tin người dùng ở trên database, nếu đúng
 thì nó sẽ tạo ra 1 session lưu trữ thông tin người dùng đó, và gửi cho người dùng 1 cookie để lưu trữ session id
@@ -13,3 +15,24 @@ thì nó sẽ tạo ra 1 session lưu trữ thông tin người dùng đó, và 
 4, Ẩn các routes khi chưa login bằng cách kiểm tra session ("./controllers/admin.js") ("./controllers/user.js")
 
 5, BẢo vệ các routes không cho phép truy cập khi chưa login ("middleware/auth.js") ("./routes/admin.js") ("./routes/user.js")
+
+6, Hiểu về CSRF
+- CSRF (Cross Site Request Forgery) là một kỹ thuật tấn công bằng cách sử dụng quyền chứng thực của người dùng 
+đối với 1 website khác (thường là 1 website đáng tin cậy) để thực hiện 1 hành động độc hại (thay đổi thông tin, thêm thông tin, xóa thông tin, ...) trên website đó. 
+-> Ví dụ: Khi người dùng đăng nhập vào 1 website, thì website đó sẽ tạo ra 1 session lưu trữ thông tin người dùng đó, và gửi cho người dùng 1 cookie để lưu trữ session id. 
+Khi người dùng truy cập vào 1 website khác, thì website đó sẽ lấy session id từ cookie và gửi lên server để xác thực người dùng. 
+Nếu server xác thực thành công thì nó sẽ cho phép người dùng thực hiện các hành động trên website đó. 
+Nhưng nếu website đó bị tấn công CSRF thì sẽ có 1 website khác (thường là 1 website đáng tin cậy) 
+gửi 1 request lên server để thực hiện 1 hành động độc hại (thay đổi thông tin, thêm thông tin, xóa thông tin, ...) trên website đó.
+
+- Cách phòng chống CSRF: 
++ Sử dụng token: Khi người dùng đăng nhập vào 1 website, thì website đó sẽ tạo ra 1 token và gửi cho người dùng.    
+Khi người dùng truy cập vào 1 website khác, thì website đó sẽ lấy token từ cookie và gửi lên server để xác thực người dùng. 
+-> Nếu server xác thực thành công thì nó sẽ cho phép người dùng thực hiện các hành động trên website đó.
+-> Nhưng nếu website đó bị tấn công CSRF thì sẽ không có token nên server sẽ không xác thực được người dùng.
++ Sử dụng captcha: Khi người dùng đăng nhập vào 1 website, thì website đó sẽ yêu cầu người dùng nhập captcha.
+
+=> Trong project này sử dụng token để phòng chống CSRF (server.js) 
+! LƯU Ý: + Việc khai báo sử dụng token phải đặt trước các routes, và phải đặt sau định nghĩa session, nếu không thì nó sẽ không có tác dụng
+         + Khi sử dụng token thì phải thêm 1 input hidden vào form để lưu trữ token với tên là _csrf (".views/auth/login.ejs") ("./controllers/auth.js") ,... 
+         VD: <input type="hidden" name="_csrf" value="<%=csrfToken%>"> phải được đặt vào những chỗ có form, hoặc những chỗ có thể gửi request lên server nếu không sẽ bị lỗi
