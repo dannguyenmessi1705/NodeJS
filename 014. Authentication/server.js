@@ -41,6 +41,10 @@ const csrf = require("csurf"); // Nhập module csurf
 const csrfProtect = csrf(); // Tạo 1 middleware để bảo vệ các route
 app.use(csrfProtect); // Sử dụng middleware bảo vệ các route, nếu không có token thì các lệnh request sẽ báo lỗi
 
+// {FLASH MESSAGE} //
+const flash = require("connect-flash");
+app.use(flash());
+
 app.set("view engine", "ejs");
 app.set("views", "./views");
 

@@ -2,12 +2,14 @@ const Order = require("../models/orders");
 const Product = require("../models/products");
 // {GET ALL PRODUCTS BY MONGOOSE} //
 const getIndex = (req, res) => {
+  const [successLogin] = req.flash("successLogin"); // Lấy giá trị Flash có tên là "successLogin"
   Product.find()
     .then((products) => {
       res.render("./user/index", {
         title: "Home",
         items: products,
         path: "/",
+        successLogin: successLogin, // Truyền giá trị Flash vào biến successLogin để hiển thị thông báo
       });
     })
     .catch((err) => console.log(err));

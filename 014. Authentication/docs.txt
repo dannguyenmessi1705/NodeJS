@@ -1,6 +1,7 @@
 Source code lấy từ folder 13. Session & Cookie
 -> Thêm module bcryptjs để mã hóa password
--> Thêm module csrf (kèm với module cookie-parser) để bảo vệ form tránh bị tấn công CSRF (Cross-site request forgery)
+-> Thêm module csurf (kèm với module cookie-parser) để bảo vệ form tránh bị tấn công CSRF (Cross-site request forgery)
+-> Thêm module connect-flash để hiển thị thông báo cho người dùng (thường dùng để hiển thị thông báo lỗi) 
 
 Folder 14. Authentication nói về việc xác thực người dùng
 Cơ chế: Khi người dùng đăng nhập, server sẽ check thông tin người dùng ở trên database, nếu đúng
@@ -16,7 +17,11 @@ thì nó sẽ tạo ra 1 session lưu trữ thông tin người dùng đó, và 
 
 5, BẢo vệ các routes không cho phép truy cập khi chưa login ("middleware/auth.js") ("./routes/admin.js") ("./routes/user.js")
 
-6, Hiểu về CSRF
+6, Thêm biến locals qua response để lưu trữ thông tin user ("server.js")
+-> Biến locals là biến toàn cục, có thể sử dụng ở bất kỳ đâu trong ứng dụng, nó sẽ được gán vào response và được truyền qua các middleware và routes
+-> Khi render 1 view, thì các biến locals sẽ được truyền vào view đó
+
+7, Hiểu về CSRF
 - CSRF (Cross Site Request Forgery) là một kỹ thuật tấn công bằng cách sử dụng quyền chứng thực của người dùng 
 đối với 1 website khác (thường là 1 website đáng tin cậy) để thực hiện 1 hành động độc hại (thay đổi thông tin, thêm thông tin, xóa thông tin, ...) trên website đó. 
 -> Ví dụ: Khi người dùng đăng nhập vào 1 website, thì website đó sẽ tạo ra 1 session lưu trữ thông tin người dùng đó, và gửi cho người dùng 1 cookie để lưu trữ session id. 
@@ -26,7 +31,7 @@ Nhưng nếu website đó bị tấn công CSRF thì sẽ có 1 website khác (t
 gửi 1 request lên server để thực hiện 1 hành động độc hại (thay đổi thông tin, thêm thông tin, xóa thông tin, ...) trên website đó.
 
 - Cách phòng chống CSRF: 
-+ Sử dụng token: Khi người dùng đăng nhập vào 1 website, thì website đó sẽ tạo ra 1 token và gửi cho người dùng.    
++ Sử dụng token (sẽ được lưu vào session): Khi người dùng đăng nhập vào 1 website, thì website đó sẽ tạo ra 1 token và gửi cho người dùng.    
 Khi người dùng truy cập vào 1 website khác, thì website đó sẽ lấy token từ cookie và gửi lên server để xác thực người dùng. 
 -> Nếu server xác thực thành công thì nó sẽ cho phép người dùng thực hiện các hành động trên website đó.
 -> Nhưng nếu website đó bị tấn công CSRF thì sẽ không có token nên server sẽ không xác thực được người dùng.
@@ -36,3 +41,13 @@ Khi người dùng truy cập vào 1 website khác, thì website đó sẽ lấy
 ! LƯU Ý: + Việc khai báo sử dụng token phải đặt trước các routes, và phải đặt sau định nghĩa session, nếu không thì nó sẽ không có tác dụng
          + Khi sử dụng token thì phải thêm 1 input hidden vào form để lưu trữ token với tên là _csrf (".views/auth/login.ejs") ("./controllers/auth.js") ,... 
          VD: <input type="hidden" name="_csrf" value="<%=csrfToken%>"> phải được đặt vào những chỗ có form, hoặc những chỗ có thể gửi request lên server nếu không sẽ bị lỗi
+
+8, Sử dụng module connect-flash hiển thị các thông báo ("./controllers/auth.js") ("server.js") ("./views/auth/")
+-> Thông báo lỗi: req.flash("error", "Thông báo lỗi")
+-> Thông báo thành công: req.flash("success", "Thông báo thành công")
+-> Thông báo cảnh báo: req.flash("warning", "Thông báo cảnh báo")
+-> Thông báo thông tin: req.flash("info", "Thông báo thông tin")
+-> Thông báo debug: req.flash("debug", "Thông báo debug")
+-> Thông báo: req.flash("message", "Thông báo")
+Các thông báo này được lưu vào 1 mảng trong session, sau khi hiển thị thì nó sẽ tự động bị xóa khỏi session ngay lập tức => (chỉ hiển thị 1 lần duy nhất) sau đó reload lại trang thì sẽ không còn thông báo nữa
+!LƯU Ý: flash chỉ hoạt động khi sử dụng session, nếu không sử dụng session thì flash sẽ không hoạt động được

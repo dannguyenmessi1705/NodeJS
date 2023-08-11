@@ -7,6 +7,16 @@
    <%- include('../includes/nav.ejs') %>
 
     <main>
+        <!-- FLASH MESSAGE -->
+        <% if(errorMessage) { %> 
+            <div class="message message--error">
+                <%= errorMessage %>
+            </div>
+        <% } else if(successSignup) { %>
+            <div class="message message--success">
+                <%= successSignup %>
+            </div>
+        <% } %>
         <form class="login-form" action="/login" method="POST">
             <div class="form-control">
                 <label for="email">E-Mail</label>

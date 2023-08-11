@@ -3,6 +3,12 @@
 <body>
     <%- include('../includes/nav.ejs') %>
     <main>
+        <!-- FLASH MESSAGE -->
+        <% if(successLogin) { %>
+            <div class="message message--success">
+                <%= successLogin %>
+            </div>
+        <% } %>
         <% if (items.length > 0) { %>
             <div class="grid">
                 <% items.forEach((item) => { %>
