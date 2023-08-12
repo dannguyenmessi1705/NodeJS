@@ -4,9 +4,11 @@ Source code lấy từ folder 14. Authentication
 Folder 15. Sending Email nói về việc gửi mail cho người dùng khi họ đăng ký tài khoản
 
 1, Thêm tính năng gửi mail cho người dùng khi họ đăng ký tài khoản ("./controllers/auth.js")
-Dùng GMAIL để gửi mail cho người dùng khi họ đăng ký tài khoản
+Dùng GMAIL để gửi mail cho người dùng khi họ đăng ký tài khoản, sử dụng SMTP
 ! Lưu ý:
     + Bật IMAP, POP trong gmail dùng để gửi mail
+    + Sau khi bật IMAP, cách sử dụng thông số SMTP:
+    -> https://support.google.com/mail/answer/7126229?hl=vi
     + Không nên dùng password của gmail để gửi mail, nên dùng ứng tính năng đăng nhập bằng mật khẩu ứng dụng
     -> https://support.google.com/accounts/answer/185833?visit_id=638274601527091110-1604688749&p=InvalidSecondFactor&rd=1
     -> https://myaccount.google.com/apppasswords
