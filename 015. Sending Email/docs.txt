@@ -1,0 +1,4 @@
+Source code lấy từ folder 14. Authentication
+-> Thêm module mailgun-js để gửi mail từ server cho người dùng
+
+Folder 15. Sending Email nói về việc gửi mail cho người dùng khi họ đăng ký tài khoản
