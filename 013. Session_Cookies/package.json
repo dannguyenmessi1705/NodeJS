@@ -14,7 +14,7 @@
   "scripts": {
     "start": "nodemon server.js"
   },
-  "name": "12.mongose",
+  "name": "13.session_cookie",
   "version": "1.0.0",
   "main": "server.js",
   "author": "",
