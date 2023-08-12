@@ -1,3 +1,19 @@
+// {SENDING EMAIL AFTER SIGNUP} //
+const nodemailer = require("nodemailer"); // Nhập module nodemailer
+// Tạo transporter để gửi mail
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com", // Host của mail server
+  port: 465, // Port của mail server
+  secure: true, // Sử dụng SSL
+  auth: {
+    user: "didannguyen@5dulieu.com", // mail dùng để gửi
+    pass: "femryegbpgljleyv", // password của mail dùng để gửi (có thể dùng password ứng dụng) (https://myaccount.google.com/apppasswords) thay vì dùng password của mail
+  },
+});
+const fs = require("fs"); // Nhập module fs
+const rootPath = require("../util/path"); // Nhập đường dẫn tuyệt đối của thư mục gốc
+const path = require("path"); // Nhập module path
+
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
 // {SESSION + COOKIES} // Đối với Session, phải tạo Session trước khi tạo Cookie
@@ -50,7 +66,6 @@ const getAuth = (req, res, next) => {
 
 // LOGOUT => SESSION SẼ XOÁ
 const postLogout = (req, res, next) => {
-
   req.session.destroy(() => {
     // Xoá Session
     res.redirect("/"); // Sau khi xoá Session thì mới chuyển hướng sang trang chủ (vì xoá Session là bất đồng bộ)
@@ -98,6 +113,32 @@ const postSignup = (req, res, next) => {
                   req.flash("successSignup", "Sign up successfully"); // Tạo flash message có tên là "success", giá trị là "Sign up successfully"
                   // Lưu user mới tạo
                   res.redirect("/login"); // Chuyển hướng sang trang đăng nhập
+
+                  // {SEND MAIL} //
+                  const pathImg = path.join(
+                    rootPath,
+                    "public",
+                    "img",
+                    "signup.png"
+                  ); // Đường dẫn đến file hình ảnh
+                  // Dùng transporter vừa tạo để gửi mail
+                  transporter
+                    .sendMail({
+                      // Tạo 1 mail
+                      from: "didannguyen@5dulieu.com", // Địa chỉ email của người gửi
+                      to: email, // Địa chỉ email của người nhận
+                      subject: "Signup Successfully", // Tiêu đề mail
+                      html: `<h1>You signup successfully. Welcome to our service</h1>`, // Nội dung mail
+                      attachments: [
+                        // File đính kèm
+                        {
+                          filename: "signup.png", // Tên file đính kèm
+                          content: fs.createReadStream(pathImg), // Nội dung file đính kèm
+                        },
+                      ],
+                    })
+                    .then((res) => console.log(res)) // Nếu gửi mail thành công
+                    .catch((err) => console.log(err)); // Nếu gửi mail thất bại
                 });
               });
           });
@@ -109,7 +150,7 @@ const postSignup = (req, res, next) => {
 
 // {SIGNUP} //
 const getSignup = (req, res, next) => {
-  const [errorUsername]  = req.flash("errorUsername"); // Lấy giá trị flash message có tên là "errorUsername"
+  const [errorUsername] = req.flash("errorUsername"); // Lấy giá trị flash message có tên là "errorUsername"
   const [errorEmail] = req.flash("errorEmail"); // Lấy giá trị flash message có tên là "errorEmail"
   res.render("./auth/signup", {
     title: "SignUp",
