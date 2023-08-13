@@ -1,3 +1,6 @@
 Source code lấy từ folder 15. Sending Email
 
 Folder 16. Advanced Authentication sẽ hoàn thiện chức năng đăng ký tài khoản cho người dùng
+
+1, Thêm tính năng kiểm tra nhập lại mật khẩu lúc đăng ký tài khoản (phải khớp với mật khẩu đã nhập) ("controllers/auth.js")
+

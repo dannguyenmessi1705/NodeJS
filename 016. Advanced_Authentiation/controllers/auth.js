@@ -95,6 +95,14 @@ const postSignup = (req, res, next) => {
               // {FLASH MESSAGE} // Nếu email đã tồn tại
               req.flash("errorEmail", "Email is existed"); // Tạo flash message có tên là "error", giá trị là "Email is existed"
               return res.redirect("/signup"); // Chuyển hướng sang trang đăng ký
+            } else if (password !== re_password) {
+              // Nếu password và re_password không trùng khớp
+              // {FLASH MESSAGE} // Nếu password không trùng khớp
+              req.flash(
+                "errorRePassword",
+                "Password and Re-Password does not match"
+              ); // Tạo flash message có tên là "error", giá trị là "Password does not match"
+              return res.redirect("/signup"); // Chuyển hướng sang trang đăng ký
             }
             bcrypt
               .hash(password, 12) // Nếu không tìm thấy => Mã hóa password với số lần lặp là 12
@@ -152,11 +160,13 @@ const postSignup = (req, res, next) => {
 const getSignup = (req, res, next) => {
   const [errorUsername] = req.flash("errorUsername"); // Lấy giá trị flash message có tên là "errorUsername"
   const [errorEmail] = req.flash("errorEmail"); // Lấy giá trị flash message có tên là "errorEmail"
+  const [errorRePassword] = req.flash("errorRePassword"); // Lấy giá trị flash message có tên là "errorRePassword"
   res.render("./auth/signup", {
     title: "SignUp",
     path: "/signup",
     errorUsername: errorUsername,
     errorEmail: errorEmail,
+    errorRePassword: errorRePassword,
   });
 };
 

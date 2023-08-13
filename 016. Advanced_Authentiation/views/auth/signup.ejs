@@ -16,6 +16,10 @@
             <div class="message message--error">
                 <%= errorEmail %>
             </div>
+        <% } else if (errorRePassword) { %>
+            <div class="message message--error">
+                <%= errorRePassword %>
+            </div>
         <% } %>
         <form class="login-form" action="/signup" method="POST">
             <div class="form-control">
