@@ -1,0 +1,3 @@
+Source code lấy từ folder 15. Sending Email
+
+Folder 16. Advanced Authentication sẽ hoàn thiện chức năng đăng ký tài khoản cho người dùng
