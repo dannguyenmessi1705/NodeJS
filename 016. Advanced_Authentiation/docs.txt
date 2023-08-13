@@ -13,3 +13,6 @@ Folder 16. Advanced Authentication sẽ hoàn thiện chức năng đăng ký t�
 -> Kiểm tra resetPasswordExpire để xác định token reset mật khẩu còn hợp lệ hay không 
  VD: {&gt: Date.now()} // thời hạn hợp lệ của token reset mật khẩu phải lớn hơn thời gian hiện tại
 -> Cập nhật mật khẩu mới cho người dùng xong đồng thời phải xoá token reset mật khẩu
+
+4, Phân quyền người dùng, chỉ có user nào tạo ra sản phẩm mới có thể cập nhật hoặc xoá sản phẩm đó ("controllers/admin.js")
+-> Trong các function updateProduct, deleteProduct thêm điều kiện: product.userId !== req.user._id

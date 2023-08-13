@@ -234,39 +234,39 @@ const getReset = (req, res, next) => {
 
 // {UPDATE PASSWORD} //
 const getUpdatePassword = (req, res, next) => {
-  const token = req.params.tokenReset;
+  const token = req.params.tokenReset; // Lấy token từ route đến trang update password (http://localhost:3000/reset/:tokenReset)
   User.findOne({
-    resetPasswordToken: token,
-    resetPasswordExpires: { $gt: Date.now() },
+    resetPasswordToken: token, // Tìm kiếm 1 user trong collection có resetPasswordToken là token
+    resetPasswordExpires: { $gt: Date.now() }, // Và resetPasswordExpires > Date.now()
   })
-    .then((user) => {
+    .then((user) => { // Nếu tìm thấy
       res.render("./auth/updatePassword", {
         path: "/update-password",
         title: "Update Password",
         passwordToken: token,
         userId: user._id.toString(),
-      });
+      }); // Render ra trang update password
     })
     .catch((err) => console.log(err));
 };
 const postUpdatePassword = (req, res, next) => {
-  const ID = req.body.userId;
-  const token = req.body.passwordToken;
-  let resetUser;
-  User.findOne({
-    resetPasswordToken: token,
-    resetPasswordExpires: { $gt: Date.now() },
-    _id: ID,
+  const ID = req.body.userId; // Lấy giá trị userId từ form
+  const token = req.body.passwordToken; // Lấy giá trị passwordToken từ form
+  let resetUser; // Khai báo 1 biến để lưu user
+  User.findOne({ 
+    resetPasswordToken: token, // Tìm kiếm 1 user trong collection có resetPasswordToken là token
+    resetPasswordExpires: { $gt: Date.now() }, // Và resetPasswordExpires > Date.now()
+    _id: ID, // Và _id = ID
   })
-    .then((user) => {
-      const password = req.body.password;
-      resetUser = user;
-      return bcrypt.hash(password, 12);
+    .then((user) => { // Nếu tìm thấy
+      const password = req.body.password; // Lấy giá trị password từ form
+      resetUser = user; // Lưu user vào biến resetUser
+      return bcrypt.hash(password, 12); // Hash password
     })
     .then((hashPassword) => {
-      resetUser.password = hashPassword;
-      resetUser.resetPasswordToken = null;
-      resetUser.resetPasswordExpires = null;
+      resetUser.password = hashPassword; // Lưu password đã hash vào user
+      resetUser.resetPasswordToken = null; // Xóa resetPasswordToken
+      resetUser.resetPasswordExpires = null; // Xóa resetPasswordExpires
       return resetUser.save();
     })
     .then(() => {
