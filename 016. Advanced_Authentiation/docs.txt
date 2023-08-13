@@ -4,3 +4,12 @@ Folder 16. Advanced Authentication sẽ hoàn thiện chức năng đăng ký t�
 
 1, Thêm tính năng kiểm tra nhập lại mật khẩu lúc đăng ký tài khoản (phải khớp với mật khẩu đã nhập) ("controllers/auth.js")
 
+2, Thêm tính năng reset mật khẩu ("controllers/auth.js"), ("views/auth/reset.ejs")
+-> Cần cài đặt nodemailer để gửi email xác nhận reset mật khẩu
+-> Cần cài đặt crypto để tạo token reset mật khẩu
+-> Thêm 2 thuộc tính vào model User: resetPasswordToken, resetPasswordExpire để lưu token và thời gian hết hạn của token reset mật khẩu ("models/user.js")
+
+3, Thêm tính năng cập nhật mật khẩu mới ("controllers/auth.js"), ("views/auth/updatePassword.ejs")
+-> Kiểm tra resetPasswordExpire để xác định token reset mật khẩu còn hợp lệ hay không 
+ VD: {&gt: Date.now()} // thời hạn hợp lệ của token reset mật khẩu phải lớn hơn thời gian hiện tại
+-> Cập nhật mật khẩu mới cho người dùng xong đồng thời phải xoá token reset mật khẩu

@@ -1,3 +1,6 @@
+// Tạo 1 bit random ngẫu nhiên => phục vụ cho việc tạo token
+const crypto = require("crypto");
+
 // {SENDING EMAIL AFTER SIGNUP} //
 const nodemailer = require("nodemailer"); // Nhập module nodemailer
 // Tạo transporter để gửi mail
@@ -56,11 +59,13 @@ const postAuth = (req, res, next) => {
 const getAuth = (req, res, next) => {
   const [errorMessage] = req.flash("errorLogin"); // Lấy giá trị flash message có tên là "error"
   const [successSignup] = req.flash("successSignup"); // Lấy giá trị flash message có tên là "successSigup"
+  const [updatePassword] = req.flash("updatePassword");
   res.render("./auth/login", {
     title: "Login",
     path: "/login",
     successSignup: successSignup, // Truyền giá trị flash message có tên là "success" vào biến successSigup
     errorMessage: errorMessage, // Truyền giá trị flash message có tên là "error" vào biến errorMessage
+    updatePassword: updatePassword,
   });
 };
 
@@ -170,10 +175,117 @@ const getSignup = (req, res, next) => {
   });
 };
 
+// {RESET PASSWORD} //
+const postReset = (req, res, next) => {
+  const email = req.body.email; // Lấy giá trị email từ form
+  User.findOne({ email: email }) // Tìm kiếm 1 user trong collection có email là email
+    .then((user) => {
+      // Nếu không tìm thấy => email không tồn tại
+      if (!user) {
+        req.flash("errorEmail", "No account with that email found"); // Tạo flash message có tên là "error", giá trị là "No account with that email found"
+        return res.redirect("/reset"); // Chuyển hướng sang trang reset password
+      }
+      // Nếu tìm thấy => email tồn tại
+      crypto.randomBytes(32, (err, buffer) => {
+        // Tạo 1 chuỗi ngẫu nhiên có độ dài là 32
+        if (err) {
+          // Nếu có lỗi
+          console.log(err); // In ra lỗi
+          return res.redirect("/reset"); // Chuyển hướng sang trang reset password
+        }
+        // Nếu không có lỗi
+        const token = buffer.toString("hex"); // Chuyển buffer thành chuỗi hex
+        user.resetPasswordToken = token; // Lưu token vào user
+        user.resetPasswordExpires = Date.now() + 600000; // Lưu thời gian hết hạn của token vào user (10 phút)
+        return user // Lưu user
+          .save()
+          .then(() => {
+            const data = {
+              from: "didannguyen@5dulieu.com", // Địa chỉ email của người gửi
+              to: email, // Địa chỉ email của người nhận
+              subject: "Reset Password", // Tiêu đề mail
+              html: `<h2>Click this <a href="http://localhost:3000/reset/${token}">link</a> to reset your password</h2>`, // Nội dung mail
+            }; // Tạo 1 mail
+            transporter
+              .sendMail(data) // Gửi mail
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
+      });
+      req.flash("requestSuccess", "Request Success"); // Tạo flash message có tên là "requestSuccess", giá trị là "Request Success"
+      return res.redirect("/reset"); // Chuyển hướng sang trang reset password
+    })
+    .catch((err) => console.log(err));
+};
+
+const getReset = (req, res, next) => {
+  const [errorEmail] = req.flash("errorEmail"); // Lấy giá trị flash message có tên là "errorEmail"
+  const [requestSuccess] = req.flash("requestSuccess"); // Lấy giá trị flash message có tên là "requestSuccess"
+  res.render("./auth/reset", {
+    path: "/reset",
+    title: "Reset Password",
+    errorEmail: errorEmail,
+    requestSuccess: requestSuccess,
+  });
+};
+
+// {UPDATE PASSWORD} //
+const getUpdatePassword = (req, res, next) => {
+  const token = req.params.tokenReset;
+  User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() },
+  })
+    .then((user) => {
+      res.render("./auth/updatePassword", {
+        path: "/update-password",
+        title: "Update Password",
+        passwordToken: token,
+        userId: user._id.toString(),
+      });
+    })
+    .catch((err) => console.log(err));
+};
+const postUpdatePassword = (req, res, next) => {
+  const ID = req.body.userId;
+  const token = req.body.passwordToken;
+  let resetUser;
+  User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() },
+    _id: ID,
+  })
+    .then((user) => {
+      const password = req.body.password;
+      resetUser = user;
+      return bcrypt.hash(password, 12);
+    })
+    .then((hashPassword) => {
+      resetUser.password = hashPassword;
+      resetUser.resetPasswordToken = null;
+      resetUser.resetPasswordExpires = null;
+      return resetUser.save();
+    })
+    .then(() => {
+      req.flash(
+        "updatePassword",
+        "You change your password successully, Please login"
+      );
+      res.redirect("/login");
+    })
+    .catch((err) => console.log(err));
+};
 module.exports = {
   getAuth,
   postAuth,
   postLogout,
   getSignup,
   postSignup,
+  getReset,
+  postReset,
+  getUpdatePassword,
+  postUpdatePassword,
 };

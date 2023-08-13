@@ -30,7 +30,6 @@ const postProduct = (req, res) => {
 
 // {GET ALL PRODUCTS BY MONGOOSE} //
 const getProduct = (req, res) => {
-  let isLogin = req.session.isLogin; // Lấy giá trị Session có tên là "isLogin"
   Product.find()
     .select("name price url description -_id")
     .exec() // Chỉ lấy các thuộc tính name, price, url, description, bỏ thuộc tính _id

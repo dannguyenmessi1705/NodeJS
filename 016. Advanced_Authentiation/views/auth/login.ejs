@@ -16,6 +16,10 @@
             <div class="message message--success">
                 <%= successSignup %>
             </div>
+        <% } else if (updatePassword) { %>
+            <div class="message message--success">
+                <%= updatePassword %>
+            </div>
         <% } %>
         <form class="login-form" action="/login" method="POST">
             <div class="form-control">
@@ -30,5 +34,6 @@
             <input type="hidden" name="_csrf" value="<%=csrfToken%>">
             <button class="btn" type="submit">Login</button>
         </form>
+        <a href="/reset" class="center" style="color: #00695c;">Forgot password?</a>
     </main>
 <%- include('../includes/end.ejs') %>
