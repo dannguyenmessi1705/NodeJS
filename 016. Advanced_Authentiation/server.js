@@ -49,13 +49,12 @@ app.set("view engine", "ejs");
 app.set("views", "./views");
 
 // {RUN SERVER + Add user to req (Phân quyền)} //
-const IP = "192.168.1.6";
 const mongoose = require("mongoose"); // Nhập module mongoose
 const User = require("./models/users"); // Nhập vào class User lấy từ file users.js
 mongoose
   .connect(URL)
   .then(() => {
-    app.listen(3000, "localhost" || IP);
+    app.listen(3000);
     console.log("Connected!");
   }) // Kết nối với database, sau đó mới chạy server
   .catch((err) => console.log(err));
