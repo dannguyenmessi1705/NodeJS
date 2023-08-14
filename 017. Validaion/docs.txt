@@ -1,0 +1,9 @@
+Source code lấy từ folder 16. Advanced_Authentication, thêm module express-validator
+-> Sử dụng {check} express-validator/check ở file routes như là 1 middleware để kiểm tra dữ liệu nhập vào (các thuộc tính của req) từ người dùng
+-> Sử dụng {validationResult} express-validator/check ở file controllers để xử lý, lấy các thông báo lỗi từ việc kiểm tra dữ liệu nhập vào
+
+Folder 17. Validation nói về việc xác thực dữ liệu nhập vào từ người dùng trước khi lưu vào database
+-> việc xác thực dữ liệu nhập vào từ người dùng trước khi lưu vào database là rất quan trọng, nó giúp chúng ta tránh được các lỗi xảy ra trong quá trình lưu trữ dữ liệu vào database
+-> việc xác thực dữ liệu đầu vào có thể xử lý ở client-side (tuy nhiên không nên vì có thể bị hack, truy cập mã nguồn để thay đổi code)
+   hoặc ở server-side (nên làm)
+=> Trong Folder này sẽ làm bên server-side
