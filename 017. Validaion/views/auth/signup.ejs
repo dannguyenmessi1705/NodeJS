@@ -12,13 +12,15 @@
             <div class="message message--error">
                 <%= errorUsername %>
             </div>
+            <!-- VALIDATION INPUT -->
         <% } else if (errorEmail) { %>
             <div class="message message--error">
                 <%= errorEmail %>
             </div>
-        <% } else if (errorRePassword) { %>
+            <!--  -->
+        <% } else if (error) { %>
             <div class="message message--error">
-                <%= errorRePassword %>
+                <%= error %>
             </div>
         <% } %>
         <form class="login-form" action="/signup" method="POST">

@@ -1,6 +1,8 @@
+// {ADDING VALIDATION} // Nhập module validationResult dùng để xác thực dữ liệu đầu vào
+const { validationResult } = require("express-validator");
+
 // Tạo 1 bit random ngẫu nhiên => phục vụ cho việc tạo token
 const crypto = require("crypto");
-
 // {SENDING EMAIL AFTER SIGNUP} //
 const nodemailer = require("nodemailer"); // Nhập module nodemailer
 // Tạo transporter để gửi mail
@@ -83,8 +85,36 @@ const postSignup = (req, res, next) => {
   const email = req.body.email; // Lấy giá trị email từ form
   const password = req.body.password; // Lấy giá trị password từ form
   const re_password = req.body.re_password; // Lấy giá trị re_password từ form
+  // {Thêm phần nhập request vào hàm validationResult để kiểm tra với hàm check bên routes/auth} //
+  const errorValidation = validationResult(req);
   if (username && email && password && re_password) {
     // Nếu tất cả các giá trị đều tồn tại
+    // Nếu tồn tại lỗi trong việc xác thực giá trị nhập vào (email không hợp lệ, pass ko đủ độ dài và không == vs rePass)
+    // {VALIDATION} //
+    if (!errorValidation.isEmpty()) {
+      console.log(errorValidation.array());
+      const [error] = errorValidation.array(); // Lấy phần tử đầu tiên của mảng
+      return res.status(422).render("./auth/signup", {
+        title: "Sign Up",
+        path: "/signup",
+        errorUsername: false,
+        errorEmail: false,
+        error: error.msg, // Nếu có lỗi thì giá trị sẽ được tìm thấy ở thuộc tính "msg"
+      });
+      // Nếu lỗi email nhập vào không phải là email hợp lệ (VD: qqq)
+      /*
+        [
+          {
+            type: 'field',
+            value: 'qqq',
+            msg: 'Invalid value',
+            path: 'email',
+            location: 'body'
+          }
+        ]
+      */
+    }
+    // Nếu tất cả đều OK
     return User.findOne({ username: username }) // Tìm kiếm 1 user trong collection có username là username
       .then((name) => {
         if (name) {
@@ -99,14 +129,6 @@ const postSignup = (req, res, next) => {
               // Nếu tìm thấy => email đã tồn tại
               // {FLASH MESSAGE} // Nếu email đã tồn tại
               req.flash("errorEmail", "Email is existed"); // Tạo flash message có tên là "error", giá trị là "Email is existed"
-              return res.redirect("/signup"); // Chuyển hướng sang trang đăng ký
-            } else if (password !== re_password) {
-              // Nếu password và re_password không trùng khớp
-              // {FLASH MESSAGE} // Nếu password không trùng khớp
-              req.flash(
-                "errorRePassword",
-                "Password and Re-Password does not match"
-              ); // Tạo flash message có tên là "error", giá trị là "Password does not match"
               return res.redirect("/signup"); // Chuyển hướng sang trang đăng ký
             }
             bcrypt
@@ -165,13 +187,12 @@ const postSignup = (req, res, next) => {
 const getSignup = (req, res, next) => {
   const [errorUsername] = req.flash("errorUsername"); // Lấy giá trị flash message có tên là "errorUsername"
   const [errorEmail] = req.flash("errorEmail"); // Lấy giá trị flash message có tên là "errorEmail"
-  const [errorRePassword] = req.flash("errorRePassword"); // Lấy giá trị flash message có tên là "errorRePassword"
   res.render("./auth/signup", {
-    title: "SignUp",
+    title: "Sign Up",
     path: "/signup",
     errorUsername: errorUsername,
     errorEmail: errorEmail,
-    errorRePassword: errorRePassword,
+    error: false
   });
 };
 
@@ -239,7 +260,8 @@ const getUpdatePassword = (req, res, next) => {
     resetPasswordToken: token, // Tìm kiếm 1 user trong collection có resetPasswordToken là token
     resetPasswordExpires: { $gt: Date.now() }, // Và resetPasswordExpires > Date.now()
   })
-    .then((user) => { // Nếu tìm thấy
+    .then((user) => {
+      // Nếu tìm thấy
       res.render("./auth/updatePassword", {
         path: "/update-password",
         title: "Update Password",
@@ -253,12 +275,13 @@ const postUpdatePassword = (req, res, next) => {
   const ID = req.body.userId; // Lấy giá trị userId từ form
   const token = req.body.passwordToken; // Lấy giá trị passwordToken từ form
   let resetUser; // Khai báo 1 biến để lưu user
-  User.findOne({ 
+  User.findOne({
     resetPasswordToken: token, // Tìm kiếm 1 user trong collection có resetPasswordToken là token
     resetPasswordExpires: { $gt: Date.now() }, // Và resetPasswordExpires > Date.now()
     _id: ID, // Và _id = ID
   })
-    .then((user) => { // Nếu tìm thấy
+    .then((user) => {
+      // Nếu tìm thấy
       const password = req.body.password; // Lấy giá trị password từ form
       resetUser = user; // Lưu user vào biến resetUser
       return bcrypt.hash(password, 12); // Hash password
