@@ -11,7 +11,12 @@ route.get("/login", getAuth.getAuth);
 // {VALIDATION INPUT LOGIN} //
 route.post(
   "/login",
-  [check("email").isEmail().withMessage("Please enter the valid email")],
+  [
+    check("email").isEmail().withMessage("Please enter the valid email"),
+    check("password")
+      .notEmpty()
+      .withMessage("Please don't leave the blank password"),
+  ],
   getAuth.postAuth
 );
 route.post("/logout", getAuth.postLogout);
@@ -52,8 +57,7 @@ route.post(
         });
       }),
 
-    check("password", "The password must be at least 5")
-      .isLength({ min: 5 }), // Độ dài mật khẩu tối thiểu là 5
+    check("password", "The password must be at least 5").isLength({ min: 5 }), // Độ dài mật khẩu tối thiểu là 5
 
     // Kiểm tra password và re_password có giống nhau không
     check("re_password").custom((value, { req }) => {

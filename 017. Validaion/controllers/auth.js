@@ -21,16 +21,29 @@ const path = require("path"); // Nhập module path
 
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
+
+
 // {SESSION + COOKIES} // Đối với Session, phải tạo Session trước khi tạo Cookie
 const postAuth = (req, res, next) => {
   const email = req.body.email; // Lấy giá trị email từ form
   const password = req.body.password; // Lấy giá trị password từ form
+  // {VALIDATION INPUT} //
+  const errorValidation = validationResult(req)
+  if (!errorValidation.isEmpty()) {
+    console.log(errorValidation.array())
+    const [errorMessage] = errorValidation.array()
+    return res.status(422).render("./auth/login", {
+      title: "Login",
+      path: "/login",
+      error: errorMessage.msg
+    })
+  }
   User.findOne({ email: email }) // Tìm user có email = email
     .then((user) => {
       if (!user) {
         // Nếu không tìm thấy user
         // {FLASH MESSAGE} // Nếu password không trùng khớp
-        req.flash("errorLogin", "Email or Password does not match!"); // Tạo flash message có tên là "error", giá trị là "Email or Password does not match!"
+        req.flash("errorLogin", "Incorrect email or password!"); // Tạo flash message có tên là "error", giá trị là "Email or Password does not match!"
         return res.redirect("/login"); // Chuyển hướng về trang login
       }
       bcrypt
@@ -49,7 +62,7 @@ const postAuth = (req, res, next) => {
             });
           } else {
             // {FLASH MESSAGE} // Nếu password không trùng khớp
-            req.flash("errorLogin", "Email or Password does not match!"); // Tạo flash message có tên là "error", giá trị là "Email or Password does not match!"
+            req.flash("errorLogin", "Incorrect username or password!"); // Tạo flash message có tên là "error", giá trị là "Email or Password does not match!"
             return res.redirect("/login"); // Chuyển hướng về trang login
           }
         })
@@ -59,14 +72,15 @@ const postAuth = (req, res, next) => {
 };
 
 const getAuth = (req, res, next) => {
-  const [errorMessage] = req.flash("errorLogin"); // Lấy giá trị flash message có tên là "error"
+  const [errorLogin] = req.flash("errorLogin"); // Lấy giá trị flash message có tên là "error"
   const [successSignup] = req.flash("successSignup"); // Lấy giá trị flash message có tên là "successSigup"
   const [updatePassword] = req.flash("updatePassword");
   res.render("./auth/login", {
     title: "Login",
     path: "/login",
     successSignup: successSignup, // Truyền giá trị flash message có tên là "success" vào biến successSigup
-    errorMessage: errorMessage, // Truyền giá trị flash message có tên là "error" vào biến errorMessage
+    errorLogin: errorLogin,
+    error: undefined, // Truyền giá trị flash message có tên là "error" vào biến errorMessage
     updatePassword: updatePassword,
   });
 };
