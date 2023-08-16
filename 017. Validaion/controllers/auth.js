@@ -87,22 +87,18 @@ const postSignup = (req, res, next) => {
   const re_password = req.body.re_password; // Lấy giá trị re_password từ form
   // {Thêm phần nhập request vào hàm validationResult để kiểm tra với hàm check bên routes/auth} //
   const errorValidation = validationResult(req);
-  if (username && email && password && re_password) {
-    // Nếu tất cả các giá trị đều tồn tại
-    // Nếu tồn tại lỗi trong việc xác thực giá trị nhập vào (email không hợp lệ, pass ko đủ độ dài và không == vs rePass)
-    // {VALIDATION} //
-    if (!errorValidation.isEmpty()) {
-      console.log(errorValidation.array());
-      const [error] = errorValidation.array(); // Lấy phần tử đầu tiên của mảng
-      return res.status(422).render("./auth/signup", {
-        title: "Sign Up",
-        path: "/signup",
-        errorUsername: false,
-        errorEmail: false,
-        error: error.msg, // Nếu có lỗi thì giá trị sẽ được tìm thấy ở thuộc tính "msg"
-      });
-      // Nếu lỗi email nhập vào không phải là email hợp lệ (VD: qqq)
-      /*
+  // Nếu tồn tại lỗi trong việc xác thực giá trị nhập vào (email không hợp lệ, pass ko đủ độ dài và không == vs rePass)
+  // {VALIDATION} //
+  if (!errorValidation.isEmpty()) {
+    console.log(errorValidation.array());
+    const [error] = errorValidation.array(); // Lấy phần tử đầu tiên của mảng
+    return res.status(422).render("./auth/signup", {
+      title: "Sign Up",
+      path: "/signup",
+      error: error.msg, // Nếu có lỗi thì giá trị sẽ được tìm thấy ở thuộc tính "msg"
+    });
+    // Nếu lỗi email nhập vào không phải là email hợp lệ (VD: qqq)
+    /*
         [
           {
             type: 'field',
@@ -113,86 +109,56 @@ const postSignup = (req, res, next) => {
           }
         ]
       */
-    }
-    // Nếu tất cả đều OK
-    return User.findOne({ username: username }) // Tìm kiếm 1 user trong collection có username là username
-      .then((name) => {
-        if (name) {
-          // Nếu tìm thấy => username đã tồn tại
-          // {FLASH MESSAGE} // Nếu username đã tồn tại
-          req.flash("errorUsername", "Username is existed"); // Tạo flash message có tên là "error", giá trị là "Username is existed"
-          return res.redirect("/signup"); // Chuyển hướng sang trang đăng ký
-        }
-        User.findOne({ email: email }) // Tìm kiếm 1 user trong collection có email là email
-          .then((userEmail) => {
-            if (userEmail) {
-              // Nếu tìm thấy => email đã tồn tại
-              // {FLASH MESSAGE} // Nếu email đã tồn tại
-              req.flash("errorEmail", "Email is existed"); // Tạo flash message có tên là "error", giá trị là "Email is existed"
-              return res.redirect("/signup"); // Chuyển hướng sang trang đăng ký
-            }
-            bcrypt
-              .hash(password, 12) // Nếu không tìm thấy => Mã hóa password với số lần lặp là 12
-              .then((hashPassword) => {
-                const user = new User({
-                  // Tạo 1 user mới
-                  username: username,
-                  email: email,
-                  password: hashPassword,
-                  cart: {
-                    items: [],
-                  },
-                });
-                return user.save().then(() => {
-                  // {FLASH MESSAGE} // Nếu user mới tạo thành công
-                  req.flash("successSignup", "Sign up successfully"); // Tạo flash message có tên là "success", giá trị là "Sign up successfully"
-                  // Lưu user mới tạo
-                  res.redirect("/login"); // Chuyển hướng sang trang đăng nhập
-
-                  // {SEND MAIL} //
-                  const pathImg = path.join(
-                    rootPath,
-                    "public",
-                    "img",
-                    "signup.png"
-                  ); // Đường dẫn đến file hình ảnh
-                  // Dùng transporter vừa tạo để gửi mail
-                  transporter
-                    .sendMail({
-                      // Tạo 1 mail
-                      from: "didannguyen@5dulieu.com", // Địa chỉ email của người gửi
-                      to: email, // Địa chỉ email của người nhận
-                      subject: "Signup Successfully", // Tiêu đề mail
-                      html: `<h1>You signup successfully. Welcome to our service</h1>`, // Nội dung mail
-                      attachments: [
-                        // File đính kèm
-                        {
-                          filename: "signup.png", // Tên file đính kèm
-                          content: fs.createReadStream(pathImg), // Nội dung file đính kèm
-                        },
-                      ],
-                    })
-                    .then((res) => console.log(res)) // Nếu gửi mail thành công
-                    .catch((err) => console.log(err)); // Nếu gửi mail thất bại
-                });
-              });
-          });
-      })
-      .catch((err) => console.log(err));
   }
-  return res.redirect("/signup");
+  // Nếu tất cả đều OK
+  return bcrypt
+    .hash(password, 12) // Nếu không tìm thấy => Mã hóa password với số lần lặp là 12
+    .then((hashPassword) => {
+      const user = new User({
+        // Tạo 1 user mới
+        username: username,
+        email: email,
+        password: hashPassword,
+        cart: {
+          items: [],
+        },
+      });
+      return user.save().then(() => {
+        // {FLASH MESSAGE} // Nếu user mới tạo thành công
+        req.flash("successSignup", "Sign up successfully"); // Tạo flash message có tên là "success", giá trị là "Sign up successfully"
+        // Lưu user mới tạo
+        res.redirect("/login"); // Chuyển hướng sang trang đăng nhập
+
+        // {SEND MAIL} //
+        const pathImg = path.join(rootPath, "public", "img", "signup.png"); // Đường dẫn đến file hình ảnh
+        // Dùng transporter vừa tạo để gửi mail
+        transporter
+          .sendMail({
+            // Tạo 1 mail
+            from: "didannguyen@5dulieu.com", // Địa chỉ email của người gửi
+            to: email, // Địa chỉ email của người nhận
+            subject: "Signup Successfully", // Tiêu đề mail
+            html: `<h1>You signup successfully. Welcome to our service</h1>`, // Nội dung mail
+            attachments: [
+              // File đính kèm
+              {
+                filename: "signup.png", // Tên file đính kèm
+                content: fs.createReadStream(pathImg), // Nội dung file đính kèm
+              },
+            ],
+          })
+          .then((res) => console.log(res)) // Nếu gửi mail thành công
+          .catch((err) => console.log(err)); // Nếu gửi mail thất bại
+      });
+    });
 };
 
 // {SIGNUP} //
 const getSignup = (req, res, next) => {
-  const [errorUsername] = req.flash("errorUsername"); // Lấy giá trị flash message có tên là "errorUsername"
-  const [errorEmail] = req.flash("errorEmail"); // Lấy giá trị flash message có tên là "errorEmail"
   res.render("./auth/signup", {
     title: "Sign Up",
     path: "/signup",
-    errorUsername: errorUsername,
-    errorEmail: errorEmail,
-    error: false
+    error: false,
   });
 };
 
