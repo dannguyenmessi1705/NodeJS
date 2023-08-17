@@ -12,10 +12,12 @@ route.post(
   "/add-product",
   ProtectRoute,
   [
-    check("name", "Invallid name").isString().notEmpty(),
+    check("name", "Invallid name").trim().isString().notEmpty(),
     check("price", "Invalid price").isFloat().notEmpty(),
-    check("url", "Invalid URL").isURL(),
-    check("description", "Please don't leave the blank description").notEmpty()
+    check("url", "Invalid URL").trim().isURL(),
+    check("description", "Please don't leave the blank description")
+      .trim()
+      .notEmpty(),
   ],
   adminController.postProduct
 );
@@ -34,10 +36,12 @@ route.post(
   "/edit-product",
   ProtectRoute,
   [
-    check("name", "Invallid name").isString().notEmpty(),
+    check("name", "Invallid name").trim().isString().notEmpty(),
     check("price", "Invalid price").isFloat().notEmpty(),
-    check("url", "Invalid URL").isURL(),
-    check("description", "Please don't leave the blank description").notEmpty()
+    check("url", "Invalid URL").trim().isURL(),
+    check("description", "Please don't leave the blank description")
+      .trim()
+      .notEmpty(),
   ],
   adminController.postEditProduct
 );

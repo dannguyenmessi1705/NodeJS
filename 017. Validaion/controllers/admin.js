@@ -92,16 +92,17 @@ const postEditProduct = (req, res) => {
   const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
   // VALIDATION INPUT
   const errorValidation = validationResult(req);
-  if (!errorValidation.isEmpty()) {
-    console.log(errorValidation.array());
-    const [error] = errorValidation.array();
-    Product.findById(ID)
-      .then((product) => {
-        // {AUTHORIZATION} //
-        if (product.userId.toString() !== req.user._id.toString()) {
-          // Kiểm tra xem user hiện tại có phải là người tạo ra product này hay không
-          return res.redirect("/admin/product"); // Nếu không phải thì redirect về trang chủ
-        }
+  Product.findById(ID)
+    .then((product) => {
+      // {AUTHORIZATION} //
+      if (product.userId.toString() !== req.user._id.toString()) {
+        // Kiểm tra xem user hiện tại có phải là người tạo ra product này hay không
+        return res.redirect("/"); // Nếu không phải thì redirect về trang chủ
+      }
+      // VALIDATION INPUT
+      if (!errorValidation.isEmpty()) {
+        console.log(errorValidation.array());
+        const [error] = errorValidation.array();
         return res.status(422).render("./admin/editProduct", {
           title: "Edit Product",
           path: "/admin/add-product",
@@ -109,32 +110,22 @@ const postEditProduct = (req, res) => {
           item: product,
           error: error.msg,
         });
-      })
-      .catch((err) => console.log(err));
-  } else {
-    Product.findById(ID)
-      .then((product) => {
-        // {AUTHORIZATION} //
-        if (product.userId.toString() !== req.user._id.toString()) {
-          // Kiểm tra xem user hiện tại có phải là người tạo ra product này hay không
-          return res.redirect("/"); // Nếu không phải thì redirect về trang chủ
-        }
-        // Cập nhật lại các giá trị của product theo req.body
-        product.name = data.name;
-        product.price = data.price;
-        product.url = data.url;
-        product.description = data.description;
-        // Lưu lại vào database
-        return product
-          .save()
-          .then(() => {
-            res.redirect("/admin/product");
-            console.log("Updated!")
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
-  }
+      }
+      // Cập nhật lại các giá trị của product theo req.body
+      product.name = data.name;
+      product.price = data.price;
+      product.url = data.url;
+      product.description = data.description;
+      // Lưu lại vào database
+      return product
+        .save()
+        .then(() => {
+          res.redirect("/admin/product");
+          console.log("Updated!");
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
   // Muốn nhanh hơn thì dùng method findByIdAndUpdate, ruy nhiên dùng save() có thể dùng được với middleware
 };
 
