@@ -1,16 +1,33 @@
 const products = require("../models/products");
 const Product = require("../models/products");
+
+// {VALIDATION INPUT} //
+const { validationResult } = require("express-validator");
+
 // {ADD PRODUCT PAGE} //
 const addProduct = (req, res) => {
   res.render("./admin/editProduct", {
     title: "Add Product",
     path: "/admin/add-product",
     editing: false, // Phân biệt với trạng thái Edit vs Add Product
+    error: undefined,
   });
 };
 
 // {CREAT PRODUCT BY MONGOOSE} //
 const postProduct = (req, res) => {
+  // VALIDATION INPUT
+  const errorValidation = validationResult(req);
+  if (!errorValidation.isEmpty()) {
+    console.log(errorValidation.array());
+    const [error] = errorValidation.array();
+    return res.status(422).render("./admin/editProduct", {
+      title: "Add Product",
+      path: "/admin/add-product",
+      editing: false,
+      error: error.msg,
+    });
+  }
   const data = JSON.parse(JSON.stringify(req.body));
   const product = new Product({
     name: data.name,
@@ -19,7 +36,7 @@ const postProduct = (req, res) => {
     description: data.description,
     userId: req.user._id,
   });
-  product
+  return product
     .save()
     .then((result) => {
       console.log("Created Product");
@@ -63,6 +80,7 @@ const getEditProduct = (req, res) => {
         path: "/admin/add-product",
         editing: isEdit, // truyền giá trị của query 'edit' vào biến editing để kiểm tra xem có phải đang ở trạng thái edit hay không
         item: product, // gán product vừa tìm được vào biến item để đưa vào file ejs
+        error: undefined,
       });
     })
     .catch((err) => console.log(err));
@@ -72,27 +90,51 @@ const getEditProduct = (req, res) => {
 const postEditProduct = (req, res) => {
   const data = req.body;
   const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
-  Product.findById(ID)
-    .then((product) => {
-      // {AUTHORIZATION} //
-      if (product.userId.toString() !== req.user._id.toString()) {
-        // Kiểm tra xem user hiện tại có phải là người tạo ra product này hay không
-        return res.redirect("/"); // Nếu không phải thì redirect về trang chủ
-      }
-      // Cập nhật lại các giá trị của product theo req.body
-      product.name = data.name;
-      product.price = data.price;
-      product.url = data.url;
-      product.description = data.description;
-      // Lưu lại vào database
-      return product
-        .save()
-        .then(() => {
-          res.redirect("/admin/product");
-        })
-        .catch((err) => console.log(err));
-    })
-    .catch((err) => console.log(err));
+  // VALIDATION INPUT
+  const errorValidation = validationResult(req);
+  if (!errorValidation.isEmpty()) {
+    console.log(errorValidation.array());
+    const [error] = errorValidation.array();
+    Product.findById(ID)
+      .then((product) => {
+        // {AUTHORIZATION} //
+        if (product.userId.toString() !== req.user._id.toString()) {
+          // Kiểm tra xem user hiện tại có phải là người tạo ra product này hay không
+          return res.redirect("/admin/product"); // Nếu không phải thì redirect về trang chủ
+        }
+        return res.status(422).render("./admin/editProduct", {
+          title: "Edit Product",
+          path: "/admin/add-product",
+          editing: true, // truyền giá trị của query 'edit' vào biến editing để kiểm tra xem có phải đang ở trạng thái edit hay không
+          item: product,
+          error: error.msg,
+        });
+      })
+      .catch((err) => console.log(err));
+  } else {
+    Product.findById(ID)
+      .then((product) => {
+        // {AUTHORIZATION} //
+        if (product.userId.toString() !== req.user._id.toString()) {
+          // Kiểm tra xem user hiện tại có phải là người tạo ra product này hay không
+          return res.redirect("/"); // Nếu không phải thì redirect về trang chủ
+        }
+        // Cập nhật lại các giá trị của product theo req.body
+        product.name = data.name;
+        product.price = data.price;
+        product.url = data.url;
+        product.description = data.description;
+        // Lưu lại vào database
+        return product
+          .save()
+          .then(() => {
+            res.redirect("/admin/product");
+            console.log("Updated!")
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }
   // Muốn nhanh hơn thì dùng method findByIdAndUpdate, ruy nhiên dùng save() có thể dùng được với middleware
 };
 

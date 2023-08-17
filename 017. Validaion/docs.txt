@@ -26,6 +26,8 @@ Folder 17. Validation nói về việc xác thực dữ liệu nhập vào từ 
 
 2, Kiểm tra dữ liệu nhập vào từ người dùng khi đăng nhập ("routes/auth.js"), ("controllers/auth.js")
 
+3, Kiểm tra dữ liệu nhập vào từ người dùng khi sửa thông tin, thêm sản phẩm ("routes/admin.js"), ("controllers/admin.js")
+
 
    
 *** Các thuộc tính của hàm check:
