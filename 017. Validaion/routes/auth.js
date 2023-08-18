@@ -88,10 +88,31 @@ route.post(
 // {RESET PASSWORD} //
 route.get("/reset", getAuth.getReset);
 
-route.post("/reset", getAuth.postReset);
+route.post(
+  "/reset",
+  // {VALIDATION INPUT} //
+  check("email", "Please enter a valid email")
+    .normalizeEmail()
+    .isEmail()
+    .custom((value, { req }) => {
+      return User.findOne({ email: value }).then((emailFound) => {
+        if (!emailFound) {
+          return Promise.reject("Email doesn't exist");
+        }
+      });
+    }),
+  getAuth.postReset
+);
 // {UPDATE PASSWORD} //
 route.get("/reset/:tokenReset", getAuth.getUpdatePassword);
 
-route.post("/update-password", getAuth.postUpdatePassword);
+route.post(
+  "/update-password",
+  // {VALIDATION INPUT} //
+  check("password", "The password must be at least 5")
+    .trim()
+    .isLength({ min: 5 }),
+  getAuth.postUpdatePassword
+);
 
 module.exports = route;
