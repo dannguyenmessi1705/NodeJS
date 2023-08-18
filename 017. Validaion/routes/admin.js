@@ -7,6 +7,7 @@ const ProtectRoute = require("../middleware/auth");
 const { check } = require("express-validator");
 
 route.get("/add-product", ProtectRoute, adminController.addProduct);
+
 // {VALIDATION INPUT} //
 route.post(
   "/add-product",
@@ -21,6 +22,7 @@ route.post(
   ],
   adminController.postProduct
 );
+
 route.get("/product", ProtectRoute, adminController.getProduct);
 
 // {ADD EDIT PRODUCT} //
@@ -30,6 +32,7 @@ route.get(
   ProtectRoute,
   adminController.getEditProduct
 );
+
 // {UPDATE PRODUCT}
 // {VALIDATION INPUT} //
 route.post(

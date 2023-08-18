@@ -22,21 +22,26 @@ const path = require("path"); // Nhập module path
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
 
-
+// LOGIN
 // {SESSION + COOKIES} // Đối với Session, phải tạo Session trước khi tạo Cookie
 const postAuth = (req, res, next) => {
   const email = req.body.email; // Lấy giá trị email từ form
   const password = req.body.password; // Lấy giá trị password từ form
   // {VALIDATION INPUT} //
-  const errorValidation = validationResult(req)
+  const errorValidation = validationResult(req);
   if (!errorValidation.isEmpty()) {
-    console.log(errorValidation.array())
-    const [errorMessage] = errorValidation.array()
+    console.log(errorValidation.array());
+    const [error] = errorValidation.array();
     return res.status(422).render("./auth/login", {
       title: "Login",
       path: "/login",
-      error: errorMessage.msg
-    })
+      error: error.msg,
+      errorType: error.path, // Lưu lại lỗi thuộc trường nào
+      oldInput: {
+        email,
+        password
+      }, // Lưu lại các giá trị vừa nhập 
+    });
   }
   User.findOne({ email: email }) // Tìm user có email = email
     .then((user) => {
@@ -82,6 +87,11 @@ const getAuth = (req, res, next) => {
     errorLogin: errorLogin,
     error: undefined, // Truyền giá trị flash message có tên là "error" vào biến errorMessage
     updatePassword: updatePassword,
+    errorType: undefined, //  ban đầu chưa có giá trị nào lỗi
+    oldInput: {
+      email: "",
+      password: "",
+    }, // Lưu lại các giá trị vừa nhập (vì ban đầu không có giá trị nào trong trường cả)
   });
 };
 
@@ -110,6 +120,8 @@ const postSignup = (req, res, next) => {
       title: "Sign Up",
       path: "/signup",
       error: error.msg, // Nếu có lỗi thì giá trị sẽ được tìm thấy ở thuộc tính "msg"
+      errorType: error.path, // xác định trường nào  lõi cần sửa
+      oldInput: { username, email, password, re_password }, // Lưu lại các giá trị vừa nhập
     });
     // Nếu lỗi email nhập vào không phải là email hợp lệ (VD: qqq)
     /*
@@ -173,6 +185,13 @@ const getSignup = (req, res, next) => {
     title: "Sign Up",
     path: "/signup",
     error: false,
+    errorType: undefined, // chưa có xảy ra lỗi
+    oldInput: {
+      username: "",
+      email: "",
+      password: "",
+      re_password: "",
+    }, // Lưu lại các giá trị vừa nhập (vì ban đầu không có giá trị nào trong trường cả)
   });
 };
 
