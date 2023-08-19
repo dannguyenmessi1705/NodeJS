@@ -1,6 +1,6 @@
 const express = require("express");
 const route = express.Router();
-const notFound = require("../controllers/404");
+const notFound = require("../controllers/error");
 
 route.get("/*", notFound);
 

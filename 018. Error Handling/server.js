@@ -36,11 +36,6 @@ app.use(
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// {CSRF khai báo sau khi định nghĩa SESSION} //
-const csrf = require("csurf"); // Nhập module csurf
-const csrfProtect = csrf(); // Tạo 1 middleware để bảo vệ các route
-app.use(csrfProtect); // Sử dụng middleware bảo vệ các route, nếu không có token thì các lệnh request sẽ báo lỗi
-
 // {FLASH MESSAGE} //
 const flash = require("connect-flash");
 app.use(flash());
@@ -77,18 +72,23 @@ app.use((req, res, next) => {
     .catch((err) => console.log(err));
 });
 
+// {CSRF khai báo sau khi định nghĩa SESSION} //
+const Tokens = require("csrf"); // Nhập module csrf
+const csrf = new Tokens(); // Tạo 1 object csrf
+const csrfProtectSecret = csrf.secretSync(); // Tạo 1 secret để mã hoá token
 // {MIDDLEWARE ĐỂ TRUYỀN BIẾN LOCALS CHO TẤT CẢ CÁC ROUTE} //
 app.use((req, res, next) => {
+  const token = csrf.create(csrfProtectSecret); // Tạo 1 token
   res.locals.authenticate = req.session.isLogin; // Truyền biến authenticate vào locals để sử dụng ở tất cả các route
-  res.locals.csrfToken = req.csrfToken(); // Truyền biến csrfToken vào locals để sử dụng ở tất cả các route
-  next(); // Tiếp tục chạy các middleware tiếp theo
-});
+  res.locals.csrfToken = token; // Truyền biến csrfToken vào locals để sử dụng ở tất cả các route
+  next();
+}); // Sử dụng middleware bảo vệ các route, nếu không có token thì các lệnh request sẽ báo lỗi
 
 // {LOGIN ROUTE} //
-const loginRoute = require("./routes/auth");
+const authRoute = require("./routes/auth");
 const adminRoute = require("./routes/admin");
 const personRoute = require("./routes/user");
-const notFoundRoute = require("./routes/notFound");
+const notFoundRoute = require("./routes/error");
 
 const path = require("path");
 const rootDir = require("./util/path.js");
@@ -97,5 +97,5 @@ app.use(express.static(path.join(rootDir, "public")));
 app.use("/admin", adminRoute);
 app.use(personRoute);
 // {LOGIN ROUTE} //
-app.use(loginRoute);
+app.use(authRoute);
 app.use(notFoundRoute);
