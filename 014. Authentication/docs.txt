@@ -1,6 +1,7 @@
 Source code lấy từ folder 13. Session & Cookie
 -> Thêm module bcryptjs để mã hóa password
 -> Thêm module csurf (kèm với module cookie-parser) để bảo vệ form tránh bị tấn công CSRF (Cross-site request forgery)
+Tuy nhiên csurf không còn hỗ trợ nữa, nên thay thế bằng module csrf, ở folfer 18. Error Handling
 -> Thêm module connect-flash để hiển thị thông báo cho người dùng (thường dùng để hiển thị thông báo lỗi) 
 
 Folder 14. Authentication nói về việc xác thực người dùng
