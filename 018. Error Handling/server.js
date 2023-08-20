@@ -65,12 +65,14 @@ app.use((req, res, next) => {
   }
   User.findById(req.session.user._id) // Tìm kiếm user trong collection users có id trùng với id của session user
     .then((user) => {
-      // Nếu tìm thấy user thì lưu vào req.user
-      if (user) {
-        req.user = new User(user); // Lưu lại user vào request để sử dụng ở các middleware tiếp theo (không cần dùng new User vì user đã là object rồi, có thể dùng các method của mongoose cũng như từ class User luôn )
-        // Tuy nhiên, Ko cần req.user nữa vì dùng session rồi (biến user sẽ lưu vào req.session.user)
-        next(); // Tiếp tục chạy các middleware tiếp theo với phân quyền
+      // Nếu ko tìm thấy user => chuyển hướng mà không có phân quyền
+      if (!user) {
+        next();
       }
+      // Nếu tìm thấy user thì lưu vào req.user
+      req.user = new User(user); // Lưu lại user vào request để sử dụng ở các middleware tiếp theo (không cần dùng new User vì user đã là object rồi, có thể dùng các method của mongoose cũng như từ class User luôn )
+      // Tuy nhiên, Ko cần req.user nữa vì dùng session rồi (biến user sẽ lưu vào req.session.user)
+      next(); // Tiếp tục chạy các middleware tiếp theo với phân quyền
     })
     .catch((err) => {
       console.log(err);
