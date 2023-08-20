@@ -29,11 +29,11 @@ Folder 18. Error Handling nói về việc xử lý các lỗi trong ứng dụn
       + Nếu không có lỗi xảy ra trong try, nó sẽ tiếp tục xử lý
 
 4, Tạo 1 page error để redirect tới mỗi khi gặp sự cố về máy chủ (MongoDB, Redis, RabbitMQ, ...)
-   ("views/505.ejs"), ("controllers/"), ("routes/") 
+   ("views/500.ejs"), ("controllers/"), ("routes/") 
 
 5, Sử dụng error middleware để bắt lỗi trong các route, các promise, các async function
    - error middleware sẽ được gọi khi có lỗi xảy ra trong các route, các promise, các async function
-   ("app.js"), ("controllers/"), ("routes/")
+   ("server.js"), ("controllers/"), ("routes/")
    - các lỗi được truyền vào error middleware bằng next(error) trong các route, các promise, các async function
    - xử lý bằng cách truyền thêm đối số error vào middleware, và xử lý error đó
    (app.use((error, req, res, next) => { ... }))
