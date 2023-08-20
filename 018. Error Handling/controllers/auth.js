@@ -72,8 +72,10 @@ const postAuth = (req, res, next) => {
           }
         })
         .catch((err) => {
-          console.log(err);
-          res.redirect("/500-maintenance");
+          // {ERROR MIDDLEWARE} //
+          const error = new Error(err);
+          error.httpStatusCode = 500;
+          next(err);
         });
     })
     .catch((err) => {
@@ -181,8 +183,10 @@ const postSignup = (req, res, next) => {
           })
           .then((res) => console.log(res)) // Nếu gửi mail thành công
           .catch((err) => {
-            console.log(err);
-            res.redirect("/500-maintenance");
+            // {ERROR MIDDLEWARE} //
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            next(err);
           }); // Nếu gửi mail thất bại
       });
     });
@@ -250,21 +254,27 @@ const postReset = (req, res, next) => {
                   console.log(res);
                 })
                 .catch((err) => {
-                  console.log(err);
-                  res.redirect("/500-maintenance");
+                  // {ERROR MIDDLEWARE} //
+                  const error = new Error(err);
+                  error.httpStatusCode = 500;
+                  next(err);
                 });
             })
             .catch((err) => {
-              console.log(err);
-              res.redirect("/500-maintenance");
+              // {ERROR MIDDLEWARE} //
+              const error = new Error(err);
+              error.httpStatusCode = 500;
+              next(err);
             });
         });
         req.flash("requestSuccess", "Request Success"); // Tạo flash message có tên là "requestSuccess", giá trị là "Request Success"
         return res.redirect("/reset"); // Chuyển hướng sang trang reset password
       })
       .catch((err) => {
-        console.log(err);
-        res.redirect("/500-maintenance");
+        // {ERROR MIDDLEWARE} //
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        next(err);
       });
   }
 };
@@ -301,8 +311,10 @@ const getUpdatePassword = (req, res, next) => {
       }); // Render ra trang update password
     })
     .catch((err) => {
-      console.log(err);
-      res.redirect("/500-maintenance");
+      // {ERROR MIDDLEWARE} //
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      next(err);
     });
 };
 const postUpdatePassword = (req, res, next) => {
@@ -331,8 +343,10 @@ const postUpdatePassword = (req, res, next) => {
         });
       })
       .catch((err) => {
-        console.log(err);
-        res.redirect("/500-maintenance");
+        // {ERROR MIDDLEWARE} //
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        next(err);
       });
   }
   User.findOne({
@@ -359,8 +373,10 @@ const postUpdatePassword = (req, res, next) => {
       res.redirect("/login");
     })
     .catch((err) => {
-      console.log(err);
-      res.redirect("/500-maintenance");
+      // {ERROR MIDDLEWARE} //
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      next(err);
     });
 };
 module.exports = {

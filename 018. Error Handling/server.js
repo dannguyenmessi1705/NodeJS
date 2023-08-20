@@ -57,6 +57,18 @@ mongoose
     res.redirect("/500-maintenance");
   });
 
+// {CSRF khai báo sau khi định nghĩa SESSION} //
+const Tokens = require("csrf"); // Nhập module csrf
+const csrf = new Tokens(); // Tạo 1 object csrf
+const csrfProtectSecret = csrf.secretSync(); // Tạo 1 secret để mã hoá token
+// {MIDDLEWARE ĐỂ TRUYỀN BIẾN LOCALS CHO TẤT CẢ CÁC ROUTE} //
+app.use((req, res, next) => {
+  const token = csrf.create(csrfProtectSecret); // Tạo 1 token
+  res.locals.authenticate = req.session.isLogin; // Truyền biến authenticate vào locals để sử dụng ở tất cả các route
+  res.locals.csrfToken = token; // Truyền biến csrfToken vào locals để sử dụng ở tất cả các route
+  next();
+}); // Sử dụng middleware bảo vệ các route, nếu không có token thì các lệnh request sẽ báo lỗi
+
 // {MIDDLEWARE PHÂN QUYỀN DÙNG SESSION} //
 app.use((req, res, next) => {
   if (!req.session?.user) {
@@ -75,22 +87,12 @@ app.use((req, res, next) => {
       next(); // Tiếp tục chạy các middleware tiếp theo với phân quyền
     })
     .catch((err) => {
-      console.log(err);
-      res.redirect("/500-maintenance");
+      // {ERROR MIDDLEWARE} //
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      next(err);
     });
 });
-
-// {CSRF khai báo sau khi định nghĩa SESSION} //
-const Tokens = require("csrf"); // Nhập module csrf
-const csrf = new Tokens(); // Tạo 1 object csrf
-const csrfProtectSecret = csrf.secretSync(); // Tạo 1 secret để mã hoá token
-// {MIDDLEWARE ĐỂ TRUYỀN BIẾN LOCALS CHO TẤT CẢ CÁC ROUTE} //
-app.use((req, res, next) => {
-  const token = csrf.create(csrfProtectSecret); // Tạo 1 token
-  res.locals.authenticate = req.session.isLogin; // Truyền biến authenticate vào locals để sử dụng ở tất cả các route
-  res.locals.csrfToken = token; // Truyền biến csrfToken vào locals để sử dụng ở tất cả các route
-  next();
-}); // Sử dụng middleware bảo vệ các route, nếu không có token thì các lệnh request sẽ báo lỗi
 
 // {LOGIN ROUTE} //
 const authRoute = require("./routes/auth");
@@ -107,3 +109,12 @@ app.use(personRoute);
 // {LOGIN ROUTE} //
 app.use(authRoute);
 app.use(errorRoute);
+
+// {ERROR MIDDLEWARE} // (Phải đặt ở cuối cùng) // Nếu không có lỗi thì sẽ chạy qua các middleware trước, nếu có lỗi thì sẽ chạy qua middleware này
+app.use((error, req, res, next) => {
+  res.status(error.httpStatusCode).render("500", { 
+    title: "Server maintenance", 
+    path: "/500" 
+  });
+});
+/// !!! Lưu ý: Nếu có lỗi thì phải truyền lỗi vào next() để nó chạy qua middleware này, nếu không thì nó sẽ chạy qua các middleware tiếp theo mà không có lỗi
