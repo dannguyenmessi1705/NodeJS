@@ -60,7 +60,7 @@ const postProduct = (req, res, next) => {
       // {ERROR MIDDLEWARE} //
       const error = new Error(err);
       error.httpStatusCode = 500;
-      next(err);
+      next(error);
     });
 };
 
@@ -81,7 +81,7 @@ const getProduct = (req, res, next) => {
       // {ERROR MIDDLEWARE} //
       const error = new Error(err);
       error.httpStatusCode = 500;
-      next(err);
+      next(error);
     });
 };
 
@@ -118,7 +118,7 @@ const getEditProduct = (req, res, next) => {
       // {ERROR MIDDLEWARE} //
       const error = new Error(err);
       error.httpStatusCode = 500;
-      next(err);
+      next(error);
     });
 };
 
@@ -175,7 +175,7 @@ const postEditProduct = (req, res, next) => {
       // {ERROR MIDDLEWARE} //
       const error = new Error(err);
       error.httpStatusCode = 500;
-      next(err);
+      next(error);
     });
   // Muốn nhanh hơn thì dùng method findByIdAndUpdate, ruy nhiên dùng save() có thể dùng được với middleware
 };
@@ -192,7 +192,7 @@ const deleteProduct = (req, res, next) => {
       // {ERROR MIDDLEWARE} //
       const error = new Error(err);
       error.httpStatusCode = 500;
-      next(err);
+      next(error);
     });
 };
 module.exports = {

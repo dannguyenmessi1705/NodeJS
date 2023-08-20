@@ -90,7 +90,7 @@ app.use((req, res, next) => {
       // {ERROR MIDDLEWARE} //
       const error = new Error(err);
       error.httpStatusCode = 500;
-      next(err);
+      next(error);
     });
 });
 
@@ -112,9 +112,10 @@ app.use(errorRoute);
 
 // {ERROR MIDDLEWARE} // (Phải đặt ở cuối cùng) // Nếu không có lỗi thì sẽ chạy qua các middleware trước, nếu có lỗi thì sẽ chạy qua middleware này
 app.use((error, req, res, next) => {
-  res.status(error.httpStatusCode).render("500", { 
-    title: "Server maintenance", 
-    path: "/500" 
+  res.status(error.httpStatusCode).render("500", {
+    title: "Server maintenance",
+    path: "/500",
+    authenticate: req.session.isLogin,
   });
 });
 /// !!! Lưu ý: Nếu có lỗi thì phải truyền lỗi vào next() để nó chạy qua middleware này, nếu không thì nó sẽ chạy qua các middleware tiếp theo mà không có lỗi
