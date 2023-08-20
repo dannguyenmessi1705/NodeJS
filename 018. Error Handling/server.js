@@ -52,7 +52,10 @@ mongoose
     app.listen(3000);
     console.log("Connected!");
   }) // Kết nối với database, sau đó mới chạy server
-  .catch((err) => console.log(err));
+  .catch((err) => {
+    console.log(err);
+    res.redirect("/500-maintenance");
+  });
 
 // {MIDDLEWARE PHÂN QUYỀN DÙNG SESSION} //
 app.use((req, res, next) => {
@@ -69,7 +72,10 @@ app.use((req, res, next) => {
         next(); // Tiếp tục chạy các middleware tiếp theo với phân quyền
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 });
 
 // {CSRF khai báo sau khi định nghĩa SESSION} //
@@ -88,7 +94,7 @@ app.use((req, res, next) => {
 const authRoute = require("./routes/auth");
 const adminRoute = require("./routes/admin");
 const personRoute = require("./routes/user");
-const notFoundRoute = require("./routes/error");
+const errorRoute = require("./routes/error");
 
 const path = require("path");
 const rootDir = require("./util/path.js");
@@ -98,4 +104,4 @@ app.use("/admin", adminRoute);
 app.use(personRoute);
 // {LOGIN ROUTE} //
 app.use(authRoute);
-app.use(notFoundRoute);
+app.use(errorRoute);

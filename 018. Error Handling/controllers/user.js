@@ -12,7 +12,10 @@ const getIndex = (req, res) => {
         successLogin: successLogin, // Truyền giá trị Flash vào biến successLogin để hiển thị thông báo
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {GET ALL PRODUCTS BY MONGOOSE} //
@@ -25,7 +28,10 @@ const getProduct = (req, res) => {
         path: "/product",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {GET PRODUCT DETAIL BY MONGOOSE} //
@@ -39,7 +45,10 @@ const getDetail = (req, res) => {
         item: product,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {POST CART USER BY MONGOOSE} //
@@ -52,9 +61,15 @@ const postCart = (req, res) => {
         .then(() => {
           return res.redirect("/cart");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          res.redirect("/500-maintenance");
+        });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {GET CART USER BY MONGOOSE} //
@@ -78,7 +93,10 @@ const getCart = (req, res) => {
         totalPrice: totalPrice,
       }); // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {DELETE CART USER BY MONGOOSE} //
@@ -91,9 +109,15 @@ const deleteCart = (req, res) => {
         .then((result) => {
           return res.redirect("/cart");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          res.redirect("/500-maintenance");
+        });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {POST ORDER BY USER IN MONGOOSE}
@@ -127,7 +151,10 @@ const postOrder = (req, res) => {
       return req.user.clearCart(); // Xoá cart của user
     })
     .then(() => res.redirect("/order"))
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {GET ORDER BY USER IN MONGOOSE} //
@@ -141,7 +168,10 @@ const getOrder = (req, res) => {
         orders: orders,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 module.exports = {

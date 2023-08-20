@@ -16,7 +16,7 @@ const addProduct = (req, res) => {
       name: "",
       price: "",
       url: "",
-      description: ""
+      description: "",
     }, // Lưu lại các giá trị vừa nhập (vì ban đầu không có giá trị nào trong trường cả)
   });
 };
@@ -39,8 +39,8 @@ const postProduct = (req, res) => {
         name: data.name,
         price: data.price,
         url: data.url,
-        description: data.description
-      }, // Lưu lại các giá trị vừa nhập 
+        description: data.description,
+      }, // Lưu lại các giá trị vừa nhập
     });
   }
   const product = new Product({
@@ -56,7 +56,10 @@ const postProduct = (req, res) => {
       console.log("Created Product");
       res.redirect("/admin/product");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {GET ALL PRODUCTS BY MONGOOSE} //
@@ -72,7 +75,10 @@ const getProduct = (req, res) => {
         path: "/admin/product",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {GET EDIT PRODUCT BY MONGOOSE} //
@@ -100,11 +106,14 @@ const getEditProduct = (req, res) => {
           name: "",
           price: "",
           url: "",
-          description: ""
+          description: "",
         }, // Lưu lại các giá trị vừa nhập (vì ban đầu không có giá trị nào trong trường cả)
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 // {UPDATE PRODUCT BY MONGOOSE} //
@@ -135,8 +144,8 @@ const postEditProduct = (req, res) => {
             name: data.name,
             price: data.price,
             url: data.url,
-            description: data.description
-          }, // Lưu lại các giá trị vừa nhập 
+            description: data.description,
+          }, // Lưu lại các giá trị vừa nhập
         });
       }
       // Cập nhật lại các giá trị của product theo req.body
@@ -151,9 +160,15 @@ const postEditProduct = (req, res) => {
           res.redirect("/admin/product");
           console.log("Updated!");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          res.redirect("/500-maintenance");
+        });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
   // Muốn nhanh hơn thì dùng method findByIdAndUpdate, ruy nhiên dùng save() có thể dùng được với middleware
 };
 
@@ -165,7 +180,10 @@ const deleteProduct = (req, res) => {
     .then(() => {
       res.redirect("/admin/product");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 module.exports = {
   addProduct,

@@ -71,9 +71,15 @@ const postAuth = (req, res, next) => {
             return res.redirect("/login"); // Chuyển hướng về trang login
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          res.redirect("/500-maintenance");
+        });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 
 const getAuth = (req, res, next) => {
@@ -174,7 +180,10 @@ const postSignup = (req, res, next) => {
             ],
           })
           .then((res) => console.log(res)) // Nếu gửi mail thành công
-          .catch((err) => console.log(err)); // Nếu gửi mail thất bại
+          .catch((err) => {
+            console.log(err);
+            res.redirect("/500-maintenance");
+          }); // Nếu gửi mail thất bại
       });
     });
 };
@@ -240,14 +249,23 @@ const postReset = (req, res, next) => {
                 .then((res) => {
                   console.log(res);
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => {
+                  console.log(err);
+                  res.redirect("/500-maintenance");
+                });
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+              console.log(err);
+              res.redirect("/500-maintenance");
+            });
         });
         req.flash("requestSuccess", "Request Success"); // Tạo flash message có tên là "requestSuccess", giá trị là "Request Success"
         return res.redirect("/reset"); // Chuyển hướng sang trang reset password
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        res.redirect("/500-maintenance");
+      });
   }
 };
 
@@ -282,7 +300,10 @@ const getUpdatePassword = (req, res, next) => {
         oldInput: "",
       }); // Render ra trang update password
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 const postUpdatePassword = (req, res, next) => {
   const ID = req.body.userId; // Lấy giá trị userId từ form
@@ -309,7 +330,10 @@ const postUpdatePassword = (req, res, next) => {
           oldInput: password,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        res.redirect("/500-maintenance");
+      });
   }
   User.findOne({
     resetPasswordToken: token, // Tìm kiếm 1 user trong collection có resetPasswordToken là token
@@ -334,7 +358,10 @@ const postUpdatePassword = (req, res, next) => {
       );
       res.redirect("/login");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500-maintenance");
+    });
 };
 module.exports = {
   getAuth,
