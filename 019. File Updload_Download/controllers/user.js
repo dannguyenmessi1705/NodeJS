@@ -218,7 +218,7 @@ const getInvoice = (req, res, next) => {
       const pdfDoc = new pdfkit(); // Tạo file pdf mới bằng pdfkit
       pdfDoc.pipe(
         // Pipe file pdf mới vào res để trình duyệt hiểu đây là file pdf
-        fs.createWriteStream(path.join(rootDir, "data", nameInvoice)) // Tạo file pdf mới trong thư mục data
+        fs.createWriteStream(path.join(rootDir, "data", "invoice", nameInvoice)) // Tạo file pdf mới trong thư mục data
       );
       pdfDoc.pipe(res); // Pipe file pdf mới vào res để trình duyệt hiểu đây là file pdf
       pdfDoc.fontSize(36).text("SHOP DIDAN", {
