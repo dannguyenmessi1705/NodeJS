@@ -315,19 +315,19 @@ const getInvoice = (req, res, next) => {
       order.products.forEach((prod) => {
         // Lặp qua tất cả các sản phẩm trong order
         numth++; // Tăng biến đếm số thứ tự
-        totalPrice += prod.product.price * prod.quantity; // Tính tổng tiền
-        totalPrice = totalPrice.toFixed(2); // Làm tròn tổng tiền
+        let priceItem = (prod.product.price * prod.quantity)
+        totalPrice += priceItem; // Tính tổng tiền
         data = data.concat([
           [
             numth,
             prod.product.name,
             prod.quantity,
-            "$" + (prod.product.price * prod.quantity).toFixed(2),
+            "$" + priceItem,
             ,
           ],
         ]); // Thêm dữ liệu của sản phẩm vào mảng data
       });
-      data.push(["", "", "Total Price", "$" + totalPrice]); // Thêm hàng tính tổng tiền
+      data.push(["", "", "Total Price", "$" + totalPrice.toFixed(2)]); // Thêm hàng tính tổng tiền
       const startX = -40; // Tọa độ x trong file pdf
       const startY = 210; // Tọa độ y trong file pdf
       const rowHeight = 30; // Chiều cao của mỗi dòng
