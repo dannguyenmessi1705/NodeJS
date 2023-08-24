@@ -2,4 +2,12 @@ Source code lấy từ folder 19. File Upload_Download
 Folder 20. Pagination nói về việc phân trang trong web
 -> Mục đích: Giảm thiểu tải trọng cho server, tăng tốc độ load trang web
 
+1, Thêm chỉ mục trang vào giao diện web ("views/")
 
+2, Thêm thời gian order đơn hàng
+
+3, Thêm phân trang vào controller ("controllers/user.js"), ("controllers/admin.js")
+    -> Sử dụng countDocuments() của mongoose để đếm số lượng document trong collection
+    -> Sử dụng skip() và limit() để phân trang (skip() để bỏ qua các document, limit() để giới hạn số lượng document)
+    -> Sử dụng Math.ceil() để làm tròn lên số trang
+    -> Thêm các biến vào res.render() để truyền dữ liệu vào giao diện web
