@@ -1,0 +1,43 @@
+Source code lấy từ folder 18. Error Handling
+--> Thêm module multer để  xử lý việc upload file lên server
+--> Thêm module pdfkit để tạo file pdf (hoá đơn) từ dữ liệu trong database
+Folder 19. FIle Upload_Download nói về việc upload và download file treen server và client
+Ngưởi dùng có thể upload file lên server, và download file từ server về client
+
+1, Upload file lên server (dùng form hoặc ajax)
+    - Tạo form để upload file lên server ("views/admin.ejs"), thêm thuộc tính vào form submit để upload các loại dữ liệu (file, text) lên server
+        form(method="POST" action="/upload" enctype="multipart/form-data")
+    - Thêm module multer để  xử lý việc upload file lên server ("server.js")
+    - Tạo folder "images" để lưu trữ các file ảnh lên server (phải khai báo cho thư mục này là tĩnh để có thể truy cập được từ client)
+    - Khi sửa product, cần tạo điều kiện kiểm tra xem người dùng có upload file ảnh mới lên hay không, nếu có thì xóa file ảnh cũ đi và upload file ảnh mới lên server
+    - Khi xóa product, cần xóa file ảnh của product đó đi
+
+2, Download file từ server về client: Download hoá đơn sau khi order
+    - Tạo link để download file pdf về client ("/views/user/order.ejs")
+    - Tạo route để download file pdf về client, xác thực người dùng và chỉ người order mới đc xem link ("/routes/admin.js")
+    - Tạo file pdf từ dữ liệu trong database (dùng module pdfkit, "/controllers/user.js"")
+    (Sử dụng creatwriteStream của fs để tạo file pdf, sau đó dùng pipe để download file pdf về client)
+    nên sử dụng stream để download file về client, vì nếu file pdf quá lớn thì sẽ gây ra lỗi khi download file về client (do file pdf quá lớn nên sẽ tốn nhiều bộ nhớ)
+!!!! LƯU Ý TẠI SAO NÊN DÙNG STREAM THAY VÌ ĐỌC DỮ LIỆU TRỤC TIẾP
+-> Hiệu suất Tối Ưu Hơn:
+Phương thức createReadStream cho phép bạn đọc dữ liệu từ tập tin theo các mảnh nhỏ (chunks) thay vì 
+đọc toàn bộ dữ liệu cùng lúc. Điều này giúp tối ưu hóa hiệu suất bằng cách giảm thiểu 
+việc tải toàn bộ dữ liệu vào bộ nhớ và cho phép xử lý dữ liệu lớn một cách hiệu quả hơn.
+
+-> Tiết Kiệm Bộ Nhớ:
+Khi sử dụng createReadStream, chỉ một phần nhỏ của dữ liệu tập tin được tải vào bộ nhớ tại một thời điểm, 
+giúp tiết kiệm tài nguyên bộ nhớ, đặc biệt khi làm việc với các tập tin lớn.
+
+-> Xử Lý Dữ Liệu Lớn:
+Đọc dữ liệu từ tập tin theo chunks cho phép bạn xử lý dữ liệu lớn mà không cần đặt toàn bộ dữ liệu 
+trong bộ nhớ. Bạn có thể thực hiện các xử lý dữ liệu theo từng mảnh nhỏ, chẳng hạn như tính toán, 
+biến đổi hoặc ghi dữ liệu vào một nơi khác.
+
+-> Phù Hợp với Stream:
+createReadStream tạo ra một Readable Stream, cho phép bạn kết hợp nó với các module hoặc tính năng khác 
+trong Node.js liên quan đến stream. Điều này thích hợp để thực hiện xử lý dữ liệu theo kiểu "streaming" 
+trong thời gian thực.
+
+-> Tiện Lợi với Sự Kiểm Soát:
+Bạn có khả năng kiểm soát tốc độ đọc bằng cách sử dụng các sự kiện như "data", "end", "error" và "close". 
+Điều này cho phép bạn thực hiện các hành động tùy chỉnh dựa trên sự kiện xảy ra trong quá trình đọc.
