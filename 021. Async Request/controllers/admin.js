@@ -269,8 +269,14 @@ const deleteProduct = (req, res, next) => {
               next(new Error(err));
             }
           });
-          console.log("Deleted!");
-          res.status(200).json({ message: "Delete successfull" }); // Trả về kết quả là json với message là Delete successfull
+          // Xoá cả sản phẩm nếu có trong giỏ hàng
+          req.user.cart.items = req.user.cart.items.filter((item) => {
+            return item.productId.toString() !== ID.toString();
+          });
+          return req.user.save().then(() => {
+            console.log("Deleted!");
+            res.status(200).json({ message: "Delete successfull" }); // Trả về kết quả là json với message là Delete successfull
+          });
         })
         .catch((err) => {
           res.status(500).json({ message: "Delete failed" }); // Trả về kết quả là json với message là Delete failed
