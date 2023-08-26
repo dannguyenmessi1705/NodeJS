@@ -145,8 +145,10 @@ const getCart = (req, res, next) => {
       return products; // Trả về kết quả
     })
     .then((products) => {
+
       // products = [{productId: {}, quantity, _id} ,{}]
       let totalPrice = products.reduce((sum, product, index) => {
+        console.log(product);
         // Tính tổng tiền của tất cả product trong cart
         return +product.productId.price * product.quantity + sum;
       }, 0); // Tính tổng tiền của tất cả product trong cart
@@ -158,6 +160,7 @@ const getCart = (req, res, next) => {
       }); // Render ra dữ liệu, đồng thời trả về các giá trị động cho file cart.ejs
     })
     .catch((err) => {
+      console.log(err);
       // {ERROR MIDDLEWARE} //
       const error = new Error(err);
       error.httpStatusCode = 500;

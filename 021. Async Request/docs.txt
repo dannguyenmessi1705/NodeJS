@@ -4,5 +4,8 @@ trả thực hiện các code xử lý logic ở server chứ ko render lại tr
 => Tránh việc reload lại trang web
 
 1, VD về việc xoá 1 sản phẩm, DOM sẽ tự loại bỏ sản phẩm đó đi không cần phải reload lại trang 
-    -> Thêm file "control.js" vào "public/js/control.js": file này xử lý DOM
+    -> Thêm file "control.js" vào "public/js/adminController.js": file này xử lý DOM
     -> Sửa phần xoá ở trong "controllers/admin.js", "routes/admin.js" và "views/admin/products.ejs"
+    -> Bỏ form (method POST) trong "views/admin/products.ejs" đi vì ko cần thiết nữa (vì đã xử lý bằng fetch)
+
+2, Tương tự với xoá sản phẩm trong giỏ hàng (file "public/js/userController.js", "views/cart.ejs", "routes/cart.js")
