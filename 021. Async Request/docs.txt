@@ -7,5 +7,3 @@ trả thực hiện các code xử lý logic ở server chứ ko render lại tr
     -> Thêm file "control.js" vào "public/js/adminController.js": file này xử lý DOM
     -> Sửa phần xoá ở trong "controllers/admin.js", "routes/admin.js" và "views/admin/products.ejs"
     -> Bỏ form (method POST) trong "views/admin/products.ejs" đi vì ko cần thiết nữa (vì đã xử lý bằng fetch)
-
-2, Tương tự với xoá sản phẩm trong giỏ hàng (file "public/js/userController.js", "views/cart.ejs", "routes/cart.js")
