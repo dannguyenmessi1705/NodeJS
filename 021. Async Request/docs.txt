@@ -1,0 +1,8 @@
+Source code lấy từ folder 20. PAGINATION
+Folder 21. Async Request nói về việc tạo ra 1 request bất đồng bộ và chỉ 
+trả thực hiện các code xử lý logic ở server chứ ko render lại trang web
+=> Tránh việc reload lại trang web
+
+1, VD về việc xoá 1 sản phẩm, DOM sẽ tự loại bỏ sản phẩm đó đi không cần phải reload lại trang 
+    -> Thêm file "control.js" vào "public/js/control.js": file này xử lý DOM
+    -> Sửa phần xoá ở trong "controllers/admin.js", "routes/admin.js" và "views/admin/products.ejs"
