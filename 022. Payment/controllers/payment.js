@@ -7,7 +7,7 @@ const config = {
   vnp_HashSecret: "EIFPXFPSHZGYLFHEWJJIBJSESLERCVDW", // Chuỗi bí mật
   vnp_Url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html", // Đường dẫn thanh toán
   vnp_Api: "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction", // Đường dẫn API
-  vnp_ReturnUrl: "http://localhost:3000/order/vnpay_return", // Đường dẫn trả về từ VNPAY
+  vnp_ReturnUrl: "http://localhost:3000/payment/vnpay_return", // Đường dẫn trả về từ VNPAY
 }; // config của VNPAY
 
 // {PAYMENT} //
@@ -69,6 +69,40 @@ const getPayment = (req, res, next) => {
   });
 };
 
+// CHUYỂN HƯỚNG TỚI TRANG TRẢ VỀ KẾT QUẢ THANH TOÁN //
+const VNPayReturn = (req, res, next) => {
+  let vnp_Params = req.query; // Lấy các tham số trả về từ VNPAY (đã được chuyển đổi thành object) - Để chuẩn bị kiểm tra mã hóa
+  let secureHash = vnp_Params["vnp_SecureHash"]; // Lấy tham số mã hóa từ VNPAY
+  delete vnp_Params["vnp_SecureHash"]; // Xóa tham số mã hóa để chuẩn bị kiểm tra mã hóa
+  delete vnp_Params["vnp_SecureHashType"]; // Xóa tham số loại mã hóa (SHA256 hoặc SHA512) - Vì chúng ta đã định nghĩa mã hóa là SHA512 ở config
+
+  vnp_Params = sortObject(vnp_Params); // Sắp xếp các tham số theo thứ tự a-z (trước khi kiểm tra mã hóa)
+
+  let tmnCode = config.vnp_TmnCode; // Mã website tại VNPAY
+  let secretKey = config.vnp_HashSecret; // Chuỗi bí mật
+
+  let signData = querystring.stringify(vnp_Params, { encode: false }); // Chuyển đổi object thành chuỗi query (không encode) - Để chuẩn bị mã hóa dữ liệu sau này
+  let hmac = crypto.createHmac("sha512", secretKey); // Tạo 1 object để mã hóa dữ liệu (SHA512)
+  let signed = hmac.update(new Buffer.from(signData, "utf-8")).digest("hex"); // Mã hóa dữ liệu
+
+  if (secureHash === signed) {
+    // Nếu mã hóa trả về từ VNPAY trùng với mã hóa của chúng ta
+    //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+    res.render("./user/vnpayReturn", {
+      title: "Payment Success",
+      path: "/vnpay-return",
+      code: vnp_Params["vnp_ResponseCode"],
+    }); // Trả về trang vnpayReturn và truyền mã code trả về từ VNPAY (GD thành công)
+  } else {
+    // Nếu mã hóa trả về từ VNPAY không trùng với mã hóa của chúng ta
+    res.render("./user/vnpayReturn", {
+      title: "Payment Success",
+      path: "/vnpay-return",
+      code: "97",
+    }); // Trả về trang vnpayReturn và truyền mã code = 97 (GD thất bại)
+  }
+};
+
 // Hàm sắp xếp các tham số theo thứ tự a-z
 function sortObject(obj) {
   let sorted = {}; // Tạo 1 object để lưu các tham số đã sắp xếp
@@ -91,4 +125,5 @@ function sortObject(obj) {
 
 module.exports = {
   getPayment,
+  VNPayReturn,
 };
