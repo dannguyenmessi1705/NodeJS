@@ -85,19 +85,58 @@ const VNPayReturn = (req, res, next) => {
   let hmac = crypto.createHmac("sha512", secretKey); // Tạo 1 object để mã hóa dữ liệu (SHA512)
   let signed = hmac.update(new Buffer.from(signData, "utf-8")).digest("hex"); // Mã hóa dữ liệu
 
-  if (secureHash === signed) {
+  if (secureHash === signed && vnp_Params["vnp_ResponseCode"] == "00") {
     // Nếu mã hóa trả về từ VNPAY trùng với mã hóa của chúng ta
     //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-    res.render("./user/vnpayReturn", {
-      title: "Payment Success",
-      path: "/vnpay-return",
-      code: vnp_Params["vnp_ResponseCode"],
-    }); // Trả về trang vnpayReturn và truyền mã code trả về từ VNPAY (GD thành công)
+    // {SAVE ORDER AND DELETE CART} //
+    const Order = require("../models/orders"); // Gọi model order
+    req.user
+      .populate("cart.items.productId") // Lấy tất cả dữ liệu user, populate để lấy thêm dữ liệu từ collection products vào thuộc tính productId của cart
+      .then((user) => {
+        const products = [...user.cart.items]; // Sau khi lấy được dữ liệu từ collection products qua populate, copy lại vào biến products
+        return products;
+      })
+      .then((products) => {
+        const productArray = products.map((item) => {
+          // Tạo mảng mới chứa các object product và quantity
+          return {
+            product: item.productId._doc, // _doc là thuộc tính của mongoose, nó sẽ lấy ra tất cả các thuộc tính của object productId
+            quantity: item.quantity, // Lấy quantity từ cart
+          };
+        });
+        const order = new Order({
+          // Tạo order mới
+          products: productArray,
+          user: {
+            username: req.user.username,
+            email: req.user.email,
+            userId: req.user._id,
+          },
+          date: new Date().toLocaleString(),
+        });
+        return order.save(); // Lưu order vào database
+      })
+      .then(() => {
+        return req.user.clearCart(); // Xoá cart của user
+      })
+      .then(() =>
+        res.render("./user/checkout", {
+          title: "Payment Success",
+          path: "/checkout",
+          code: vnp_Params["vnp_ResponseCode"],
+        })
+      ) // Trả về trang vnpayReturn và truyền mã code trả về từ VNPAY (GD thành công))
+      .catch((err) => {
+        // {ERROR MIDDLEWARE} //
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        next(error);
+      });
   } else {
     // Nếu mã hóa trả về từ VNPAY không trùng với mã hóa của chúng ta
-    res.render("./user/vnpayReturn", {
-      title: "Payment Success",
-      path: "/vnpay-return",
+    res.render("./user/checkout", {
+      title: "Payment Failed",
+      path: "/checkout",
       code: "97",
     }); // Trả về trang vnpayReturn và truyền mã code = 97 (GD thất bại)
   }
