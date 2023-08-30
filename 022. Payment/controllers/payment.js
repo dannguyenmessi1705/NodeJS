@@ -56,7 +56,7 @@ const getPayment = (req, res, next) => {
     vnp_Params["vnp_TxnRef"] = orderId; // Mã giao dịch
     vnp_Params["vnp_OrderInfo"] = "Thanh toan cho ma GD:" + orderId; // Thông tin giao dịch
     vnp_Params["vnp_OrderType"] = "other"; // Loại hình thanh toán
-    vnp_Params["vnp_Amount"] = Math.round(amount * 100); // Số tiền thanh toán (amount*100 để chuyển đổi từ VND sang xu - tất cả API thanh toán đều làm việc như vậy), ngoài ra phải làm tròn số vì API thanh toán chỉ nhận số nguyên
+    vnp_Params["vnp_Amount"] = Math.ceil(amount * 100); // Số tiền thanh toán (amount*100 để chuyển đổi từ VND sang xu - tất cả API thanh toán đều làm việc như vậy), ngoài ra phải làm tròn số vì API thanh toán chỉ nhận số nguyên
     vnp_Params["vnp_ReturnUrl"] = returnUrl; // Đường dẫn trả về từ VNPAY
     vnp_Params["vnp_IpAddr"] = ipAddr; // Địa chỉ IP của user
     vnp_Params["vnp_CreateDate"] = createDate; // Thời gian tạo giao dịch
