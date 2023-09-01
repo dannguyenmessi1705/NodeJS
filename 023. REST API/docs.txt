@@ -1,4 +1,3 @@
-Source code lấy từ folder 22. Payment
 Folder 22. REST API: nói về cách tạo REST API bằng NodeJS 
 
 - REST API: Resepresentational State Transfer Application Programming Interface, là một kiểu kiến trúc để xây dựng các ứng dụng web. REST API là một trong những chuẩn thiết kế được sử dụng phổ biến nhất để tạo các web service. 
