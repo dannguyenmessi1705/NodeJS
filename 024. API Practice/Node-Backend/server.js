@@ -19,9 +19,22 @@ app.use(express.static(path.join(__dirname, "img")));
 const postRoute = require("./routes/post");
 app.use("/v1", postRoute);
 
-app.listen(port, "localhost", () => {
-  console.log(`Server is running at ${port}`);
-});
+// {CONNECT TO MONGODB}
+const mongoose = require("mongoose");
+mongoose
+  .connect(
+    "mongodb+srv://social:17052002@cluster0.aonecur.mongodb.net/social?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    app.listen(port, "localhost", () => {
+      console.log(`Server is running at ${port}`);
+    });
+  })
+  .catch((err) => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    next(error);
+  });
 
 app.use((err, req, res, next) => {
   res.status(err.httpStatusCode).json({
