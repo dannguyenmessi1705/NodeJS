@@ -23,11 +23,11 @@ const postController = {
   createPost: async (req, res, next) => {
     const {
       title,
-      creator: { name },
-      createdAt,
-      image,
       content,
     } = req.body;
+    const creator = { name: "Di Dan" };
+    const createdAt = new Date();
+    const image = "image/test.jpg";
     const id = Math.random().toString();
     try {
       res.status(201).json({
