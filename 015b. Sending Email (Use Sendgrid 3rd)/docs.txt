@@ -4,3 +4,4 @@ Khác vời Folder gốc 15 dùng gmail, 15b dùng Sendgrid
 -> Thêm module @sendgrid/mail để dùng sendgrid
 
 1, Thay đổi trong file "controllers/auth.js"
+GUIDE: https://app.sendgrid.com/guide/integrate/langs/nodejs
