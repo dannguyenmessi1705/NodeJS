@@ -9,7 +9,7 @@ const postController = {
               name: "Di Dan",
             },
             createdAt: new Date(),
-            image: "image/test.jpg",
+            image: "image/test.png",
             content: "test123",
           },
         ],
@@ -21,26 +21,19 @@ const postController = {
     }
   },
   createPost: async (req, res, next) => {
-    const {
-      title,
-      content,
-    } = req.body;
-    const creator = { name: "Di Dan" };
-    const createdAt = new Date();
-    const image = "image/test.jpg";
-    const id = Math.random().toString();
+    const { title, content } = req.body;
     try {
       res.status(201).json({
-        posts: [
-          {
-            _id: id,
-            title,
-            creator,
-            createdAt,
-            image,
-            content,
+        post: {
+          _id: new Date().toISOString(),
+          creator: {
+            name: "Di Dan",
           },
-        ],
+          createdAt: new Date(),
+          title,
+          content,
+          image: "image/test.png",
+        },
       });
     } catch (error) {
       const err = new Error(error);

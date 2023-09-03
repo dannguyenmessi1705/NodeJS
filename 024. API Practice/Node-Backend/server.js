@@ -13,6 +13,8 @@ const cors = require("cors");
 // ==== app.use(cors()); // cho phép tất cả các domain đều có thể gọi API
 
 app.use(cors()); // cho phép tất cả các domain đều có thể gọi API
+const path = require("path");
+app.use(express.static(path.join(__dirname, "img")));
 
 const postRoute = require("./routes/post");
 app.use("/v1", postRoute);

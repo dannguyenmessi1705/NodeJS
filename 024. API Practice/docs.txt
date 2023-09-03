@@ -1,0 +1,8 @@
+Folder 24. API Practice: Thực hành tạo API kết nối tới Frontend
+
+1, Tạo GET post API để lấy danh sách bài viết ("Node-Backend/controllers/post.js")
+
+2, Tạo POST post API để tạo bài viết mới ("Node-Backend/controllers/post.js")
+
+3, Xác thực các dữ liệu nhập vào sao cho chính xác ("Node-Backend/controllers/post.js"), ("Node-Backend/route/post.js") 
+-> sử dụng thư viện "express-validator"
