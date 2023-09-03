@@ -7,7 +7,7 @@ const crypto = require("crypto");
 const sgMail = require("@sendgrid/mail"); // Nhập module sendgrid
 const dotenv = require("dotenv"); // Nhập module dotenv để đọc file .env và lưu vào process.env
 dotenv.config(); // Đọc file .env và lưu vào process.env
-sgMail.setApiKey(process.env.SENDGRID_API_KEY); // Đăng ký tài khoản sendgrid và lấy API key 
+sgMail.setApiKey('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'); // Đăng ký tài khoản sendgrid và lấy API key 
 const transporter = sgMail; // Tạo 1 transporter để gửi mail
 const fs = require("fs"); // Nhập module fs
 const rootPath = require("../util/path"); // Nhập đường dẫn tuyệt đối của thư mục gốc
