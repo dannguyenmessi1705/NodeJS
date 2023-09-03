@@ -1,3 +1,6 @@
+// {VALIDATION}
+const { validationResult } = require("express-validator"); // Nhập vào để check validation
+
 const postController = {
   getPost: async (req, res, next) => {
     try {
@@ -21,8 +24,15 @@ const postController = {
     }
   },
   createPost: async (req, res, next) => {
+    const validattionErrors = validationResult(req);
     const { title, content } = req.body;
     try {
+      if (!validattionErrors.isEmpty()) {
+        return res.status(422).json({
+          message: "Validation failed, entered data is incorrect.",
+          errors: validattionErrors.array(),
+        });
+      }
       res.status(201).json({
         post: {
           _id: new Date().toISOString(),

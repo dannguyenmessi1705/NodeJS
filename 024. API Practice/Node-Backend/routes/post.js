@@ -6,9 +6,13 @@ const postController = require("../controllers/post");
 const { body } = require("express-validator");
 
 // GET http://localhost:4000/v1/posts
-router.get("/posts", body. postController.getPost);
+router.get("/posts", postController.getPost);
 
 // POST http://localhost:4000/v1/posts
-router.post("/posts", postController.createPost);
+router.post(
+  "/posts",
+  [body("title").isLength({ min: 5 }), body("content").isLength({ min: 5 })],
+  postController.createPost
+);
 
 module.exports = router;
