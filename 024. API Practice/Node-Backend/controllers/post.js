@@ -21,12 +21,27 @@ const postController = {
     }
   },
   createPost: async (req, res, next) => {
-    const { name, age } = req.body;
+    const {
+      title,
+      creator: { name },
+      createdAt,
+      image,
+      content,
+    } = req.body;
     const id = Math.random().toString();
     try {
-      res
-        .status(201)
-        .json({ message: "Create successfully", id: id, name: name, age: age });
+      res.status(201).json({
+        posts: [
+          {
+            _id: id,
+            title,
+            creator,
+            createdAt,
+            image,
+            content,
+          },
+        ],
+      });
     } catch (error) {
       const err = new Error(error);
       err.httpStatusCode = 500;

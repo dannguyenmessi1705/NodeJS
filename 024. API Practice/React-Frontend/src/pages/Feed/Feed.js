@@ -69,7 +69,7 @@ class Feed extends Component {
 
   statusUpdateHandler = event => {
     event.preventDefault();
-    fetch('URL')
+    fetch('http://localhost:4000/v1/posts')
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error("Can't update status!");
@@ -106,9 +106,9 @@ class Feed extends Component {
       editLoading: true
     });
     // Set up data (with image!)
-    let url = 'URL';
+    let url = 'http://localhost:4000/v1/posts';
     if (this.state.editPost) {
-      url = 'URL';
+      url = 'http://localhost:4000/v1/posts';
     }
 
     fetch(url)
