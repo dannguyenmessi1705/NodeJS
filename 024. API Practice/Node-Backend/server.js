@@ -21,10 +21,9 @@ app.use("/v1", postRoute);
 
 // {CONNECT TO MONGODB}
 const mongoose = require("mongoose");
+const URL = require("./util/database");
 mongoose
-  .connect(
-    "mongodb+srv://social:17052002@cluster0.aonecur.mongodb.net/social?retryWrites=true&w=majority"
-  )
+  .connect(URL)
   .then(() => {
     app.listen(port, "localhost", () => {
       console.log(`Server is running at ${port}`);
