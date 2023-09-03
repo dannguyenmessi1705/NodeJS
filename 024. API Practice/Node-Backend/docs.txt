@@ -1,0 +1,70 @@
+Folder 22. REST API: nói về cách tạo REST API bằng NodeJS 
+
+- REST API: Resepresentational State Transfer Application Programming Interface, là một kiểu kiến trúc để xây dựng các ứng dụng web. REST API là một trong những chuẩn thiết kế được sử dụng phổ biến nhất để tạo các web service. 
+-> Trong các Sourcecode trên đều trả về kiểu HTML (ejs), tuy nhiên có thể trả về nhiều kiểu JSON, XML, HTML, v.v. (tùy vào yêu cầu của người dùng).
+-> Làm việc với HTML trình duyệt chỉ có thể nhận diện các phương thức GET, POST. Tuy nhiên,
+REST API có thể sử dụng các HTTP request để POST, GET, DELETE, PUT,... dữ liệu. 
+   + GET: lấy dữ liệu từ server
+   + POST: tạo mới dữ liệu trên server
+   + PUT: cập nhật dữ liệu trên server
+   + DELETE: xóa dữ liệu trên server
+   + PATCH: cập nhật một phần dữ liệu trên server
+   + OPTIONS: trả về các phương thức HTTP mà server hỗ trợ
+   + HEAD: trả về các header mà server hỗ trợ
+   + TRACE: trả về một bản sao của request được gửi tới server
+   + CONNECT: dùng để proxy một HTTP request tới server nào đó mà không cần thông qua các proxy khác
+   + LINK: tạo một liên kết tới một resource
+   + UNLINK: xóa một liên kết tới một resource
+   
+1, Một số nguyên tắc thiết kế REST API:
+*** Sử dụng các phương thức HTTP một cách chính xác: GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD, TRACE, CONNECT, LINK, UNLINK
+
+*** Sử dụng các URI (Uniform Resource Identifier) để định danh resource (tính nhất quán): Ví dụ:
+  ->  /api/v1/users (để lấy danh sách user), 
+  -> /api/v1/users/1 (để lấy thông tin user có id = 1), 
+  -> /api/v1/users/1/posts (để lấy danh sách bài viết của user có id = 1),...
+
+*** Cacheable: Các resource trả về từ server có thể được cache lại trên client để sử dụng cho các request sau.
+
+*** Client-Server: Client và Server phải được phân biệt rõ ràng. Client không được can thiệp vào logic của Server và ngược lại.
+
+*** Layered System: Có thể sử dụng nhiều layer để xử lý request. Ví dụ: load balancer, caching, authentication, v.v. 
+
+*** Code on demand: Server có thể gửi code cho client để thực thi. Ví dụ: Javascript, Java applet, v.v.
+
+*** Tồn tại ở trạng thái stateless: không lưu trạng thái của client trên server. Mỗi request đều phải chứa đầy đủ thông tin để server 
+có thể hiểu request đó và trả về kết quả cho client.
+
+*** Sử dụng các HTTP status code để trả về kết quả của request: Ví dụ:
+  -> 200 OK: request thành công
+  -> 201 Created: tạo mới thành công
+  -> 400 Bad Request: request không hợp lệ
+  -> 401 Unauthorized: không có quyền truy cập
+  -> 403 Forbidden: cấm truy cập
+  -> 404 Not Found: không tìm thấy resource
+  -> 500 Internal Server Error: lỗi server
+  -> 503 Service Unavailable: server tạm thời không hoạt động
+
+*** Có thể sử dụng cả URL endpoint với Logical hierarchy để định danh resource: Ví dụ:
+  -> /api/v1/users/1/posts (để lấy danh sách bài viết của user có id = 1)
+  -> /api/v1/users/1/posts/1 (để lấy thông tin bài viết có id = 1 của user có id = 1)
+  -> /api/v1/users/1/posts/1/comments (để lấy danh sách comment của bài viết có id = 1 của user có id = 1)
+  -> /api/v1/users/1/posts/1/comments/1 (để lấy thông tin comment có id = 1 của bài viết có id = 1 của user có id = 1)
+
+*** Có thể sử dụng cả URL endpoint với Query string để định danh resource: Ví dụ:
+  -> /api/v1/users/1/posts?limit=10&page=1 (để lấy danh sách 10 bài viết của user có id = 1 ở trang 1)
+  -> /api/v1/users/1/posts/1/comments?limit=10&page=1 (để lấy danh sách 10 comment của bài viết có id = 1 của user có id = 1 ở trang 1)
+
+*** Có thể sử dụng cả URL endpoint với Matrix parameters để định danh resource: Ví dụ:
+  -> /api/v1/users/1/posts;limit=10;page=1 (để lấy danh sách 10 bài viết của user có id = 1 ở trang 1)
+  -> /api/v1/users/1/posts/1/comments;limit=10;page=1 (để lấy danh sách 10 comment của bài viết có id = 1 của user có id = 1 ở trang 1)
+
+*** Versioning không phải trong HTTP header mà trong URL endpoint: Ví dụ:
+  -> /api/v1/users (để lấy danh sách user) // version 1
+  -> /api/v2/users (để lấy danh sách user) // version 2
+
+2, Công cụ làm việc với REST API: Postman, extension của Chrome: Advanced REST Client, vsCode Rest Client, v.v.
+
+3, Lưu ý khi làm việc giữa client và server: hay gặp lỗi CORS (Cross-Origin Resource Sharing) server không cho phép client gửi request đến server.
+Lý do là do client và server không cùng domain. Ví dụ: client chạy trên localhost:3000, server chạy trên localhost:4000. Để giải quyết vấn đề này,
+có thể sử dụng thêm một số thư viện như cors, v.v. để cho phép client gửi request đến server.
