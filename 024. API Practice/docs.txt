@@ -1,6 +1,6 @@
 Folder 24. API Practice: Thực hành tạo API kết nối tới Frontend
 
-1, Tạo GET post API để lấy danh sách bài viết ("Node-Backend/controllers/post.js")
+1, Tạo GET posts API để lấy danh sách bài viết ("Node-Backend/controllers/post.js")
 
 2, Tạo POST post API để tạo bài viết mới ("Node-Backend/controllers/post.js")
 
@@ -10,3 +10,12 @@ Folder 24. API Practice: Thực hành tạo API kết nối tới Frontend
 
 4, Sử dụng database để lưu trữ dữ liệu ("Node-Backend/models/post.js")
 -> sử dụng thư viện "mongoose"
+
+5, Tạo GET post API để lấy thông tin chi tiết của bài viết ("Node-Backend/controllers/post.js"), ("Node-Backend/route/post.js")
+
+6, Sửa POST post API và FE, thêm và tải lên hình ảnh vào đường dẫn để tạo bài viết mới 
+("Node-Backend/controllers/post.js"), ("Node-Backend/server.js"), ("React-Frontend/src/pages/Feed/SinglePost/SinglePost.js")
+-> Sử dụng module multer để upload file ảnh
+-> Sử dụng module uuid để tạo id ngẫu nhiên, đặt tên file ảnh ngẫu nhiên (để tránh trùng tên file ảnh)'
+-> Xử lý đường dẫn đến file ảnh chuyển về dạng từ \\ -> / (để tránh lỗi bên phía client)
+-> Bên FE, sử dụng thư viện "FormData" để tạo object chứa dữ liệu và file ảnh để gửi lên server, thay vì dùng Headers application/json

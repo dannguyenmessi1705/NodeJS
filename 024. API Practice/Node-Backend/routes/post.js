@@ -15,4 +15,7 @@ router.post(
   postController.createPost
 );
 
+// GET POST DETAIL BY ID http://localhost:4000/v1/posts/:postId
+router.get("/posts/:postId", postController.getPostById);
+
 module.exports = router;

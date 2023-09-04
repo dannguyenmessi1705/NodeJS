@@ -102,6 +102,10 @@ class Feed extends Component {
   };
 
   finishEditHandler = (postData) => {
+    let formData = new FormData(); // Dùng FormData để gửi file lên server (có thể gửi cả text lên server)
+    formData.append("title", postData.title); // append() là phương thức của FormData để thêm dữ liệu vào formData 
+    formData.append("content", postData.content); 
+    formData.append("image", postData.image); // postData.image là file image
     this.setState({
       editLoading: true,
     });
@@ -113,13 +117,7 @@ class Feed extends Component {
 
     fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: postData.title,
-        content: postData.content,
-      }),
+      body: formData,
     })
       .then((res) => {
         if (res.status !== 200 && res.status !== 201) {
@@ -128,7 +126,7 @@ class Feed extends Component {
         return res.json();
       })
       .then((resData) => {
-        console.log(resData)
+        console.log(resData);
         const post = {
           _id: resData.post._id,
           title: resData.post.title,

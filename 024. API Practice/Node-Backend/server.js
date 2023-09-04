@@ -14,8 +14,37 @@ const cors = require("cors");
 
 app.use(cors()); // cho phép tất cả các domain đều có thể gọi API
 const path = require("path");
-app.use(express.static(path.join(__dirname, "img")));
 
+// {FILE UPLOAD}
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "image");
+  },
+  filename(req, file, cb) {
+    cb(null, uuidv4() + "-" + file.originalname);
+  },
+});
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+}; // chỉ cho phép upload file có đuôi là png, jpg, jpeg
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+); // single("image") là tên của field trong form
+
+// {STATIC FILE}
+app.use("/image", express.static(path.join(__dirname, "image")));
+
+// {ROUTES}
 const postRoute = require("./routes/post");
 app.use("/v1", postRoute);
 
@@ -36,7 +65,9 @@ mongoose
   });
 
 app.use((err, req, res, next) => {
-  res.status(err.httpStatusCode).json({
-    message: err.message,
+  statusCode = err.statusCode || 500;
+  message = err.message;
+  res.status(statusCode).json({
+    message: message,
   });
 });
