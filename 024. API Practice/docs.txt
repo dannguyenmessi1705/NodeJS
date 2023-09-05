@@ -21,3 +21,5 @@ Folder 24. API Practice: Thực hành tạo API kết nối tới Frontend
 -> Bên FE, sử dụng thư viện "FormData" để tạo object chứa dữ liệu và file ảnh để gửi lên server, thay vì dùng Headers application/json
 
 7, Thêm tính năng, sửa cập nhật Post
+
+8, Thêm tính nằng, xoá Post

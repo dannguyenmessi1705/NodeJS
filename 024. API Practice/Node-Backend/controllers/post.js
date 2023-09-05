@@ -132,7 +132,26 @@ const postController = {
       next(err);
     }
   },
-  deletePost: async (req, res, next) => {},
+  deletePost: async (req, res, next) => {
+    const postId = req.params.postId;
+    try {
+      const post = await Post.findById(postId);
+      if (!post) {
+        const error = new Error("Could not find post.");
+        error.statusCode = 404;
+        throw error;
+      }
+      const pathImgDel = post.image;
+      const result = await Post.findByIdAndDelete(postId);
+      fs.unlinkSync(path.join(__dirname, "..", pathImgDel));
+      res.status(200).json({ message: "Post deleted", post: result });
+    } catch (err) {
+      if (!err.statusCode) {
+        err.httpStatusCode = 500;
+      }
+      next(err);
+    }
+  },
 };
 
 module.exports = postController;
