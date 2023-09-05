@@ -59,7 +59,12 @@ class Feed extends Component {
       })
       .then((resData) => {
         this.setState({
-          posts: resData.posts,
+          posts: resData.posts.map((post) => {
+            return {
+              ...post,
+              imagePath: post.imageUrl,
+            };
+          }),
           totalPosts: resData.totalItems,
           postsLoading: false,
         });
@@ -103,20 +108,22 @@ class Feed extends Component {
 
   finishEditHandler = (postData) => {
     let formData = new FormData(); // Dùng FormData để gửi file lên server (có thể gửi cả text lên server)
-    formData.append("title", postData.title); // append() là phương thức của FormData để thêm dữ liệu vào formData 
-    formData.append("content", postData.content); 
+    formData.append("title", postData.title); // append() là phương thức của FormData để thêm dữ liệu vào formData
+    formData.append("content", postData.content);
     formData.append("image", postData.image); // postData.image là file image
     this.setState({
       editLoading: true,
     });
     // Set up data (with image!)
     let url = "http://localhost:4000/v1/posts";
+    let method = "POST";
     if (this.state.editPost) {
-      url = "";
+      url = "http://localhost:4000/v1/posts/" + this.state.editPost._id;
+      method = "PUT";
     }
 
     fetch(url, {
-      method: "POST",
+      method: method,
       body: formData,
     })
       .then((res) => {

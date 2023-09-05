@@ -19,3 +19,5 @@ Folder 24. API Practice: Thực hành tạo API kết nối tới Frontend
 -> Sử dụng module uuid để tạo id ngẫu nhiên, đặt tên file ảnh ngẫu nhiên (để tránh trùng tên file ảnh)'
 -> Xử lý đường dẫn đến file ảnh chuyển về dạng từ \\ -> / (để tránh lỗi bên phía client)
 -> Bên FE, sử dụng thư viện "FormData" để tạo object chứa dữ liệu và file ảnh để gửi lên server, thay vì dùng Headers application/json
+
+7, Thêm tính năng, sửa cập nhật Post
