@@ -82,6 +82,7 @@ const authController = {
       }
       const accessToken = genAuth.generateAccessToken({ userId: user._id.toString() });
       const refreshToken = genAuth.generateRefreshToken({ userId: user._id.toString() });
+      res.cookie("refreshToken", refreshToken, { httpOnly: true }); // lưu refreshToken vào cookie
       res
         .status(200)
         .json(

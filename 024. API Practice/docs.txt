@@ -31,3 +31,13 @@ Folder 24. API Practice: Thực hành tạo API kết nối tới Frontend
         + Lưu access token vào header Authorization của req (có thời hạn ngắn): dùng để xác thực user
         + Lưu refresh token vào cookie (có thời hạn dài): dùng để tạo access token mới khi access token hết hạn
 -> Sử dụng module express-validator để xác thực dữ liệu nhập vào
+
+10, Bảo vệ các routes bằng middleware ("Node-Backend/middleware/isAuth.js"), ("Node-Backend/route/post.js"), ("Node-Backend/route/auth.js")
+ - Sử dụng module jsonwebtoken để xác thực user
+ - Kiểm tra access token có hợp lệ hay không (có hết hạn hay không)  
+    -> nếu hợp lệ thì cho phép truy cập vào các routes
+    -> nếu không hợp lệ thì kiểm tra refresh token có hợp lệ hay không
+        + nếu hợp lệ thì tạo access token mới (trả lại accessToken mới cho client) và cho phép truy cập vào các routes 
+        + nếu không hợp lệ thì trả về lỗi
+ - Xác thực việc đúng người dùng mới được thao tác về sản phẩm của mình
+ - Tạo liên kết giữa post và user, khi xoá post => cũng xoá trường post trong user
