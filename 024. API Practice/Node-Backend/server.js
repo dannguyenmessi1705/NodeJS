@@ -3,6 +3,11 @@ const app = express();
 const bodyParser = require("body-parser");
 //app.use(bodyParser.urlencoded({extended: true})); // dùng cho application/x-www-form-urlencoded (loại mà form từ HTML submit lên)
 app.use(bodyParser.json()); // dùng cho application/json (loại mà axios gửi lên)
+
+// {COOKIE PARSER} - lưu và đọc cookie (dùng cho jsonwebtoken)
+const cookie = require("cookie-parser");
+app.use(cookie());
+
 const port = 4000;
 const cors = require("cors");
 // app.use((req, res, next) => {
@@ -46,6 +51,8 @@ app.use("/image", express.static(path.join(__dirname, "image")));
 
 // {ROUTES}
 const postRoute = require("./routes/post");
+const authRoute = require("./routes/auth");
+app.use("/auth", authRoute);
 app.use("/v1", postRoute);
 
 // {CONNECT TO MONGODB}

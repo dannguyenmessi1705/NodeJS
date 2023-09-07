@@ -20,6 +20,14 @@ Folder 24. API Practice: Thực hành tạo API kết nối tới Frontend
 -> Xử lý đường dẫn đến file ảnh chuyển về dạng từ \\ -> / (để tránh lỗi bên phía client)
 -> Bên FE, sử dụng thư viện "FormData" để tạo object chứa dữ liệu và file ảnh để gửi lên server, thay vì dùng Headers application/json
 
-7, Thêm tính năng, sửa cập nhật Post
+7, Thêm tính năng, sửa cập nhật Post ("Node-Backend/controllers/post.js"), ("Node-Backend/route/post.js"), ("React-Frontend/src/pages/Feed/Feed.js")
 
-8, Thêm tính nằng, xoá Post
+8, Thêm tính nằng, xoá Post ("Node-Backend/controllers/post.js"), ("Node-Backend/route/post.js"), ("React-Frontend/src/pages/Feed/Feed.js")
+
+9, Thêm modal user, thêm tính năng đăng ký, đăng nhập ("Node-Backend/controllers/auth.js"), ("Node-Backend/route/auth.js"), ("React-Frontend/src/App.js")
+-> Sử dụng module bcrypt để mã hóa password
+-> Sử dụng module jsonwebtoken để tạo token (để xác thực user khi đăng nhập, đăng ký thành công)
+   -  Tạo ra access token và refresh token 
+        + Lưu access token vào header Authorization của req (có thời hạn ngắn): dùng để xác thực user
+        + Lưu refresh token vào cookie (có thời hạn dài): dùng để tạo access token mới khi access token hết hạn
+-> Sử dụng module express-validator để xác thực dữ liệu nhập vào
