@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en" class="mdl-js">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/toolkit.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap">
+    <link rel="stylesheet" href="/css/aos.min.css">
+    <link rel="stylesheet" href="/css/animate.min.css">
+    <link rel="stylesheet" href="/css/home.css"> 
+    <link rel="stylesheet" href="/css/toggle.css">
+    <script>
+        var isPageLoaded = false; // Biến kiểm tra trang đã tải xong hay chưa
+        window.addEventListener('load', function() {
+          if (!isPageLoaded) { // Kiểm tra trang đã tải xong chưa
+            isPageLoaded = true; // Đánh dấu trang đã tải xong
+          } else {
+            location.reload(); // Tải lại trang
+          }
+        });
+    </script>
