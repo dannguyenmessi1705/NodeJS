@@ -1,15 +1,7 @@
 Source code lấy từ folder 25. Async Await
 Folder 26. UI FOR EJS: nói về việc chỉnh sửa UI cho project dùng EJS
 
-- Khi sử dụng async await thì sẽ không cần sử dụng promise nữa
-- Async await sẽ giúp code của chúng ta trở nên dễ đọc hơn
-- Async await sẽ giúp chúng ta tránh được callback hell
-- Nếu như Promise sử dụng then catch thì async await sẽ sử dụng try catch, nếu trong try có lỗi thì sẽ vào catch
-- Async await sẽ giúp chúng ta tránh được việc sử dụng then catch nhiều lần, lồng nhau, chỉ cần sử dụng try catch 1 lần duy nhất
-- Await sẽ giúp chúng ta đợi cho đến khi nào promise được resolve thì mới thực hiện các lệnh tiếp theo
-- Await chỉ có thể được sử dụng trong async function (tuy nhiên từ phiên bản nodejs 14 trở lên thì có thể sử dụng await trong top level code)
-=> Nhìn chung async await là thuộc không đồng bộ, nó chỉ giúp chúng ta viết code nhìn trông giống 
-code đồng bộ hơn, nhưng thực chất nó vẫn là code không đồng bộ
+Sử dụng Bootstrap 5.3
 
                                 CÁC LOẠI THẺ ĐỂ TEST GIAO DỊCH
                                         1	

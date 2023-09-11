@@ -18,7 +18,7 @@
             </div>
             <% } else { %>
                 <% if(error) { %> 
-                    <div data-aos="fade-down" class="d-inline-block p-2 text-center mx-auto fw-bold text-danger border rounded border-danger bg-danger-subtle">
+                    <div class="shake animated d-inline-block p-2 text-center mx-auto fw-bold text-danger border rounded border-danger bg-danger-subtle">
                         <%= error %>
                     </div>
                 <% } %>
@@ -28,7 +28,7 @@
                 <div class="form-control">
                     <label for="email">E-Mail</label>
                     <input type="email" name="email" id="email" value="<%=oldInput%>"
-                        class="<%=errorType === 'email' ? 'invalid' : ''%>">
+                        class="border-3 <%=errorType === 'email' ? 'border-danger' : ''%>">
                 </div>
                 <!-- TOKEN CSRF -->
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>">
