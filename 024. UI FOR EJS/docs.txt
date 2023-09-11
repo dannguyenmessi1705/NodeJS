@@ -1,7 +1,7 @@
-Source code lấy từ folder 26. UI FOR EJS
-Folder 27. TẠO API CHO PROJECT
-1, THÊM CÁC RUOTE /api 
-2, Khi muốn trả về API, thì dùng res.json(), thay vì render để trả về html
+Source code lấy từ folder 23. Async Await
+Folder 24. UI FOR EJS: nói về việc chỉnh sửa UI cho project dùng EJS
+
+Sử dụng Bootstrap 5.3
 
                                 CÁC LOẠI THẺ ĐỂ TEST GIAO DỊCH
                                         1	

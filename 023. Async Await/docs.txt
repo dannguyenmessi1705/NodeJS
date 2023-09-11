@@ -1,5 +1,5 @@
 Source code lấy từ folder 22. Payment
-Folder 25. Async Await: nói về việc sử dụng async await thay thế promise trong project này
+Folder 23. Async Await: nói về việc sử dụng async await thay thế promise trong project này
 
 - Khi sử dụng async await thì sẽ không cần sử dụng promise nữa
 - Async await sẽ giúp code của chúng ta trở nên dễ đọc hơn

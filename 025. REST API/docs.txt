@@ -1,6 +1,6 @@
-Folder 22. REST API: nói về cách tạo REST API bằng NodeJS 
+Folder 25. REST API: nói về cách tạo REST API bằng NodeJS 
 
-- REST API: Resepresentational State Transfer Application Programming Interface, là một kiểu kiến trúc để xây dựng các ứng dụng web. REST API là một trong những chuẩn thiết kế được sử dụng phổ biến nhất để tạo các web service. 
+- REST API: Respresentational State Transfer Application Programming Interface, là một kiểu kiến trúc để xây dựng các ứng dụng web. REST API là một trong những chuẩn thiết kế được sử dụng phổ biến nhất để tạo các web service. 
 -> Trong các Sourcecode trên đều trả về kiểu HTML (ejs), tuy nhiên có thể trả về nhiều kiểu JSON, XML, HTML, v.v. (tùy vào yêu cầu của người dùng).
 -> Làm việc với HTML trình duyệt chỉ có thể nhận diện các phương thức GET, POST. Tuy nhiên,
 REST API có thể sử dụng các HTTP request để POST, GET, DELETE, PUT,... dữ liệu. 

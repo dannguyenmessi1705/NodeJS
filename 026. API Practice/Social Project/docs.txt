@@ -1,4 +1,4 @@
-Folder 24. API Practice: Thực hành tạo API kết nối tới Frontend
+Folder 26. API Practice: Thực hành tạo API kết nối tới Frontend
 
 1, Tạo GET posts API để lấy danh sách bài viết ("Node-Backend/controllers/post.js")
 

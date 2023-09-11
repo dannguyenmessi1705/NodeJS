@@ -1,7 +1,20 @@
-Source code lấy từ folder 25. Async Await
-Folder 26. UI FOR EJS: nói về việc chỉnh sửa UI cho project dùng EJS
+Source code lấy từ folder 24. UI FOR EJS
+Folder 26. TẠO API CHO PROJECT (để có thể gọi API từ UI thay vì dùng server side render 
+(dùng form submit từ ejs (chỉ POST), ... sau đó gọi hàm res.render() (GET) để trả về html) như tromg các folder trước đây)
 
-Sử dụng Bootstrap 5.3
+*** Để tương tác với Client qua API, thì cần cài Postman (https://www.postman.com/downloads/)
+*** Ngoài ra cần phải cài đặt cors (npm i cors) để cho phép các domain khác gọi API của mình
+1, Cài đặt cors ("server.js")
+1, THÊM CÁC ROUTE (endpoint) /api 
+2, Khi muốn trả về API, thì dùng res.json(), thay vì render để trả về html
+
+*** Có thể trả về nhiều định dạng, không nhất thiết phải chia api riêng
+-> res.format() (để trả về nhiều định dạng khác nhau)
+  + html: () => {res.render()}
+  + json:  () => {res.json()}
+  + xml (res.send())
+  + text (res.send())
+  + ...
 
                                 CÁC LOẠI THẺ ĐỂ TEST GIAO DỊCH
                                         1	
