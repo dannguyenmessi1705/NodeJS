@@ -56,8 +56,9 @@ const getAllProduct = async (req, res, next) => {
     }
     res.status(200).json({
       message: "Get all products successfully",
+      csrfToken: res.locals.csrfToken,
       title: "Product",
-      path: "/product",
+      path: "/products",
       hasFooter: true,
       items: products,
     });

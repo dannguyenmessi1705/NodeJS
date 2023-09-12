@@ -1,5 +1,11 @@
 Source code lấy từ folder 26. API Practice/Shop-Project
-Folder 27. JSONWEBTOKEN sử dụng module jsonwebtoken để tạo token cho user
+Folder 27. JSONWEBTOKEN sử dụng module jsonwebtoken và csrf để xác thực cho user
+1, CSRF (Cross-site request forgery): Ngăn chặn tấn công giả mạo yêu cầu đến server (Đã nói ở Folder Authentication và Error Handling)
+  -> Thêm middleware tạo csrfToken và middleware xác thực ("./middleware/csrfToken")
+  -> Thêm các middleware này vào các route, với các route post (thêm middleware xác thực vào)
+  -> Thêm hidden input vào các form để lưu csrfToken
+  -> Thêm header X-CSRF-Token vào các request gửi lên server nếu dùng API
+2, JSONWEBTOKEN 
 -> Token này dùng để xác thực user khi gọi API hay khi thực hiện các thao tác cần xác thực (ví dụ: thêm, sửa, xóa, ...) 
 -> jsonwebtoken sẽ cấp cho user accessToken, refreshToken qua việc đằng nhập rồi trả về json() 
    user sẽ lưu token này vào local storage hoặc cookie hoặc session
