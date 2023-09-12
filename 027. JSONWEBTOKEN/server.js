@@ -49,7 +49,7 @@ app.use(
     // Ngoài ra có thể tuỳ chỉnh thêm cho cookie: secure, path, signed,... ở cấu hình session
     cookie: {
       signed: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7, // Thời gian sống của cookie (7 ngày)
+      maxAge: 1000 * 60 * 60 * 24 * 3, // Thời gian sống của cookie (3 ngày)
       httpOnly: true, // Chỉ có thể truy cập cookie thông qua http request, không thể truy cập bằng javascript
     },
   })

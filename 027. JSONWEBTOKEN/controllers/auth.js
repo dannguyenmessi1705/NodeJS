@@ -57,8 +57,12 @@ const postAuth = async (req, res, next) => {
       // {FLASH MESSAGE} //
       req.flash("successLogin", "Login successfully!"); // Tạo flash message có tên là "success", giá trị là "Login successfully!"
       // Nếu password trùng khớp
-      const accessToken = genJWT.generateAccessToken({ userId: user._id }); // Tạo accessToken
-      const refreshToken = genJWT.generateRefreshToken({ userId: user._id }); // Tạo refreshToken
+      const accessToken = genJWT.generateAccessToken({
+        userId: user._id.toString(),
+      }); // Tạo accessToken
+      const refreshToken = genJWT.generateRefreshToken({
+        userId: user._id.toString(),
+      }); // Tạo refreshToken
       req.session.accessToken = accessToken; // Lưu accessToken vào Session
       req.session.refreshToken = refreshToken; // Lưu refreshToken vào Session
       req.session.isLogin = true; // Tạo Session có tên là "isLogin", giá trị là "true"
