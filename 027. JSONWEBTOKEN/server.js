@@ -49,10 +49,11 @@ app.use(
     // Ngoài ra có thể tuỳ chỉnh thêm cho cookie: secure, path, signed,... ở cấu hình session
     cookie: {
       signed: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // Thời gian sống của cookie (7 ngày)
+      httpOnly: true, // Chỉ có thể truy cập cookie thông qua http request, không thể truy cập bằng javascript
     },
   })
 );
-
 
 // {MULTER} // (Để lấy dữ liệu file từ form) //
 const multer = require("multer"); // Nhập module multer
@@ -114,8 +115,6 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
-
 
 // {MIDDLEWARE PHÂN QUYỀN DÙNG SESSION} //
 app.use(async (req, res, next) => {

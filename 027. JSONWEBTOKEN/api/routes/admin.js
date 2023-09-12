@@ -1,7 +1,7 @@
 const express = require("express");
 const route = express.Router();
 const adminController = require("../controllers/admin");
-const ProtectRoute = require("../../middleware/auth");
+const ProtectRoute = require("../../middleware/isAuth");
 const { CreateCSRFTOKEN, verifyCSRFToken } = require("../../middleware/csrfToken");
 
 // {TẠO CAC ENDPOINT API} //

@@ -5,19 +5,21 @@ Folder 27. JSONWEBTOKEN sử dụng module jsonwebtoken và csrf để xác th�
   -> Thêm các middleware này vào các route, với các route post (thêm middleware xác thực vào)
   -> Thêm hidden input vào các form để lưu csrfToken
   -> Thêm header X-CSRF-Token vào các request gửi lên server nếu dùng API
-2, JSONWEBTOKEN 
--> Token này dùng để xác thực user khi gọi API hay khi thực hiện các thao tác cần xác thực (ví dụ: thêm, sửa, xóa, ...) 
--> jsonwebtoken sẽ cấp cho user accessToken, refreshToken qua việc đằng nhập rồi trả về json() 
-   user sẽ lưu token này vào local storage hoặc cookie hoặc session
--> accessToken dùng để xác thực các yêu cầu, thường có hạn ngắn, 
-   refreshToken dùng để tạo ra accessToken khi nó hết hạn, thường hạn dài hơn
--> Các bước:
-  - Kiểm tra access token có hợp lệ hay không (có hết hạn hay không)  
-    + nếu hợp lệ thì cho phép thực hiện các thao tác cần xác thực
-    + nếu không hợp lệ thì kiểm tra refresh token có hợp lệ hay không
-        + nếu hợp lệ thì tạo access token mới (trả lại accessToken mới cho client) và cho phép truy cập vào các routes 
-        + nếu không hợp lệ thì trả về lỗi
-  ! Phải xác thực việc đúng người dùng mới được thao tác về sản phẩm của mình
+
+
+2, JSONWEBTOKEN ("./middleware/isAuth"), ("./middleware/jsonwebtoken"), ("./controllers), ("./routes), ("./api/controllers), ("./api/routes)
+  -> Token này dùng để xác thực user khi gọi API hay khi thực hiện các thao tác cần xác thực (ví dụ: thêm, sửa, xóa, ...) 
+  -> jsonwebtoken sẽ cấp cho user accessToken, refreshToken qua việc đằng nhập rồi trả về json() 
+    user sẽ lưu token này vào local storage hoặc cookie hoặc session hoặc form input hidden
+  -> accessToken dùng để xác thực các yêu cầu, thường có hạn ngắn, 
+    refreshToken dùng để tạo ra accessToken khi nó hết hạn, thường hạn dài hơn
+  -> Các bước:
+    - Kiểm tra access token có hợp lệ hay không (có hết hạn hay không)  (lấy từ req.body (form server side), header "Authorization": Bearer + accessToken(client gửi lên), cookie, session, querypath)
+      + nếu hợp lệ thì cho phép thực hiện các thao tác cần xác thực
+      + nếu không hợp lệ thì kiểm tra refresh token có hợp lệ hay không
+          + nếu hợp lệ thì tạo access token mới (trả lại accessToken mới cho client) và cho phép truy cập vào các routes 
+          + nếu không hợp lệ thì trả về lỗi
+    ! Phải xác thực việc đúng người dùng mới được thao tác về sản phẩm của mình
 
                                 CÁC LOẠI THẺ ĐỂ TEST GIAO DỊCH
                                         1	

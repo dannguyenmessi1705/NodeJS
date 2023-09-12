@@ -2,7 +2,7 @@ const express = require("express");
 const route = express.Router();
 
 const userController = require("../controllers/user");
-const ProtectRoute = require("../middleware/auth")
+const ProtectRoute = require("../middleware/isAuth")
 const {CreateCSRFTOKEN, verifyCSRFToken} = require("../middleware/csrfToken")
 
 
