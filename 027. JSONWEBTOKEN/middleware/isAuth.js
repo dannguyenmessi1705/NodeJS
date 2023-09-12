@@ -6,6 +6,7 @@ const ProtectRoute = async (req, res, next) => {
     const decoded = jwt.verify(accessToken, "nguyendidan"); // Giải mã token
     const currentTime = Math.floor(Date.now() / 1000); // Lấy thời gian hiện tại (tính bằng giây) để so sánh với thời gian hết hạn của token
     if (decoded.exp && decoded.exp < currentTime) {
+      // Nếu token hết hạn
       console.log("Token expired");
       const refreshToken = req.session.refreshToken; // Lấy refreshToken từ session
       isVerify = jwt.verify(refreshToken, "nguyendidan"); // Giải mã refreshToken
@@ -20,12 +21,11 @@ const ProtectRoute = async (req, res, next) => {
       } else {
         console.log("RefreshToken expired");
         return res.redirect("/login");
-      } 
+      }
     }
     return next();
   } catch (error) {
-    req.session.isLogin = false; // Gán isLogin = false để đánh dấu là chưa đăng nhập
-    await req.session.save(); // Lưu lại session
+    await req.session.destroy(); // Xóa session để đăng xuất
     res.redirect("/login"); // Nếu không có token thì chuyển hướng về trang login
   }
 };

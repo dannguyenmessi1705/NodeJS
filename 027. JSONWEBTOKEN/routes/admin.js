@@ -2,14 +2,13 @@ const express = require("express");
 const route = express.Router();
 const adminController = require("../controllers/admin");
 const ProtectRoute = require("../middleware/isAuth");
-const { CreateCSRFTOKEN, verifyCSRFToken } = require("../middleware/csrfToken");
+const { verifyCSRFToken } = require("../middleware/csrfToken");
 
 // {VALIDATION INPUT} //
 const { check } = require("express-validator");
 
 route.get(
   "/add-product",
-  CreateCSRFTOKEN,
   ProtectRoute,
   adminController.addProduct
 );
@@ -17,7 +16,6 @@ route.get(
 // {VALIDATION INPUT} //
 route.post(
   "/add-product",
-  CreateCSRFTOKEN,
   ProtectRoute,
   verifyCSRFToken,
   [
@@ -32,7 +30,7 @@ route.post(
 
 route.get(
   "/product",
-  CreateCSRFTOKEN,
+
   ProtectRoute,
   adminController.getProduct
 );
@@ -41,7 +39,6 @@ route.get(
 // url = "http://.../edit-poduct/id"
 route.get(
   "/edit-product/:productID",
-  CreateCSRFTOKEN,
   ProtectRoute,
   adminController.getEditProduct
 );
@@ -50,7 +47,6 @@ route.get(
 // {VALIDATION INPUT} //
 route.post(
   "/edit-product",
-  CreateCSRFTOKEN,
   ProtectRoute,
   verifyCSRFToken,
   [
@@ -66,7 +62,6 @@ route.post(
 // {DELETE PRODUCT} //
 route.delete(
   "/delete-product/:productID",
-  CreateCSRFTOKEN,
   ProtectRoute,
   verifyCSRFToken,
   adminController.deleteProduct

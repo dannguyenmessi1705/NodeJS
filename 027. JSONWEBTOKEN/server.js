@@ -55,6 +55,10 @@ app.use(
   })
 );
 
+// {CSRF - CROSS SITE REQUEST FORGERY} // Bảo vệ trang web khỏi tấn công CSRF (Tấn công giả mạo yêu cầu trang web)
+const { CreateCSRFTOKEN } = require("./middleware/csrfToken"); // Nhập middleware để tạo csrfToken
+app.use(CreateCSRFTOKEN); // Sử dụng middleware để tạo token và truyền vào locals để sử dụng ở tất cả các route
+
 // {MULTER} // (Để lấy dữ liệu file từ form) //
 const multer = require("multer"); // Nhập module multer
 const fileStorage = multer.diskStorage({
