@@ -1,8 +1,8 @@
 const express = require("express");
 const route = express.Router();
 const adminController = require("../controllers/admin");
-const ProtectRoute = require("../../middleware/isAuth");
-const { CreateCSRFTOKEN, verifyCSRFToken } = require("../../middleware/csrfToken");
+const ProtectRoute = require("../middleware/isAuth");
+const { verifyCSRFToken } = require("../../middleware/csrfToken");
 
 // {TẠO CAC ENDPOINT API} //
 
@@ -12,7 +12,6 @@ const { check } = require("express-validator");
 // {VALIDATION INPUT} //
 route.post(
   "/add-product",
-  CreateCSRFTOKEN,
   ProtectRoute,
   verifyCSRFToken,
   [
@@ -25,13 +24,12 @@ route.post(
   adminController.postProduct
 );
 
-route.get("/products", CreateCSRFTOKEN, ProtectRoute, adminController.getProduct);
+route.get("/products", ProtectRoute, adminController.getProduct);
 
 // {ADD EDIT PRODUCT} //
 // url = "http://.../edit-poduct/id"
 route.get(
   "/edit-product/:productID",
-  CreateCSRFTOKEN,
   ProtectRoute,
   adminController.getEditProduct
 );
@@ -40,7 +38,6 @@ route.get(
 // {VALIDATION INPUT} //
 route.post(
   "/edit-product",
-  CreateCSRFTOKEN,
   ProtectRoute,
   verifyCSRFToken,
   [
@@ -54,6 +51,11 @@ route.post(
 );
 
 // {DELETE PRODUCT} //
-route.delete("/delete-product/:productID", CreateCSRFTOKEN, ProtectRoute, verifyCSRFToken, adminController.deleteProduct); // Sửa method xoá sang delete
+route.delete(
+  "/delete-product/:productID",
+  ProtectRoute,
+  verifyCSRFToken,
+  adminController.deleteProduct
+); // Sửa method xoá sang delete
 
 module.exports = route;
