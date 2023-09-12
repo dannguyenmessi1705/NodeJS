@@ -7,8 +7,6 @@ const getAuth = require("../controllers/auth");
 
 const User = require("../../models/users");
 
-route.get("/login", getAuth.getAuth);
-
 // {VALIDATION INPUT LOGIN} //
 route.post(
   "/login",
@@ -27,7 +25,6 @@ route.post(
 
 route.post("/logout", getAuth.postLogout);
 
-route.get("/signup", getAuth.getSignup);
 // {VALIDATION INPUT} //
 route.post(
   "/signup",
@@ -85,9 +82,6 @@ route.post(
   getAuth.postSignup
 );
 
-// {RESET PASSWORD} //
-route.get("/reset", getAuth.getReset);
-
 route.post(
   "/reset",
   // {VALIDATION INPUT} //
@@ -103,8 +97,6 @@ route.post(
     }),
   getAuth.postReset
 );
-// {UPDATE PASSWORD} //
-route.get("/reset/:tokenReset", getAuth.getUpdatePassword);
 
 route.post(
   "/update-password",

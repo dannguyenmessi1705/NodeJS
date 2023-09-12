@@ -162,13 +162,11 @@ app.use(personRoute);
 app.use(authRoute);
 app.use(paymentRoute);
 
-
 // {ENPOINT API ROUTE FOR CLIENT} //
 const authRouteAPI = require("./api/routes/auth");
 const adminRouteAPI = require("./api/routes/admin");
 const personRouteAPI = require("./api/routes/user");
 const paymentRouteAPI = require("./api/routes/payment");
-const errorRouteAPI = require("./api/routes/error");
 app.use("/api/admin", adminRouteAPI);
 app.use("/api", personRouteAPI);
 // {LOGIN ROUTE} //
@@ -176,7 +174,6 @@ app.use("/api", authRouteAPI);
 app.use("/api", paymentRouteAPI);
 
 // Phải đặt các route lỗi ở cuối cùng
-app.use("/api", errorRouteAPI);
 app.use(errorRoute);
 
 // {ERROR MIDDLEWARE} // (Phải đặt ở cuối cùng) // Nếu không có lỗi thì sẽ chạy qua các middleware trước, nếu có lỗi thì sẽ chạy qua middleware này

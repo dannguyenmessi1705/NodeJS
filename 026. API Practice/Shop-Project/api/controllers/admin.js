@@ -7,23 +7,6 @@ const productOfPage = 6;
 // {VALIDATION INPUT} //
 const { validationResult } = require("express-validator");
 
-// {ADD PRODUCT PAGE} //
-const addProduct = async (req, res, next) => {
-  res.json({ 
-    message: "Add product page", 
-    path: "/api/admin/add-product",
-    hasFooter: false,
-    editing: false, // Phân biệt với trạng thái Edit vs Add Product
-    error: undefined,
-    errorType: undefined, //  ban đầu chưa có giá trị nào lỗi
-    oldInput: {
-      name: "",
-      price: "",
-      description: "",
-    }, // Lưu lại các giá trị vừa nhập (vì ban đầu không có giá trị nào trong trường cả)
-   });
-};
-
 // {CREAT PRODUCT BY MONGOOSE} //
 const postProduct = async (req, res, next) => {
   const name = req.body.name;
@@ -35,7 +18,8 @@ const postProduct = async (req, res, next) => {
   const image = req.file; // Lấy file từ multer
   if (!image) {
     // Nếu không có file thì trả về trang add-product với thông báo lỗi
-    return res.status(422).render("./admin/editProduct", {
+    return res.status(422).json({
+      message: "Attached file is not an image",
       title: "Add Product",
       path: "/admin/add-product",
       hasFooter: false,
@@ -56,12 +40,12 @@ const postProduct = async (req, res, next) => {
   if (!errorValidation.isEmpty()) {
     console.log(errorValidation.array());
     const [error] = errorValidation.array();
-    return res.status(422).render("./admin/editProduct", {
+    return res.status(422).json({
+      message: error.msg,
       title: "Add Product",
       path: "/admin/add-product",
       hasFooter: false,
       editing: false,
-      error: error.msg,
       errorType: error.path, //  Xác định trường nào chứa giá trị lỗi
       oldInput: {
         name: req.body.name,
@@ -80,19 +64,12 @@ const postProduct = async (req, res, next) => {
     });
     const result = await product.save();
     if (result) {
-      console.log("Created Product");
-      res.redirect("/admin/product");
+      res.status(201).json({ message: "Create product successfull", product });
     } else {
-      const err = new Error("Create product failed");
-      err.httpStatusCode = 500;
-      throw err;
+      res.status(500).json({ message: "Create product failed" });
     }
   } catch (err) {
-    // {ERROR MIDDLEWARE} //
-    if (!err.httpStatusCode) {
-      err.httpStatusCode = 500;
-    }
-    next(err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -114,11 +91,10 @@ const getProduct = async (req, res, next) => {
       .select("name price url description _id") // Chỉ lấy các thuộc tính name, price, url, description, bỏ thuộc tính _id
       .exec(); // Thực thi
     if (!products) {
-      const err = new Error("Product not found");
-      err.httpStatusCode = 404;
-      throw err;
+      return res.status(404).json({ message: "Product not found" });
     }
-    res.render("./admin/products", {
+    res.status(200).json({
+      message: "Get products successfull",
       title: "Admin Product",
       items: products,
       path: "/admin/product",
@@ -132,11 +108,7 @@ const getProduct = async (req, res, next) => {
       hasNextPage: curPage < Math.ceil(numProducts / productOfPage), // Kiểm tra xem có trang tiếp theo hay không
     });
   } catch (err) {
-    // {ERROR MIDDLEWARE} //
-    if (!err.httpStatusCode) {
-      err.httpStatusCode = 500;
-    }
-    next(err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -151,14 +123,13 @@ const getEditProduct = async (req, res, next) => {
     const product = await Product.findById(ID);
     if (product.userId.toString() !== req.user._id.toString()) {
       // Kiểm tra xem user hiện tại có phải là người tạo ra product này hay không
-      return res.redirect("/admin/product"); // Nếu không phải thì redirect về trang chủ
+      return res.status(403).json({ message: "Forbidden" });
     }
     if (!product) {
-      const err = new Error("Product not found");
-      err.httpStatusCode = 404;
-      throw err;
+      return res.status(404).json({ message: "Product not found" });
     }
-    res.render("./admin/editProduct", {
+    res.status(308).json({
+      message: "Go to edit product page",
       title: "Edit Product",
       path: "/admin/add-product",
       hasFooter: false,
@@ -173,9 +144,7 @@ const getEditProduct = async (req, res, next) => {
       }, // Lưu lại các giá trị vừa nhập (vì ban đầu không có giá trị nào trong trường cả)
     });
   } catch (err) {
-    if (!err.httpStatusCode) {
-      err.httpStatusCode = 500;
-    }
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -200,15 +169,14 @@ const postEditProduct = async (req, res, next) => {
   try {
     const product = await Product.findById(ID);
     if (!product) {
-      const err = new Error("Product not found");
-      err.httpStatusCode = 404;
-      throw err;
+      return res.status(404).json({ message: "Product not found" });
     }
     // VALIDATION INPUT
     if (!errorValidation.isEmpty()) {
       console.log(errorValidation.array());
       const [error] = errorValidation.array();
-      return res.status(422).render("./admin/editProduct", {
+      return res.status(422).json({
+        message: error.msg,
         title: "Edit Product",
         path: "/admin/add-product",
         hasFooter: false,
@@ -226,7 +194,7 @@ const postEditProduct = async (req, res, next) => {
     // {AUTHORIZATION} //
     if (product.userId.toString() !== req.user._id.toString()) {
       // Kiểm tra xem user hiện tại có phải là người tạo ra product này hay không
-      return res.redirect("/"); // Nếu không phải thì redirect về trang chủ
+      return res.status(403).json({ message: "Forbidden" });
     }
     // Cập nhật lại các giá trị của product theo req.body
     product.name = name;
@@ -236,9 +204,7 @@ const postEditProduct = async (req, res, next) => {
       fs.unlink(product.url, (err) => {
         // Xóa file cũ
         if (err) {
-          // Nếu có lỗi thì in ra lỗi
-          console.log(err);
-          next(new Error(err));
+          return res.status(500).json({ message: "Server error" });
         }
       });
       product.url = url; // Lưu đường dẫn của file mới
@@ -247,19 +213,13 @@ const postEditProduct = async (req, res, next) => {
     // Lưu lại vào database
     const result = await product.save();
     if (result) {
-      console.log("Updated!");
-      res.redirect("/admin/product");
+      res.status(201).json({ message: "Update product successfull", product });
     } else {
-      const err = new Error("Update product failed");
-      err.httpStatusCode = 500;
-      throw err;
+      res.status(500).json({ message: "Update product failed" });
     }
     // Muốn nhanh hơn thì dùng method findByIdAndUpdate, ruy nhiên dùng save() có thể dùng được với middleware
   } catch (err) {
-    if (!err.httpStatusCode) {
-      err.httpStatusCode = 500;
-    }
-    next(err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -272,24 +232,19 @@ const deleteProduct = async (req, res, next) => {
   try {
     const product = await Product.findById(ID);
     if (!product) {
-      const err = new Error("Product not found");
-      err.httpStatusCode = 404;
-      throw err;
+      return res.status(404).json({ message: "Product not found" });
     }
     urlDelete = product.url; // Lưu đường dẫn của file vào biến urlDelete
     // {AUTHORIZATION} //
     const result = await Product.deleteOne({ _id: ID, userId: req.user._id }); // Kiểm tra xem user hiện tại có phải là người tạo ra product này hay không (userId: req.user._id)
     if (!result) {
-      const err = new Error("Delete failed");
-      err.httpStatusCode = 404;
-      throw err;
+      return res.status(403).json({ message: "Forbidden" });
     }
     fs.unlink(urlDelete, (err) => {
       // Xóa file cũ
       if (err) {
         // Nếu có lỗi thì in ra lỗi
-        console.log(err);
-        throw err;
+        return res.status(500).json({ message: "Server error" });
       }
     });
     // Xoá cả sản phẩm nếu có trong giỏ hàng
@@ -298,21 +253,14 @@ const deleteProduct = async (req, res, next) => {
     });
     const save = await req.user.save();
     if (!save) {
-      const err = new Error("Delete failed");
-      err.httpStatusCode = 404;
-      throw err;
+      return res.status(500).json({ message: "Server error" });
     }
-    console.log("Deleted!");
-    res.status(200).json({ message: "Delete successfull" }); // Trả về kết quả là json với message là Delete successfull
+    res.status(200).json({ message: "Delete successfull", product }); // Trả về kết quả là json với message là Delete successfull
   } catch (err) {
-    if (!err.httpStatusCode) {
-      err.httpStatusCode = 500;
-    }
-    next(err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 module.exports = {
-  addProduct,
   postProduct,
   getProduct,
   getEditProduct,

@@ -15,7 +15,7 @@ const getPayment = (req, res, next) => {
   const userId = req.body.userId; // Lấy id của user
   if (userId.toString() !== req.user._id.toString()) {
     // Nếu id của user không trùng với id của session user thì chuyển hướng về trang chủ
-    return res.redirect("/"); // Chuyển hướng về trang chủ
+    return res.status(403).json({ message: "Forbiden" });
   }
   // Ngược lại thì tiếp tục thực hiện thanh toán
   process.env.TZ = "Asia/Ho_Chi_Minh"; // Đặt múi giờ
@@ -74,21 +74,21 @@ const getPayment = (req, res, next) => {
 
 // CHUYỂN HƯỚNG TỚI TRANG TRẢ VỀ KẾT QUẢ THANH TOÁN //
 const VNPayReturn = async (req, res, next) => {
-  let vnp_Params = req.query; // Lấy các tham số trả về từ VNPAY (đã được chuyển đổi thành object) - Để chuẩn bị kiểm tra mã hóa
-  let secureHash = vnp_Params["vnp_SecureHash"]; // Lấy tham số mã hóa từ VNPAY
-  delete vnp_Params["vnp_SecureHash"]; // Xóa tham số mã hóa để chuẩn bị kiểm tra mã hóa
-  delete vnp_Params["vnp_SecureHashType"]; // Xóa tham số loại mã hóa (SHA256 hoặc SHA512) - Vì chúng ta đã định nghĩa mã hóa là SHA512 ở config
-
-  vnp_Params = sortObject(vnp_Params); // Sắp xếp các tham số theo thứ tự a-z (trước khi kiểm tra mã hóa)
-
-  let tmnCode = config.vnp_TmnCode; // Mã website tại VNPAY
-  let secretKey = config.vnp_HashSecret; // Chuỗi bí mật
-
-  let signData = querystring.stringify(vnp_Params, { encode: false }); // Chuyển đổi object thành chuỗi query (không encode) - Để chuẩn bị mã hóa dữ liệu sau này
-  let hmac = crypto.createHmac("sha512", secretKey); // Tạo 1 object để mã hóa dữ liệu (SHA512)
-  let signed = hmac.update(new Buffer.from(signData, "utf-8")).digest("hex"); // Mã hóa dữ liệu
-
   try {
+    let vnp_Params = req.query; // Lấy các tham số trả về từ VNPAY (đã được chuyển đổi thành object) - Để chuẩn bị kiểm tra mã hóa
+    let secureHash = vnp_Params["vnp_SecureHash"]; // Lấy tham số mã hóa từ VNPAY
+    delete vnp_Params["vnp_SecureHash"]; // Xóa tham số mã hóa để chuẩn bị kiểm tra mã hóa
+    delete vnp_Params["vnp_SecureHashType"]; // Xóa tham số loại mã hóa (SHA256 hoặc SHA512) - Vì chúng ta đã định nghĩa mã hóa là SHA512 ở config
+
+    vnp_Params = sortObject(vnp_Params); // Sắp xếp các tham số theo thứ tự a-z (trước khi kiểm tra mã hóa)
+
+    let tmnCode = config.vnp_TmnCode; // Mã website tại VNPAY
+    let secretKey = config.vnp_HashSecret; // Chuỗi bí mật
+
+    let signData = querystring.stringify(vnp_Params, { encode: false }); // Chuyển đổi object thành chuỗi query (không encode) - Để chuẩn bị mã hóa dữ liệu sau này
+    let hmac = crypto.createHmac("sha512", secretKey); // Tạo 1 object để mã hóa dữ liệu (SHA512)
+    let signed = hmac.update(new Buffer.from(signData, "utf-8")).digest("hex"); // Mã hóa dữ liệu
+
     if (secureHash === signed && vnp_Params["vnp_ResponseCode"] == "00") {
       // Nếu mã hóa trả về từ VNPAY trùng với mã hóa của chúng ta
       //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
@@ -113,9 +113,10 @@ const VNPayReturn = async (req, res, next) => {
         },
         date: new Date().toLocaleString(),
       });
-      const result = await order.save(); // Lưu order vào database
-      const clearCart = await req.user.clearCart(); // Xoá cart của user
-      res.render("./user/checkout", {
+      await order.save(); // Lưu order vào database
+      await req.user.clearCart(); // Xoá cart của user
+      res.status(308).json({
+        message: "Payment Success",
         title: "Payment Success",
         path: "/checkout",
         hasFooter: false,
@@ -123,7 +124,8 @@ const VNPayReturn = async (req, res, next) => {
       }); // Trả về trang vnpayReturn và truyền mã code trả về từ VNPAY (GD thành công))
     } else {
       // Nếu mã hóa trả về từ VNPAY không trùng với mã hóa của chúng ta
-      res.render("./user/checkout", {
+      res.status(404).json({
+        message: "Payment Failed",
         title: "Payment Failed",
         path: "/checkout",
         hasFooter: false,
@@ -131,10 +133,7 @@ const VNPayReturn = async (req, res, next) => {
       }); // Trả về trang vnpayReturn và truyền mã code = 97 (GD thất bại)
     }
   } catch (err) {
-    if (!err.httpStatusCode) {
-      err.httpStatusCode = 500;
-    }
-    next(err);
+    res.status(500).json({ message: "Server Error" });
   }
 };
 

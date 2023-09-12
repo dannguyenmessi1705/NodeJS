@@ -8,8 +8,6 @@ const ProtectRoute = require("../../middleware/auth");
 // {VALIDATION INPUT} //
 const { check } = require("express-validator");
 
-route.get("/add-product", ProtectRoute, adminController.addProduct);
-
 // {VALIDATION INPUT} //
 route.post(
   "/add-product",
