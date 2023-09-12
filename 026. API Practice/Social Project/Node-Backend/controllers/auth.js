@@ -33,7 +33,7 @@ const authController = {
         const data = errors.array();
         throw err;
       }
-      const hashPassword = await bcrypt.hash(password, 12);
+      const hashPassword = bcrypt.hashSync(password, 12);
       const user = new User({
         email,
         password: hashPassword,
@@ -74,7 +74,7 @@ const authController = {
         error.statusCode = 404;
         throw error;
       }
-      const isEqual = await bcrypt.compare(password, user.password);
+      const isEqual = bcrypt.compareSync(password, user.password);
       if (!isEqual) {
         const error = new Error("Wrong password!");
         error.statusCode = 401;

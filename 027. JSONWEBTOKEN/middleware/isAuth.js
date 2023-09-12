@@ -16,8 +16,9 @@ const ProtectRoute = async (req, res, next) => {
         req.session.accessToken = newAccessToken; // Gán accessToken mới vào session
         req.session.refreshToken = newRefreshToken; // Gán refreshToken cũ vào session
         req.session.isLogin = true; // Gán isLogin = true để đánh dấu là đã đăng nhập
-        await req.session.save(); // Lưu lại session
-        console.log("New accessToken generated");
+        req.session.save(() => {
+          console.log("New accessToken generated");
+        }); // Lưu lại session
       } else {
         console.log("RefreshToken expired");
         return res.redirect("/login");

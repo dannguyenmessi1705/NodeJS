@@ -43,7 +43,7 @@ app.use(
   session({
     secret: "Nguyen Di Dan", // Chuỗi bí mật để mã hoá session
     resave: false, // resave: false => Không lưu lại session nếu không có sự thay đổi (Không cần thiết)
-    saveUninitialized: false, // saveUninitialized: false => Không lưu lại session nếu không có sự thay đổi (Không cần thiết)
+    saveUninitialized: true, // saveUninitialized: true => Lưu session ngay cả khi chưa có sự thay đổi  
     // resave vs saveUninitialized: https://stackoverflow.com/questions/40381401/when-use-saveuninitialized-and-resave-in-express-session
     store: storeDB, // Lưu session vào database
     // Ngoài ra có thể tuỳ chỉnh thêm cho cookie: secure, path, signed,... ở cấu hình session

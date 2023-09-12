@@ -52,7 +52,7 @@ const postAuth = async (req, res, next) => {
       req.flash("errorLogin", "Incorrect email or password!"); // Tạo flash message có tên là "error", giá trị là "Email or Password does not match!"
       return res.redirect("/login"); // Chuyển hướng về trang login
     }
-    const checkPass = await bcrypt.compare(password, user.password); // So sánh password nhập vào với password đã mã hoá trong database
+    const checkPass = bcrypt.compareSync(password, user.password); // So sánh password nhập vào với password đã mã hoá trong database
     if (checkPass) {
       // {FLASH MESSAGE} //
       req.flash("successLogin", "Login successfully!"); // Tạo flash message có tên là "success", giá trị là "Login successfully!"
@@ -60,8 +60,9 @@ const postAuth = async (req, res, next) => {
       req.session.isLogin = true; // Tạo Session có tên là "isLogin", giá trị là "true"
       req.session.user = user; // Tạo Session có tên là "user", giá trị là user vừa tìm được
       // req.session.cookie.maxAge = 3000; // Thời gian tồn tại của Session là 3s
-      await req.session.save(); // Lưu Session
-      res.redirect("/"); // Sau khi lưu Session thì mới chuyển hướng sang trang chủ (vì lưu Session là bất đồng bộ)
+      req.session.save(() => {
+        res.redirect("/"); // Sau khi lưu Session thì mới chuyển hướng sang trang chủ (vì lưu Session là bất đồng bộ)
+      }); // Lưu Session
     } else {
       // {FLASH MESSAGE} // Nếu password không trùng khớp
       req.flash("errorLogin", "Incorrect email or password!"); // Tạo flash message có tên là "error", giá trị là "Email or Password does not match!"
