@@ -82,8 +82,9 @@ const postAuth = async (req, res, next) => {
 // LOGOUT => SESSION SẼ XOÁ
 const postLogout = async (req, res, next) => {
   try {
-    await req.session.destroy(); // Xoá Session
-    res.status(200).json({ message: "Logout successfully" });
+    req.session.destroy(() => {
+      res.status(200).json({ message: "Logout successfully" });
+    }); // Xoá Session
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -259,7 +260,6 @@ const postUpdatePassword = async (req, res, next) => {
 
 // {CSRF TOKEN} // Lấy token từ server và gửi về client
 const getCsrfToken = (req, res, next) => {
-  console.log(req.aaa)
   res.json({ csrfToken: res.locals.csrfToken }); // Trả về token vừa tạo ở middleware
 };
 
