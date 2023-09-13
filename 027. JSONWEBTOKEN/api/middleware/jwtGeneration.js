@@ -12,7 +12,7 @@ const generateAccessToken = (payload) => {
 // Tạo refreshToken, payload là thông tin của user (lấy id của user để tạo token)
 const generateRefreshToken = (payload) => {
   try {
-    const refreshToken = jwt.sign(payload, "nguyendidan", { expiresIn: "7d" }); // expiresIn: '7d' - thời gian sống của token là 7 ngày, sau 7 ngày token sẽ hết hạn, dùng để tạo ra accesstoken khi hết hạn
+    const refreshToken = jwt.sign(payload, "nguyendidan", { expiresIn: "3d" }); // expiresIn: '7d' - thời gian sống của token là 7 ngày, sau 7 ngày token sẽ hết hạn, dùng để tạo ra accesstoken khi hết hạn
     return refreshToken;
   } catch (error) {
     console.log(error);
