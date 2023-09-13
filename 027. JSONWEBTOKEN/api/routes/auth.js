@@ -109,4 +109,7 @@ route.post(
   getAuth.postUpdatePassword
 );
 
+// {CSRF} Lấy token từ server và gửi về client
+route.get("/csrf-token", getAuth.getCsrfToken);
+
 module.exports = route;
