@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const genJWT = require("./jwtGeneration");
 const ProtectRoute = async (req, res, next) => {
   try {
-    let accessToken = req.session.accessToken; // Lấy token từ session
+    let accessToken = req.session.accessToken || req.get("Authorization").split(" ")[1]; // Lấy token từ session
     const decoded1 = jwt.verify(accessToken, "nguyendidan"); // Giải mã token
     next();
   } catch (error) {

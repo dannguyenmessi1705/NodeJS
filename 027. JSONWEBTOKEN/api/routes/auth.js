@@ -23,7 +23,7 @@ route.post(
   getAuth.postAuth
 );
 
-route.delete("/logout", ProtectRoute, getAuth.postLogout);
+route.delete("/logout", ProtectRoute, verifyCSRFToken, getAuth.postLogout);
 
 // {VALIDATION INPUT} //
 route.post(
