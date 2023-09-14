@@ -31,7 +31,6 @@ const getIndex = async (req, res, next) => {
       message: "Get products successfully",
       title: "Home",
       path: "/",
-      hasFooter: true,
       successLogin: successLogin, // Truyền giá trị Flash vào biến successLogin để hiển thị thông báo
       // {PAGINATION} //
       lastPage: Math.ceil(numProducts / productOfPage), // Tính số lượng trang
@@ -57,8 +56,7 @@ const getAllProduct = async (req, res, next) => {
     res.status(200).json({
       message: "Get all products successfully",
       title: "Product",
-      path: "/product",
-      hasFooter: true,
+      path: "/products",
       items: products,
     });
   } catch (error) {
@@ -78,7 +76,6 @@ const getDetail = async (req, res, next) => {
       message: "Get product detail successfully",
       title: "Product Detail",
       path: "/product",
-      hasFooter: true,
       item: product,
     });
   } catch (error) {
@@ -88,7 +85,9 @@ const getDetail = async (req, res, next) => {
 
 // {POST CART USER BY MONGOOSE} //
 const postCart = async (req, res, next) => {
-  const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
+  // const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
+  const ID = req.params.productID; // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
+  // API //
   try {
     const product = await Product.findById(ID); // Tìm product có _id = ID
     if (!product) {
@@ -120,7 +119,6 @@ const getCart = async (req, res, next) => {
       message: "Get cart successfully",
       title: "Cart",
       path: "/cart",
-      hasFooter: false,
       totalPrice: totalPrice.toFixed(2),
       userId: req.user._id,
       items: products,
@@ -132,7 +130,9 @@ const getCart = async (req, res, next) => {
 
 // {DELETE CART USER BY MONGOOSE} //
 const deleteCart = async (req, res, next) => {
-  const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
+  // API //
+  const ID = req.params.productID; // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
+  // const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
   try {
     const product = await Product.findById(ID); // Tìm product có _id = ID
     if (!product) {
@@ -183,16 +183,8 @@ const postOrder = async (req, res, next) => {
 
 // {GET ORDER BY USER IN MONGOOSE} //
 const getOrder = async (req, res, next) => {
-  const curPage = req.query.page || 1; // Lấy giá trị page từ URL, nếu không có thì mặc định là 1
-  let numProducts; // Tạo biến để lưu số lượng sản phẩm
   try {
-    const numOfProducts = await Order.countDocuments({
-      "user.userId": req.user._id,
-    }); // Đếm số lượng order có userId = userId của user hiện tại
-    numProducts = +numOfProducts; // Lưu số lượng sản phẩm vào biến numProducts
     const orders = await Order.find({ "user.userId": req.user._id }) // Tìm kiếm order có userId = userId của user hiện tại
-      .skip((curPage - 1) * itemOfOrder) // Bỏ qua các order trước order đầu tiên của trang hiện tại
-      .limit(itemOfOrder); // Giới hạn số lượng order trên 1 trang
     // orders = [{ {products: {}, quantity}, user{}}, {}]
     if (!orders) {
       return res.status(404).json({ message: "Orders not found" });
@@ -201,16 +193,10 @@ const getOrder = async (req, res, next) => {
       message: "Get order successfully",
       title: "Order",
       path: "/order",
-      hasFooter: false,
-      lastPage: Math.ceil(numProducts / itemOfOrder), // Tính số lượng trang
-      curPage: curPage, // Trang hiện tại
-      nextPage: curPage + 1, // Trang tiếp theo
-      prevPage: curPage - 1, // Trang trước đó
-      hasPrevPage: curPage > 1, // Kiểm tra xem có trang trước đó hay không
-      hasNextPage: curPage < Math.ceil(numProducts / itemOfOrder), // Kiểm tra xem có trang tiếp theo hay không
       orders: orders,
     });
   } catch (error) {
+    console.log(123);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -220,9 +206,9 @@ const getOrder = async (req, res, next) => {
 const getInvoice = async (req, res, next) => {
   const orderId = req.params.orderId; // Lấy route động :orderId bên routes (URL) - VD: http://localhost:3000/order/5f9b7b3b3b3b3b3b3b3b3b3b => orderId = 5f9b7b3b3b3b3b3b3b3b3b3b
   try {
-    const orders = await Order.findById(orderId); // Tìm order có _id = orderId
+    const order = await Order.findById(orderId); // Tìm order có _id = orderId
     // order = {products: [{product: {}, quantity}], user: {}}
-    if (!orders) {
+    if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
     if (order.user.userId.toString() !== req.user._id.toString()) {

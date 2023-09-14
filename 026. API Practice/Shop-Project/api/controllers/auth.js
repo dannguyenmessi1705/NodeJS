@@ -1,6 +1,9 @@
 // {ADDING VALIDATION} // Nhập module validationResult dùng để xác thực dữ liệu đầu vào
 const { validationResult } = require("express-validator");
 
+// {JSONWEBTOKEN} //
+const genJWT = require("../middleware/jwtGeneration"); // Nhập module jwtGeneration
+
 // Tạo 1 bit random ngẫu nhiên => phục vụ cho việc tạo token
 const crypto = require("crypto");
 // {SENDING EMAIL AFTER SIGNUP} //
@@ -36,7 +39,6 @@ const postAuth = async (req, res, next) => {
         message: error.msg,
         title: "Login",
         path: "/login",
-        hasFooter: false,
         errorType: error.path, // Lưu lại lỗi thuộc trường nào
         oldInput: {
           email,
@@ -51,13 +53,23 @@ const postAuth = async (req, res, next) => {
     const checkPass = bcrypt.compareSync(password, user.password); // So sánh password nhập vào với password đã mã hoá trong database
     if (checkPass) {
       // Nếu password trùng khớp
+      const accessToken = genJWT.generateAccessToken({
+        userId: user._id.toString(),
+      }); // Tạo accessToken
+      const refreshToken = genJWT.generateRefreshToken({
+        userId: user._id.toString(),
+      }); // Tạo refreshToken
+      req.session.accessToken = accessToken; // Lưu accessToken vào session
+      req.session.refreshToken = refreshToken; // Lưu refreshToken vào session
       req.session.isLogin = true; // Tạo Session có tên là "isLogin", giá trị là "true"
       req.session.user = user; // Tạo Session có tên là "user", giá trị là user vừa tìm được
       // req.session.cookie.maxAge = 3000; // Thời gian tồn tại của Session là 3s
-      await req.session.save(() => {
-        res
-          .status(200)
-          .json({ message: "Login successfully", userId: user._id.toString() });
+      req.session.save(() => {
+        res.status(200).json({
+          message: "Login successfully",
+          userId: user._id.toString(),
+          accessToken: accessToken,
+        });
       }); // Lưu Session
     } else {
       res.status(401).json({ message: "Email or Password is incorrect!" });
@@ -95,7 +107,6 @@ const postSignup = async (req, res, next) => {
         message: error.msg,
         title: "Sign Up",
         path: "/signup",
-        hasFooter: false,
         errorType: error.path, // xác định trường nào  lõi cần sửa
         oldInput: { username, email, password, re_password }, // Lưu lại các giá trị vừa nhập
       });
@@ -131,8 +142,8 @@ const postSignup = async (req, res, next) => {
           },
         ],
       })
-      .then((res) =>
-        res.status(201).json({ message: "Signup successfully", email: res })
+      .then((result) =>
+        res.status(201).json({ message: "Signup successfully", result: result })
       ); // Nếu gửi mail thành công
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -154,7 +165,6 @@ const postReset = async (req, res, next) => {
         requestSuccess: undefined,
         errorType: error.path,
         oldInput: email,
-        hasFooter: false,
       });
     } else {
       const user = await User.findOne({ email: email }); // Tìm kiếm 1 user trong collection có email là email
@@ -178,17 +188,45 @@ const postReset = async (req, res, next) => {
           from: "didannguyen@5dulieu.com", // Địa chỉ email của người gửi
           to: email, // Địa chỉ email của người nhận
           subject: "Reset Password", // Tiêu đề mail
-          html: `<h2>Click this <a href="${http}/reset/${token}">link</a> to reset your password</h2>`, // Nội dung mail
+          html: `<h2>Click this <a href="${http}/api/reset/${token}">link</a> to reset your password</h2>`, // Nội dung mail
         }; // Tạo 1 mail
         transporter
           .sendMail(data) // Gửi mail
-          .then((res) => {
+          .then((result) => {
             res
               .status(201)
-              .json({ message: "Reset password successfully", email: res }); // Trả về thành công
+              .json({
+                message: "Sent email reset password successfully",
+                token: token,
+                result: result,
+              }); // Trả về thành công
           });
       });
     }
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// {UPDATE PASSWORD} //
+const getUpdatePassword = async (req, res, next) => {
+  const token = req.params.tokenReset; // Lấy token từ route đến trang update password (http://localhost:3000/reset/:tokenReset)
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token, // Tìm kiếm 1 user trong collection có resetPasswordToken là token
+      resetPasswordExpires: { $gt: Date.now() }, // Và resetPasswordExpires > Date.now()
+    });
+    if (!user) {
+      // Nếu không tìm thấy
+      return res.status(404).json({ message: "User not found" }); // Trả về lỗi
+    }
+    // Nếu tìm thấy
+    res.status(200).json({
+      path: "/update-password",
+      title: "Update Password",
+      passwordToken: token,
+      userId: user._id.toString(),
+    }); // Render ra trang update password
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -215,7 +253,6 @@ const postUpdatePassword = async (req, res, next) => {
       // Nếu tìm thấy
       return res.status(422).json({
         path: "/update-password",
-        hasFooter: false,
         title: "Update Password",
         passwordToken: token,
         userId: user._id.toString(),
@@ -248,10 +285,18 @@ const postUpdatePassword = async (req, res, next) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// {CSRF TOKEN} // Lấy token từ server và gửi về client
+const getCsrfToken = (req, res, next) => {
+  res.json({ csrfToken: res.locals.csrfToken }); // Trả về token vừa tạo ở middleware
+};
+
 module.exports = {
   postAuth,
   postLogout,
   postSignup,
   postReset,
+  getUpdatePassword,
   postUpdatePassword,
+  getCsrfToken,
 };
