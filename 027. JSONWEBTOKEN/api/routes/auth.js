@@ -10,6 +10,7 @@ const ProtectRoute = require("../middleware/isAuth");
 // {VALIDATION INPUT LOGIN} //
 route.post(
   "/login",
+  verifyCSRFToken,
   [
     check("email")
       .normalizeEmail()

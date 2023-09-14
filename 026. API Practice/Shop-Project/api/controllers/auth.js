@@ -70,7 +70,7 @@ const postAuth = async (req, res, next) => {
 // LOGOUT => SESSION SẼ XOÁ
 const postLogout = async (req, res, next) => {
   try {
-    await req.session.destroy(); // Xoá Session
+    req.session.destroy(); // Xoá Session
     res.status(200).json({ message: "Logout successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });

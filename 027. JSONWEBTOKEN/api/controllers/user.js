@@ -55,7 +55,6 @@ const getAllProduct = async (req, res, next) => {
     }
     res.status(200).json({
       message: "Get all products successfully",
-      csrfToken: res.locals.csrfToken,
       title: "Product",
       path: "/products",
       items: products,
@@ -193,6 +192,7 @@ const getOrder = async (req, res, next) => {
       orders: orders,
     });
   } catch (error) {
+    console.log(123);
     res.status(500).json({ message: "Server error" });
   }
 };
