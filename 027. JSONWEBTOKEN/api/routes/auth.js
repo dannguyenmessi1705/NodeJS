@@ -101,7 +101,9 @@ route.post(
   getAuth.postReset
 );
 
-route.put(
+route.get("/reset/:tokenReset", getAuth.getUpdatePassword);
+
+route.patch(
   "/update-password",
   verifyCSRFToken,
   // {VALIDATION INPUT} //

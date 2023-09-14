@@ -85,7 +85,9 @@ const getDetail = async (req, res, next) => {
 
 // {POST CART USER BY MONGOOSE} //
 const postCart = async (req, res, next) => {
-  const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
+  // const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
+  const ID = req.params.productID; // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
+  // API //
   try {
     const product = await Product.findById(ID); // Tìm product có _id = ID
     if (!product) {
@@ -128,7 +130,9 @@ const getCart = async (req, res, next) => {
 
 // {DELETE CART USER BY MONGOOSE} //
 const deleteCart = async (req, res, next) => {
-  const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
+  // API //
+  const ID = req.params.productID; // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
+  // const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
   try {
     const product = await Product.findById(ID); // Tìm product có _id = ID
     if (!product) {
@@ -202,9 +206,9 @@ const getOrder = async (req, res, next) => {
 const getInvoice = async (req, res, next) => {
   const orderId = req.params.orderId; // Lấy route động :orderId bên routes (URL) - VD: http://localhost:3000/order/5f9b7b3b3b3b3b3b3b3b3b3b => orderId = 5f9b7b3b3b3b3b3b3b3b3b3b
   try {
-    const orders = await Order.findById(orderId); // Tìm order có _id = orderId
+    const order = await Order.findById(orderId); // Tìm order có _id = orderId
     // order = {products: [{product: {}, quantity}], user: {}}
-    if (!orders) {
+    if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
     if (order.user.userId.toString() !== req.user._id.toString()) {
