@@ -37,13 +37,15 @@ const ProtectRoute = async (req, res, next) => {
           }); // Trả về accessToken mới
         }); // Lưu lại session
       } catch (error) {
-        res.status(401).json({ message: "RefreshToken Invalid" }); // Nếu không xác thực được refreshToken thì trả về lỗi
-        req.session.destroy(); // Xóa session để đăng xuất
+        req.session.destroy(() => {
+          res.status(401).json({ message: "RefreshToken Invalid" }); // Nếu không xác thực được refreshToken thì trả về lỗi
+        }); // Xóa session để đăng xuất
       }
     } else {
       // Nếu accessToken không hợp lệ => xóa session và chuyển hướng về trang login
-      res.status(401).json({ message: "AccessToken Invalid" }); // Nếu không xác thực được accessToken thì trả về lỗi
-      req.session.destroy(); // Xóa session để đăng xuất
+      req.session.destroy(() => {
+        res.status(401).json({ message: "AccessToken Invalid" }); // Nếu không xác thực được accessToken thì trả về lỗi
+      }); // Xóa session để đăng xuất
     }
   }
 };

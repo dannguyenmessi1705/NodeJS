@@ -70,8 +70,9 @@ const postAuth = async (req, res, next) => {
 // LOGOUT => SESSION SẼ XOÁ
 const postLogout = async (req, res, next) => {
   try {
-    req.session.destroy(); // Xoá Session
-    res.status(200).json({ message: "Logout successfully" });
+    req.session.destroy(() => {
+      res.status(200).json({ message: "Logout successfully" });
+    }); // Xoá Session
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -239,12 +240,10 @@ const postUpdatePassword = async (req, res, next) => {
     resetUser.resetPasswordToken = null; // Xóa resetPasswordToken
     resetUser.resetPasswordExpires = null; // Xóa resetPasswordExpires
     await resetUser.save(); // Lưu user
-    res
-      .status(201)
-      .json({
-        message: "Update password successfully",
-        userId: user._id.toString(),
-      }); // Trả về thành công
+    res.status(201).json({
+      message: "Update password successfully",
+      userId: user._id.toString(),
+    }); // Trả về thành công
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
