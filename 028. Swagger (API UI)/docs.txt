@@ -1,8 +1,16 @@
 Source code lấy từ folder 27. JSONWEBTOKEN
 Folder 28. Swagger nói về cách tạo API document cho các API của mình
 -> Sử dụng swagger-ui-express để tạo API document cho các API của mình
--> Sử dụng sưagger-autogen để tự động tạo API document cho các API của mình (bước đầu tạo rồi sau đó chỉnh sửa lại cho phù hợp)
+-> Sử dụng swagger-autogen (chạy bằng node swagger.js) để tự động tạo API document cho các API của mình (bước đầu tạo rồi sau đó chỉnh sửa lại cho phù hợp)
 -> Nếu không dùng (swagger-autogen) thì phải tạo các file swagger.json, swagger.yaml, swagger.js, swagger.yml để tạo API document cho các API của mình, có thể viết comment vào các route, modal bằng /** */ để tạo API document cho các API của mình
+
+1, Thiết lập các thông số cơ bản cho file swagger.js (swagger-autogen) ("./api/swagger.js")
+  -> Vào từng controller để chỉnh sửa lại các thông số cho phù hợp với các API của mình ("./api/controllers/...js")
+  -> Trỏ đường dẫn đến các file controller của mình (mặc định đường dẫn bắt đầu từ thư mục gốc của project)
+  -> sau đó chạy lệnh "node swagger.js" để tạo file swagger_output.json
+  -> sau đó chỉnh sửa lại file swagger_output.js cho phù hợp
+
+2, Dùng swagger-ui-express để tạo API document cho các API của mình ("server.js")
 
 
                                 CÁC LOẠI THẺ ĐỂ TEST GIAO DỊCH

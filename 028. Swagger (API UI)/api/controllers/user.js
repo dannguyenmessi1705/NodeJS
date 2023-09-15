@@ -13,6 +13,10 @@ const itemOfOrder = 10;
 
 // {GET ALL PRODUCTS BY MONGOOSE} //
 const getIndex = async (req, res, next) => {
+  /* #swagger.tags = ['User']
+     #swagger.description = 'Endpoint to get products follow pagination'
+     #swagger.parameters['page'] = { description: 'Page number', type: 'integer' }
+  */
   const [successLogin] = req.flash("successLogin"); // Lấy giá trị Flash có tên là "successLogin"
   /// {PAGINATION} ///
   const curPage = +req.query.page || 1; // Lấy giá trị page từ URL, nếu không có thì mặc định là 1
@@ -48,6 +52,9 @@ const getIndex = async (req, res, next) => {
 
 // {GET ALL PRODUCTS BY MONGOOSE} //
 const getAllProduct = async (req, res, next) => {
+  /* #swagger.tags = ['User']
+      #swagger.description = 'Endpoint to get all products'
+  */
   try {
     const products = await Product.find();
     if (!products) {
@@ -66,6 +73,10 @@ const getAllProduct = async (req, res, next) => {
 
 // {GET PRODUCT DETAIL BY MONGOOSE} //
 const getDetail = async (req, res, next) => {
+  /* #swagger.tags = ['User']
+     #swagger.description = 'Endpoint to get product detail'
+     #swagger.parameters['productID'] = { description: 'Product ID', type: 'string' }
+  */
   const ID = req.params.productID; // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
   try {
     const product = await Product.findById(ID);
@@ -85,6 +96,10 @@ const getDetail = async (req, res, next) => {
 
 // {POST CART USER BY MONGOOSE} //
 const postCart = async (req, res, next) => {
+  /* #swagger.tags = ['User']
+     #swagger.description = 'Endpoint to add product to cart'
+     #swagger.parameters['productID'] = { description: 'Product ID', type: 'string' }
+  */
   // const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
   const ID = req.params.productID; // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
   // API //
@@ -104,6 +119,9 @@ const postCart = async (req, res, next) => {
 
 // {GET CART USER BY MONGOOSE} //
 const getCart = async (req, res, next) => {
+  /* #swagger.tags = ['User']
+     #swagger.description = 'Endpoint to get cart'
+  */
   try {
     const user = await req.user.populate("cart.items.productId"); // Lấy tất cả dữ liệu user, populate để lấy thêm dữ liệu từ collection products vào thuộc tính productId của cart
     if (!user) {
@@ -130,6 +148,10 @@ const getCart = async (req, res, next) => {
 
 // {DELETE CART USER BY MONGOOSE} //
 const deleteCart = async (req, res, next) => {
+  /* #swagger.tags = ['User']
+     #swagger.description = 'Endpoint to delete product in cart'
+     #swagger.parameters['productID'] = { description: 'Product ID', type: 'string' }
+  */
   // API //
   const ID = req.params.productID; // Lấy route động :productID bên routes (URL) - VD: http://localhost:3000/product/0.7834371053383911 => ID = 0.7834371053383911
   // const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
@@ -149,6 +171,9 @@ const deleteCart = async (req, res, next) => {
 
 // {POST ORDER BY USER IN MONGOOSE}
 const postOrder = async (req, res, next) => {
+  /* #swagger.tags = ['User']
+    #swagger.description = 'Endpoint to add order'
+  */
   const currentDate = new Date();
   const options = { timeZone: "Etc/GMT+7" };
   const localDate = currentDate.toLocaleString("en-US", options);
@@ -183,8 +208,11 @@ const postOrder = async (req, res, next) => {
 
 // {GET ORDER BY USER IN MONGOOSE} //
 const getOrder = async (req, res, next) => {
+  /* #swagger.tags = ['User']
+     #swagger.description = 'Endpoint to get order'
+  */
   try {
-    const orders = await Order.find({ "user.userId": req.user._id }) // Tìm kiếm order có userId = userId của user hiện tại
+    const orders = await Order.find({ "user.userId": req.user._id }); // Tìm kiếm order có userId = userId của user hiện tại
     // orders = [{ {products: {}, quantity}, user{}}, {}]
     if (!orders) {
       return res.status(404).json({ message: "Orders not found" });
@@ -204,6 +232,10 @@ const getOrder = async (req, res, next) => {
 // {DOWNLOAD THE INVOICE} //
 // {GET INVOICE} // http:.../order/orderID
 const getInvoice = async (req, res, next) => {
+  /* #swagger.tags = ['User']
+     #swagger.description = 'Endpoint to get invoice'
+     #swagger.parameters['orderId'] = { description: 'Order ID', type: 'string' }
+  */
   const orderId = req.params.orderId; // Lấy route động :orderId bên routes (URL) - VD: http://localhost:3000/order/5f9b7b3b3b3b3b3b3b3b3b3b => orderId = 5f9b7b3b3b3b3b3b3b3b3b3b
   try {
     const order = await Order.findById(orderId); // Tìm order có _id = orderId
