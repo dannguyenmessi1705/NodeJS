@@ -98,6 +98,10 @@ const getDetail = async (req, res, next) => {
 const postCart = async (req, res, next) => {
   /* #swagger.tags = ['User']
      #swagger.description = 'Endpoint to add product to cart'
+     #swagger.security = [{
+       "csrfToken": [],
+        "bearAuth": []
+    }]
      #swagger.parameters['productID'] = { description: 'Product ID', type: 'string' }
   */
   // const ID = req.body.id; // ".id" vì id được đặt trong thuộc tính name của thẻ input đã được hidden
@@ -121,6 +125,9 @@ const postCart = async (req, res, next) => {
 const getCart = async (req, res, next) => {
   /* #swagger.tags = ['User']
      #swagger.description = 'Endpoint to get cart'
+     #swagger.security = [{
+      "bearAuth": []
+    }]
   */
   try {
     const user = await req.user.populate("cart.items.productId"); // Lấy tất cả dữ liệu user, populate để lấy thêm dữ liệu từ collection products vào thuộc tính productId của cart
@@ -150,6 +157,10 @@ const getCart = async (req, res, next) => {
 const deleteCart = async (req, res, next) => {
   /* #swagger.tags = ['User']
      #swagger.description = 'Endpoint to delete product in cart'
+     #swagger.security = [{
+        "csrfToken": [],
+        "bearAuth": []
+    }]
      #swagger.parameters['productID'] = { description: 'Product ID', type: 'string' }
   */
   // API //
@@ -173,6 +184,10 @@ const deleteCart = async (req, res, next) => {
 const postOrder = async (req, res, next) => {
   /* #swagger.tags = ['User']
     #swagger.description = 'Endpoint to add order'
+    #swagger.security = [{
+      "csrfToken": [],
+      "bearAuth": []
+    }]
   */
   const currentDate = new Date();
   const options = { timeZone: "Etc/GMT+7" };
@@ -210,6 +225,9 @@ const postOrder = async (req, res, next) => {
 const getOrder = async (req, res, next) => {
   /* #swagger.tags = ['User']
      #swagger.description = 'Endpoint to get order'
+     #swagger.security = [{
+      "bearAuth": []
+    }]
   */
   try {
     const orders = await Order.find({ "user.userId": req.user._id }); // Tìm kiếm order có userId = userId của user hiện tại
@@ -234,6 +252,9 @@ const getOrder = async (req, res, next) => {
 const getInvoice = async (req, res, next) => {
   /* #swagger.tags = ['User']
      #swagger.description = 'Endpoint to get invoice'
+     #swagger.security = [{
+      "bearAuth": []
+    }]
      #swagger.parameters['orderId'] = { description: 'Order ID', type: 'string' }
   */
   const orderId = req.params.orderId; // Lấy route động :orderId bên routes (URL) - VD: http://localhost:3000/order/5f9b7b3b3b3b3b3b3b3b3b3b => orderId = 5f9b7b3b3b3b3b3b3b3b3b3b

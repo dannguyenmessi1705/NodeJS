@@ -13,42 +13,58 @@ const doc = {
     version: "1.0.0",
     title: "API for SHOP Website",
     description:
-      "This is a REST API application made with Express and documented with Swagger",
+      "This is a REST API application made by ZDiDane for SHOP Website. \n\nIf you want to use this API, please get csrfToken first, then add csrfToken to header of request. \n\nIf you want to use API for Admin, please add bearAuth to header of request.",
+      "contact": {
+        "name": "ZDiDane",
+        "email": "didannguyen17@gmail.com",
+        "url": "https://didan.id.vn",
+      },
   },
   servers: [
     {
-      url: "http://localhost:3000/api"
+      url: "http://localhost:3000/api",
     },
     {
-      url: "https://localhost:3000/api"
+      url: "https://localhost:3000/api",
     },
     {
-      url: "http://shop.didan.id.vn/api"
+      url: "http://shop.didan.id.vn/api",
     },
     {
-      url: "https://shop.didan.id.vn/api"
-    }
+      url: "https://shop.didan.id.vn/api",
+    },
   ],
   tags: [
     {
-      name: "User",
-      description: "API for User in the system",
+      name: "Auth",
+      description: "API for Auth in the system",
     },
     {
       name: "Admin",
       description: "API for Admin in the system",
     },
     {
-      name: "Payment",
-      description: "API for Payment in the system",
+      name: "User",
+      description: "API for User in the system",
     },
     {
-      name: "Auth",
-      description: "API for Auth in the system",
+      name: "Payment",
+      description: "API for Payment in the system",
     },
   ], // Thêm các tags từ Postman collection nếu cần
   schemes: ["http", "https"],
   components: {
+    securitySchemes: {
+      csrfToken: {
+        type: "apiKey",
+        in: "header",
+        name: "X-CSRF-Token",
+      },
+      bearAuth: {
+        type: "http",
+        scheme: "bearer",
+      }
+    }, // Thêm các securitySchemes để có quyền truy cập vào các API
     schemas: {
       SignUp: {
         $name: "anv",
@@ -61,7 +77,7 @@ const doc = {
         $password: "123456",
       },
       Reset: {
-        $email: "anv@gmai.com"
+        $email: "anv@gmai.com",
       },
       Product: {
         $name: "Iphone 12",
@@ -70,11 +86,13 @@ const doc = {
         $description: "A smartphone from Apple",
       },
     },
-  },
-  // Thêm các components từ Postman collection nếu cần
+  }, // Thêm các schemas để có thể sử dụng lại trong các API
 };
 const options = {
   multipart: true,
 };
 
-SwaggerAutogen(outputFile, endpointsFiles, doc, options); // Tạo file swagger_output.json từ file orders.js
+SwaggerAutogen(outputFile, endpointsFiles, doc, options)
+// .then(() => {
+//   require("../server.js"); // Đặt file chạy server ở đây (chạy sswagger.js trước rồi mới chạy server.js) => thay cả trong package.json
+// }); // Tạo file swagger_output.json từ file orders.js

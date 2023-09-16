@@ -3,7 +3,12 @@
   "info": {
     "version": "1.0.0",
     "title": "API for SHOP Website",
-    "description": "This is a REST API application made with Express and documented with Swagger"
+    "description": "This is a REST API application made by ZDiDane for SHOP Website. \n\nIf you want to use this API, please get csrfToken first, then add csrfToken to header of request. \n\nIf you want to use API for Admin, please add bearAuth to header of request.",
+    "contact": {
+      "name": "ZDiDane",
+      "email": "didannguyen17@gmail.com",
+      "url": "https://didan.id.vn"
+    }
   },
   "servers": [
     {
@@ -21,23 +26,36 @@
   ],
   "tags": [
     {
-      "name": "User",
-      "description": "API for User in the system"
+      "name": "Auth",
+      "description": "API for Auth in the system"
     },
     {
       "name": "Admin",
       "description": "API for Admin in the system"
     },
     {
-      "name": "Payment",
-      "description": "API for Payment in the system"
+      "name": "User",
+      "description": "API for User in the system"
     },
     {
-      "name": "Auth",
-      "description": "API for Auth in the system"
+      "name": "Payment",
+      "description": "API for Payment in the system"
     }
   ],
   "paths": {
+    "/csrf-token": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to get CSRF token.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
         "tags": [
@@ -61,6 +79,11 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "csrfToken": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -89,7 +112,13 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "csrfToken": [],
+            "bearAuth": []
+          }
+        ]
       }
     },
     "/signup": {
@@ -109,6 +138,11 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "csrfToken": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -141,6 +175,11 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "csrfToken": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -203,6 +242,11 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "csrfToken": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -211,19 +255,6 @@
                 "$ref": "#/components/schemas/UpdatePassword"
               }
             }
-          }
-        }
-      }
-    },
-    "/csrf-token": {
-      "get": {
-        "tags": [
-          "Auth"
-        ],
-        "description": "Endpoint to get CSRF token.",
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -251,6 +282,12 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "csrfToken": [],
+            "bearAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -317,7 +354,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearAuth": []
+          }
+        ]
       }
     },
     "/admin/edit-product/{productID}": {
@@ -365,7 +407,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearAuth": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -415,6 +462,12 @@
             "description": "Internal Server Error"
           }
         },
+        "security": [
+          {
+            "csrfToken": [],
+            "bearAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -483,7 +536,13 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "csrfToken": [],
+            "bearAuth": []
+          }
+        ]
       }
     },
     "/": {
@@ -583,7 +642,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearAuth": []
+          }
+        ]
       }
     },
     "/cart/{productID}": {
@@ -616,7 +680,13 @@
           "404": {
             "description": "Not Found"
           }
-        }
+        },
+        "security": [
+          {
+            "csrfToken": [],
+            "bearAuth": []
+          }
+        ]
       }
     },
     "/delete-cart/{productID}": {
@@ -649,7 +719,13 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "csrfToken": [],
+            "bearAuth": []
+          }
+        ]
       }
     },
     "/orders": {
@@ -671,7 +747,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearAuth": []
+          }
+        ]
       }
     },
     "/add-order": {
@@ -693,7 +774,13 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "csrfToken": [],
+            "bearAuth": []
+          }
+        ]
       }
     },
     "/order/{orderId}": {
@@ -729,7 +816,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "bearAuth": []
+          }
+        ]
       }
     },
     "/payment/{userID}": {
@@ -767,6 +859,12 @@
             "description": "Forbidden"
           }
         },
+        "security": [
+          {
+            "csrfToken": [],
+            "bearAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -993,11 +1091,27 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearAuth": []
+          }
+        ]
       }
     }
   },
   "components": {
+    "securitySchemes": {
+      "csrfToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-CSRF-Token"
+      },
+      "bearAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
     "schemas": {
       "SignUp": {
         "type": "object",

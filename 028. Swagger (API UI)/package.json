@@ -25,6 +25,7 @@
   },
   "scripts": {
     "start": "nodemon server.js",
+    "swagger": "node ./api/swagger.js",
     "build": "npm i"
   },
   "name": "22.payment",

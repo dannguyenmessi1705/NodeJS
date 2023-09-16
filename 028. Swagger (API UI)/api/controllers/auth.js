@@ -25,11 +25,22 @@ const path = require("path"); // Nhập module path
 const User = require("../../models/users");
 const bcrypt = require("bcrypt");
 
+
+// {CSRF TOKEN} // Lấy token từ server và gửi về client (có token mới cho phép gửi request post, put, delete lên server)
+const getCsrfToken = (req, res, next) => {
+  /* #swagger.tags = ['Auth']
+     #swagger.description = 'Endpoint to get CSRF token.' */
+  res.json({ csrfToken: res.locals.csrfToken }); // Trả về token vừa tạo ở middleware
+};
+
 // LOGIN
 // {SESSION + COOKIES} // Đối với Session, phải tạo Session trước khi tạo Cookie
 const postAuth = async (req, res, next) => {
   /* #swagger.tags = ['Auth'] 
     #swagger.description = 'Endpoint to login.'
+    #swagger.security = [{
+      "csrfToken": []
+    }]
     #swagger.requestBody = {
       required: true,
       content: {
@@ -94,6 +105,10 @@ const postAuth = async (req, res, next) => {
 // LOGOUT => SESSION SẼ XOÁ
 const postLogout = async (req, res, next) => {
   /* #swagger.tags = ['Auth']
+      #swagger.security = [{
+      "csrfToken": [],
+      "bearAuth": []
+    }]
     #swagger.description = 'Endpoint to logout.' */
   try {
     req.session.destroy(() => {
@@ -108,6 +123,9 @@ const postLogout = async (req, res, next) => {
 const postSignup = async (req, res, next) => {
   /* #swagger.tags = ['Auth']
     #swagger.description = 'Endpoint to signup.'
+    #swagger.security = [{
+      "csrfToken": []
+    }]
     #swagger.requestBody = {
       required: true,
       content: {
@@ -180,6 +198,9 @@ const postSignup = async (req, res, next) => {
 const postReset = async (req, res, next) => {
   /* #swagger.tags = ['Auth']
      #swagger.description = 'Endpoint to reset password.'
+     #swagger.security = [{
+       "csrfToken": []
+    }]
      #swagger.requestBody = {
       required: true,
       content: {
@@ -281,6 +302,9 @@ const getUpdatePassword = async (req, res, next) => {
 const postUpdatePassword = async (req, res, next) => {
   /* #swagger.tags = ['Auth']
      #swagger.description = 'Endpoint to update password.'
+     #swagger.security = [{
+      "csrfToken": []
+    }]
      #swagger.requestBody = {
       required: true,
       content: {
@@ -344,12 +368,6 @@ const postUpdatePassword = async (req, res, next) => {
   }
 };
 
-// {CSRF TOKEN} // Lấy token từ server và gửi về client
-const getCsrfToken = (req, res, next) => {
-  /* #swagger.tags = ['Auth']
-     #swagger.description = 'Endpoint to get CSRF token.' */
-  res.json({ csrfToken: res.locals.csrfToken }); // Trả về token vừa tạo ở middleware
-};
 
 module.exports = {
   postAuth,

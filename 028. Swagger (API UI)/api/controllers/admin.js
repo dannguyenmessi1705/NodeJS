@@ -11,6 +11,10 @@ const { validationResult } = require("express-validator");
 const postProduct = async (req, res, next) => {
   /*#swagger.tags = ['Admin']
     #swagger.description = 'Endpoint to create a new product'
+    #swagger.security = [{
+      "csrfToken": [],
+      "bearAuth": []
+    }]
     #swagger.requestBody = {
       required: true,
       content: {
@@ -112,6 +116,9 @@ const postProduct = async (req, res, next) => {
 const getProduct = async (req, res, next) => {
   /*#swagger.tags = ['Admin']
     #swagger.description = 'Endpoint to get products'
+    #swagger.security = [{
+      "bearAuth": []
+    }]
     #swagger.parameters['page'] = {
       in: 'query',
       description: 'Page number',
@@ -160,6 +167,9 @@ const getProduct = async (req, res, next) => {
 const getEditProduct = async (req, res, next) => {
   /*#swagger.tags = ['Admin']
     #swagger.description = 'Endpoint to get edit product'
+    #swagger.security = [{
+      "bearAuth": []
+    }]
     #swagger.parameters['edit'] = {
       in: 'query',
       description: 'Edit product',
@@ -210,6 +220,10 @@ const getEditProduct = async (req, res, next) => {
 const postEditProduct = async (req, res, next) => {
   /*#swagger.tags = ['Admin']
     #swagger.description = 'Endpoint to update product'
+    #swagger.security = [{
+      "csrfToken": [],
+      "bearAuth": []
+    }]
     #swagger.requestBody = {
       required: true,
       content: {
@@ -333,6 +347,10 @@ const postEditProduct = async (req, res, next) => {
 const deleteProduct = async (req, res, next) => {
   /*#swagger.tags = ['Admin']
     #swagger.description = 'Endpoint to delete product'
+    #swagger.security = [{
+      "csrfToken": [],
+      "bearAuth": []
+    }]
     #swagger.parameters['productID'] = {
       in: 'path',
       description: 'Product ID',

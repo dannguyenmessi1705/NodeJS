@@ -14,6 +14,10 @@ const config = {
 const getPayment = (req, res, next) => {
   /* #swagger.tags = ['Payment']
       #swagger.description = 'Endpoint direct to VNPAY payment website' 
+      #swagger.security = [{
+        "csrfToken": [],
+        "bearAuth": []
+    }]
       #swagger.parameters['userID'] = {
           in: 'path',
           description: 'ID of user',
@@ -93,6 +97,9 @@ const getPayment = (req, res, next) => {
 const VNPayReturn = async (req, res, next) => {
   /* #swagger.tags = ['Payment']
      #swagger.description = 'Endpoint return from VNPAY payment website'
+     #swagger.security = [{
+      "bearAuth": []
+    }]
       #swagger.parameters['vnp_SecureHash'] = {
           in: 'query',
           description: 'Secure Hash from VNPAY',
