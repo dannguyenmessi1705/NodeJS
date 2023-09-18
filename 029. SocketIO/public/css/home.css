@@ -57,7 +57,7 @@ form {
 }
 
 .card__actions-dan {
-  padding: 1rem;
+  padding: 0rem 1rem 1rem 1rem;
   text-align: center;
 }
 
@@ -88,3 +88,28 @@ form {
   background-color: #00695c;
   color: white;
 }
+
+.float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #00b779;
+  color: #FFF;
+  font-size: 30px;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
+  z-index: 100;
+}
+
+.float:hover {
+  background-color: #054605;
+  color: #FFF;
+}
+
+.my-float {
+  margin-top: 15px;
+}
+

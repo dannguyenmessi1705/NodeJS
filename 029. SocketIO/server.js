@@ -116,11 +116,11 @@ mongoose
     const server = app.listen(3000);
     // {SOCKET.IO} //
     const io = require("./util/socket").init(server); // Khởi tạo socket.io và lưu vào biến io, sẽ được khởi tạo ở file server.js
+    console.log("Connected!");
     io.on("connection", (socket) => {
       // Khi có 1 client kết nối đến server thì sẽ chạy hàm này với biến socket là 1 object chứa các thông tin của client
       console.log("Client connected!");
     });
-    console.log("Connected!");
   }) // Kết nối với database, sau đó mới chạy server
   .catch((err) => {
     console.log(err);
