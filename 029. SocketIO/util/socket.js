@@ -2,7 +2,8 @@ let io; // Tạo biến io để lưu socket
 module.exports = {
   init: (httpServer) => {
     // httpServer là server được tạo ở file server.js (VD như app.listen(3000))
-    io = require("socket.io")(httpServer); // Khởi tạo socket.io và lưu vào biến io, sẽ được khởi tạo ở file server.js
+    const { Server } = require("socket.io"); // Nhập module socket.io
+    const io = new Server(httpServer); // Khởi tạo socket.io và lưu vào biến io, sẽ được khởi tạo ở file server.js
     return io; // Trả về biến io
   },
   getIO: () => {

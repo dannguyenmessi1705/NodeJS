@@ -1,13 +1,16 @@
 Source code lấy từ folder 28. Swagger (API UI)
 Folder 29. Socket IO nói về Socket IO - Ứng dụng vào các hoạt động realtime như chat, game, ...
+Trong bài này ta sẽ ứng dụng để làm realtime chat giữa các user
+
 -> Sử dụng module socket.io để tạo ra các socket kết nối giữa client và Server
     Bên server sử dụng module socket.io để tạo ra các socket kết nối giữa client và Server
 -> Sử dụng module socket.io-client để tạo ra các socket kết nối giữa client và Server
     Bên client sử dụng module socket.io-client để tạo ra các socket kết nối giữa client và server
 
 - Các phương thức kết nối của socket-io
-  => socket.emit('event', data) : gửi dữ liệu từ client lên server
-  => socket.on('event', function(data){}) : nhận dữ liệu từ server gửi xuống client
+  => socket.emit('event', data) : gửi dữ liệu từ client lên server và ngược lại
+  => socket.on('event', function(data){}) : nhận dữ liệu từ server gửi xuống client và ngược lại
+  => "event" : tên của sự kiện, không được trùng với các sự kiện có sẵn của socket-io (disconnect, connect, reconnect, ...)
   => socket.broadcast.emit() : gửi dữ liệu từ server xuống tất cả các client, ngoại trừ client gửi dữ liệu lên server
   => io.sockets.emit() : gửi dữ liệu từ server xuống tất cả các client, bao gồm client gửi dữ liệu lên server 
   => socket.broadcast.to('room').emit() : gửi dữ liệu từ server xuống tất cả các client trong room, ngoại trừ client gửi dữ liệu lên server
@@ -29,6 +32,11 @@ Folder 29. Socket IO nói về Socket IO - Ứng dụng vào các hoạt động
   => socket.on('message', function(){}) : xử lý khi client nhận được tin nhắn
   => socket.on('anything', function(){}) : xử lý khi client nhận được bất kỳ sự kiện nào
   
+!!!! CHÚ Ý
+  => socket là 1 biến toàn cục, có thể sử dụng ở bất kỳ đâu trong ứng dụng
+    + socket được tạo ra khi có 1 kết nối giữa client và server, dùng để truyền dữ liệu giữa client kết nối tới server
+  => io là 1 biến toàn cục, có thể sử dụng ở bất kỳ đâu trong ứng dụng
+    + io được tạo ra khi có 1 kết nối giữa client và server, dùng để truyền dữ liệu giữa tất cả các client kết nối tới server
 1, Tạo file kết nối socket server-client ("util/socket.js")
 2, Thực hiện khởi tạo kết nối socket server-client ("server.js")
 

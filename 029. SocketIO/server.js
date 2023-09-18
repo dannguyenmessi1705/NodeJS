@@ -118,8 +118,13 @@ mongoose
     const io = require("./util/socket").init(server); // Khởi tạo socket.io và lưu vào biến io, sẽ được khởi tạo ở file server.js
     console.log("Connected!");
     io.on("connection", (socket) => {
+      // socket là 1 object chứa các thông tin của client
       // Khi có 1 client kết nối đến server thì sẽ chạy hàm này với biến socket là 1 object chứa các thông tin của client
       console.log("Client connected!");
+      socket.on("disconnect", () => {
+        // Khi client disconnect thì sẽ chạy hàm này
+        console.log("Client disconnected!");
+      });
     });
   }) // Kết nối với database, sau đó mới chạy server
   .catch((err) => {
@@ -149,7 +154,6 @@ app.use(async (req, res, next) => {
     next(err);
   }
 });
-
 
 // {ROUTE SERVER SIDE} //
 const authRoute = require("./routes/auth");
