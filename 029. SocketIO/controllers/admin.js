@@ -76,6 +76,8 @@ const postProduct = async (req, res, next) => {
       userId,
     });
     const result = await product.save();
+    const io = require("../util/socket").getIOServer(); // Lấy biến io của Server để sử dụng ở các file khác
+    io.emit("product", { action: "create", product: result }); // Gửi socket về máy khách
     if (result) {
       console.log("Created Product");
       res.redirect("/admin/product");
