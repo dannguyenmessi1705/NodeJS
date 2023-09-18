@@ -387,4 +387,4 @@ Conclusion
 
 5. Kiểm tra: Kiểm tra xem Nginx đã được cài đặt và cấu hình đúng bằng cách truy cập vào tên miền của bạn từ trình duyệt. Nếu mọi thứ được cấu hình đúng, yêu cầu sẽ được chuyển tiếp đến ứng dụng Node.js và bạn sẽ nhìn thấy kết quả trả về từ ứng dụng trên trình duyệt.
 
-Lưu ý: Trước khi tiến hành cấu hình Nginx, hãy đảm bảo rằng ứng dụng Node.js của bạn đang chạy trên cổng 3000 (hoặc cổng khác mà bạn đã chọn) và hoạt động đúng trên máy chủ của bạn.
+Lưu ý: Trước khi tiến hành cấu hình Nginx, hãy đảm bảo rằng, tên miền bạn mua đã trỏ về đúng IP Server Linux (thêm dns A) ứng dụng Node.js của bạn đang chạy trên cổng 3000 (hoặc cổng khác mà bạn đã chọn) và hoạt động đúng trên máy chủ của bạn.
