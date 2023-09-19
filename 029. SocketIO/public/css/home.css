@@ -113,3 +113,23 @@ form {
   margin-top: 15px;
 }
 
+/* Hide the scrollbar */
+::-webkit-scrollbar {
+  width: 0.5rem; /* Adjust this width to fit your design */
+}
+
+/* Track (the gray area) */
+::-webkit-scrollbar-track {
+  background: transparent; /* Make it transparent */
+}
+
+/* Handle (the part you drag) */
+::-webkit-scrollbar-thumb {
+  background: transparent; /* Make it transparent */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: transparent; /* Make it transparent */
+}
+

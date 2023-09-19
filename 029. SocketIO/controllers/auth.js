@@ -21,7 +21,7 @@ const rootPath = require("../util/path"); // Nhập đường dẫn tuyệt đ�
 const path = require("path"); // Nhập module path
 
 const User = require("../models/users");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 // LOGIN
 // {SESSION + COOKIES} // Đối với Session, phải tạo Session trước khi tạo Cookie

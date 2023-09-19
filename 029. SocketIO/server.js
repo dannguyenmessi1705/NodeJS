@@ -164,12 +164,14 @@ const authRoute = require("./routes/auth");
 const adminRoute = require("./routes/admin");
 const personRoute = require("./routes/user");
 const paymentRoute = require("./routes/payment");
+const chatRoute = require("./routes/chat");
 const errorRoute = require("./routes/error");
 app.use("/admin", adminRoute);
 app.use(personRoute);
 // {LOGIN ROUTE} //
 app.use(authRoute);
 app.use(paymentRoute);
+app.use(chatRoute);
 
 // {SWAGGER API} //
 const swaggerUi = require("swagger-ui-express");

@@ -19,7 +19,6 @@ const getIndex = (req, res, next) => {
   res.render("./user/index", {
     // Render ra dữ liệu, đồng thời trả về các giá trị động cho file index.ejs
     title: "Home",
-    items: products,
     path: "/",
     successLogin: successLogin, // Truyền giá trị Flash vào biến successLogin để hiển thị thông báo
   });
@@ -335,6 +334,7 @@ const getInvoice = (req, res, next) => {
       next(error); // Trả về lỗi
     });
 };
+
 
 module.exports = {
   getIndex,
