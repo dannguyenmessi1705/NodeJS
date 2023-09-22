@@ -6,6 +6,7 @@ Trong bài này ta sẽ ứng dụng để làm realtime chat giữa các user
     Bên server sử dụng module socket.io để tạo ra các socket kết nối giữa client và Server
 -> Sử dụng module socket.io-client để tạo ra các socket kết nối giữa client và Server
     Bên client sử dụng module socket.io-client để tạo ra các socket kết nối giữa client và server
+-> Sử dụng socket ở những nơi ngay khi dữ liệu thay đổi 
 
 - Các phương thức kết nối của socket-io
   => socket.emit('event', data) : gửi dữ liệu từ client lên server và ngược lại
@@ -39,6 +40,8 @@ Trong bài này ta sẽ ứng dụng để làm realtime chat giữa các user
     + io được tạo ra khi có 1 kết nối giữa client và server, dùng để truyền dữ liệu giữa tất cả các client kết nối tới server
 1, Tạo file kết nối socket server-client ("util/socket.js")
 2, Thực hiện khởi tạo kết nối socket server-client ("server.js")
+3, Test kết nối socket server-client ("testSocketConnetion.js")
+4, Gửi chat thực hiện khởi tạo kết nối socket server-client ("./views/user/chat.ejs")
 
 
 

@@ -247,7 +247,7 @@ const postReset = (req, res, next) => {
           const token = buffer.toString("hex"); // Chuyển buffer thành chuỗi hex
           user.resetPasswordToken = token; // Lưu token vào user
           user.resetPasswordExpires = Date.now() + 600000; // Lưu thời gian hết hạn của token vào user (10 phút)
-          const http = req.protocol + "://" + req.get("host"); // Lấy đường dẫn trang mặc định (http://localhost:3000/)
+          const http = req.protocol + "://" + req.get("host"); // Lấy đường dẫn trang mặc định (http://localhost:3000)
           return user // Lưu user
             .save()
             .then(() => {

@@ -88,6 +88,7 @@ const getDetail = async (req, res, next) => {
       title: "Product Detail",
       path: "/product",
       item: product,
+      userId: req.user._id,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error" });

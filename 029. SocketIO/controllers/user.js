@@ -71,6 +71,7 @@ const getDetail = (req, res, next) => {
         title: "Product Detail",
         path: "/product",
         item: product,
+        userId: req.user._id,
       });
     })
     .catch((err) => {

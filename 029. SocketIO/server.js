@@ -115,7 +115,7 @@ mongoose
   .then(() => {
     const server = app.listen(3000);
     // {SOCKET.IO} //
-    const io = require("./util/socket").initServer(server); // Khởi tạo socket.io và lưu vào biến io, sẽ được khởi tạo ở file server.js
+    const io = require("./util/socket").init(server); // Khởi tạo socket.io và lưu vào biến io, sẽ được khởi tạo ở file server.js
     console.log("Connected!");
     io.on("connection", (socket) => {
       // socket là 1 object chứa các thông tin của client
@@ -192,12 +192,12 @@ app.use("/api", paymentRouteAPI);
 // Phải đặt các route lỗi ở cuối cùng
 app.use(errorRoute);
 
-// {ERROR MIDDLEWARE} // (Phải đặt ở cuối cùng) // Nếu không có lỗi thì sẽ chạy qua các middleware trước, nếu có lỗi thì sẽ chạy qua middleware này
-app.use((err, req, res, next) => {
-  res.status(500).render("500", {
-    title: "Server maintenance",
-    path: "/500",
-    authenticate: req.session.isLogin, // Vì đây là trang lỗi được ưu tiên thực hiện trước các route khác nên chưa có session, nên phải truyền biến authenticate vào để sử dụng ở header
-  });
-});
-/// !!! Lưu ý: Nếu có lỗi thì phải truyền lỗi vào next() để nó chạy qua middleware này, nếu không thì nó sẽ chạy qua các middleware tiếp theo mà không có lỗi
+// // {ERROR MIDDLEWARE} // (Phải đặt ở cuối cùng) // Nếu không có lỗi thì sẽ chạy qua các middleware trước, nếu có lỗi thì sẽ chạy qua middleware này
+// app.use((err, req, res, next) => {
+//   res.status(500).render("500", {
+//     title: "Server maintenance",
+//     path: "/500",
+//     authenticate: req.session.isLogin, // Vì đây là trang lỗi được ưu tiên thực hiện trước các route khác nên chưa có session, nên phải truyền biến authenticate vào để sử dụng ở header
+//   });
+// });
+// /// !!! Lưu ý: Nếu có lỗi thì phải truyền lỗi vào next() để nó chạy qua middleware này, nếu không thì nó sẽ chạy qua các middleware tiếp theo mà không có lỗi
