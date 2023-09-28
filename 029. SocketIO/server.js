@@ -138,6 +138,7 @@ mongoose
 // {MIDDLEWARE PHÂN QUYỀN DÙNG SESSION} //
 app.use(async (req, res, next) => {
   if (!req.session?.user) {
+    res.locals.userId = undefined; // Truyền biến user vào locals để sử dụng ở tất cả các route
     // Nếu không có session user thì return next() để chạy các middleware tiếp theo mà không có phân quyền
     return next();
   }
@@ -145,10 +146,13 @@ app.use(async (req, res, next) => {
     const user = await User.findById(req.session.user._id); // Tìm kiếm user trong collection users có id trùng với id của session user
     // Nếu ko tìm thấy user => chuyển hướng mà không có phân quyền
     if (!user) {
+      res.locals.userId = undefined; // Truyền biến user vào locals để sử dụng ở tất cả các route
       next();
     }
     // Nếu tìm thấy user thì lưu vào req.user
     req.user = new User(user); // Lưu lại user vào request để sử dụng ở các middleware tiếp theo (không cần dùng new User vì user đã là object rồi, có thể dùng các method của mongoose cũng như từ class User luôn )
+    res.locals.userId = req.session.user._id.toString(); // Truyền biến user vào locals để sử dụng ở tất cả các route
+    res.locals.username = req.session.user.username; // Truyền biến user vào locals để sử dụng ở tất cả các route
     // Tuy nhiên, Ko cần req.user nữa vì dùng session rồi (biến user sẽ lưu vào req.session.user)
     next(); // Tiếp tục chạy các middleware tiếp theo với phân quyền
   } catch (err) {
@@ -192,12 +196,12 @@ app.use("/api", paymentRouteAPI);
 // Phải đặt các route lỗi ở cuối cùng
 app.use(errorRoute);
 
-// {ERROR MIDDLEWARE} // (Phải đặt ở cuối cùng) // Nếu không có lỗi thì sẽ chạy qua các middleware trước, nếu có lỗi thì sẽ chạy qua middleware này
-app.use((err, req, res, next) => {
-  res.status(500).render("500", {
-    title: "Server maintenance",
-    path: "/500",
-    authenticate: req.session.isLogin, // Vì đây là trang lỗi được ưu tiên thực hiện trước các route khác nên chưa có session, nên phải truyền biến authenticate vào để sử dụng ở header
-  });
-});
-/// !!! Lưu ý: Nếu có lỗi thì phải truyền lỗi vào next() để nó chạy qua middleware này, nếu không thì nó sẽ chạy qua các middleware tiếp theo mà không có lỗi
+// // {ERROR MIDDLEWARE} // (Phải đặt ở cuối cùng) // Nếu không có lỗi thì sẽ chạy qua các middleware trước, nếu có lỗi thì sẽ chạy qua middleware này
+// app.use((err, req, res, next) => {
+//   res.status(500).render("500", {
+//     title: "Server maintenance",
+//     path: "/500",
+//     authenticate: req.session.isLogin, // Vì đây là trang lỗi được ưu tiên thực hiện trước các route khác nên chưa có session, nên phải truyền biến authenticate vào để sử dụng ở header
+//   });
+// });
+// /// !!! Lưu ý: Nếu có lỗi thì phải truyền lỗi vào next() để nó chạy qua middleware này, nếu không thì nó sẽ chạy qua các middleware tiếp theo mà không có lỗi
