@@ -1,0 +1,50 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <section data-aos="fade-down" data-aos-delay="500" class="position-relative py-4 py-xl-5">
+        <% if(error) { %> 
+            <div class="alert alert-danger shake animated d-inline-block pb-2 text-center mx-auto fw-bold text-danger">
+                <%= error %>
+            </div>
+        <% } %>
+        <!-- Nếu editing = true => Edit, ngược lại là ADD -->
+        <div class="container position-relative">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4" style>
+                    <div class="card mb-5">
+                        <div class="card-body p-sm-5">
+                            <h2 class="text-center mb-4"><%if(editing){%>Edit Product<%}else{%>Add Product<%}%></h2>
+                            <form method="post" action="/admin/<%if(editing){%>edit-product<%}else{%>add-product<%}%>" enctype="multipart/form-data">
+                                <!-- TOKEN CSRF -->
+                                <input type="hidden" name="_csrf" value="<%=csrfToken%>">
+                                <div class="mb-3">
+                                    <input id="name" class="form-control border-3 <%=errorType === 'name' ? 'border-danger' : ''%>" type="text" name="name" placeholder="Name" autocomplete="on" value="<%if(editing){%><%=item.name%><%}else{%><%=oldInput.name%><%}%>"/>
+                                </div>
+                                <div class="mb-3">
+                                    <input id="price" class="form-control border-3 <%=errorType === 'price' ? 'border-danger' : ''%>" type="number" step="0.01" name="price" placeholder="Price" autocomplete="on" value="<%if(editing){%><%=item.price%><%}else{%><%=oldInput.price%><%}%>"/>
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control form-control-file" type="file" name="image" id="image">
+                                </div>
+                                <div class="mb-3">
+                                    <input id="price" class="form-control border-3 <%=errorType === 'quantity' ? 'border-danger' : ''%>" type="number" name="quantity" placeholder="Quantity" autocomplete="on" value="<%if(editing){%><%=item.quantity%><%}else{%><%=oldInput.quantity%><%}%>"/>
+                                </div>
+                                <div class="mb-3">
+                                    <textarea id="description" class="form-control border-3 <%=errorType === 'description' ? 'border-danger' : ''%>" name="description" rows="4" placeholder="Description" autocomplete="on" spellcheck="true" wrap="soft"><%if(editing){%><%=item.description%><%}else{%><%=oldInput.description%><%}%></textarea>
+                                </div>
+                                        <!-- UPDATE PRODUCT -->
+                                <%if(editing){%>
+                                    <input type="hidden" value="<%=item._id%>" name="id">
+                                <%}%>
+                                <div>
+                                    <button class="btn btn-outline-success d-block w-100" type="submit"><%if(editing){%>Update Product<%}else{%>Add Product<%}%></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<%- include('../includes/end.ejs') %>

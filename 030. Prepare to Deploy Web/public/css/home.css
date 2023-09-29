@@ -1,0 +1,96 @@
+form {
+  display: inline;
+}
+
+.card-dan {
+  width: 25rem;
+  max-width: 95%;
+}
+
+
+.card__image-dan {
+  width: 100%;
+  display: contents;
+}
+
+.card__image-dan img {
+  width: 55%;
+}
+
+.card__actions-dan {
+  padding: 0rem 1rem 1rem 1rem;
+  text-align: center;
+}
+
+.card__actions-dan button,
+.card__actions-dan a {
+  margin: 0 0.25rem;
+}
+
+.pagination-dan {
+  margin-top: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+}
+
+.btn-dan {
+  font: inherit;
+  border: 1px solid #00695c;
+  color: #00695c;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-dan:hover,
+.btn-dan:active {
+  background-color: #00695c;
+  color: white;
+}
+
+.float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #00b779;
+  color: #FFF;
+  font-size: 30px;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
+  z-index: 100;
+}
+
+.float:hover {
+  background-color: #054605;
+  color: #FFF;
+}
+
+.my-float {
+  margin-top: 15px;
+}
+
+/* Hide the scrollbar */
+::-webkit-scrollbar {
+  width: 0.5rem; /* Adjust this width to fit your design */
+}
+
+/* Track (the gray area) */
+::-webkit-scrollbar-track {
+  background: transparent; /* Make it transparent */
+}
+
+/* Handle (the part you drag) */
+::-webkit-scrollbar-thumb {
+  background: transparent; /* Make it transparent */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: transparent; /* Make it transparent */
+}
+
