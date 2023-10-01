@@ -1,15 +1,11 @@
 Source code lấy từ folder 29. SocetIO
 Folder 30. Prepare to Deploy Web: Chuẩn bị các thứ cần thiết để deploy web
--> Bảo mật các biến môi trường, các API key, các thông tin nhạy cảm
+-> Bảo mật các biến môi trường, các API key, các thông tin nhạy cảm (module dotenv) "server.js", ".env", ".gitignore", "middleware", "controllers"
 -> Giảm thiểu việc hiển thị các lỗi trên web (Đã làm ở bước 18. Error Handling) cho người dùng
--> Thiết lập bảo mật các respond header: để tránh bị tấn công bởi hacker
--> Cài đặt logrotate để quản lý các file log
--> Sử dụng TLS/SSL để mã hóa dữ liệu trên đường truyền (Dùng free của cloudflare)
--> Có thể nén các file static để tăng tốc độ load web
--> Có thể tạo file robots.txt để hạn chế việc truy cập của các bot
--> Có thể tạo file sitemap.xml để giúp các bot tìm kiếm các trang web của bạn
--> Có thể tạo file humans.txt để giới thiệu về người tạo ra trang web
--> Có thể tạo file ads.txt để giúp các nhà quảng cáo tìm kiếm thông tin về trang web
+-> Thiết lập bảo mật các respond header: để tránh bị tấn công bởi hacker (module helmet) "server.js"
+-> Có thể nén các file static để tăng tốc độ load web (module compression) "server.js"
+-> Cài đặt logger để quản lý các file log (module morgan) "server.js"
+-> Sử dụng TLS/SSL để mã hóa dữ liệu trên đường truyền (Dùng free của cloudflare hoặc tự tạo băng openssl) "server.js"
 -> Thiết lập Nginx để trỏ tới một tên miền và chuyển tiếp yêu cầu đến một ứng dụng Node.js (ở cuối)
 
 
