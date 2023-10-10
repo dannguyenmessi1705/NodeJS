@@ -1,0 +1,17 @@
+Tronng folder này nói về cách dùng Typescrpit
+-> Typescript là ngôn ngữ lập trình phía client, nó là một superset của javascript, 
+nó được biên dịch sang javascript để chạy được trên trình duyệt
+-> Typescript giúp chúng ta viết code dễ hơn, dễ hiểu hơn, dễ bảo trì hơn, dễ mở rộng hơn
+vì typescript có định nghĩa kiểu dữ liệu, có class, có interface, có enum, có module, có namespace, có generic, 
+có decorator, có async await, có arrow function, có for of, có let const, có template string, có spread operator, 
+có destructuring, có default parameter, có optional parameter, có rest parameter, có default parameter, 
+có optional parameter, có rest parameter, có string literal type, có union type, có intersection type, 
+có type alias, có type guard, có type assertion, có type inference, có type compatibility, có type query, 
+có type reflection, có type erasure, có type widening, có type narrowing, có type predicate, có type index, 
+có type mapping, có type conditional, có type template, có type lookup, có type recursive, có type polymorphism
+
+1, Cài đặt Typescript (npm install -g typescript)
+2, Biên dịch typescript sang javascript (tsc <tên file>.ts)
+3, Chạy file javascript (node <tên file>.js)
+4, Các loại kiểu trong Typescript: boolean, number, string, array, tuple, enum, any, void, null, undefined, never, object
+

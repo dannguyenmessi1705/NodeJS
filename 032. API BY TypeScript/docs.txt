@@ -1,0 +1,38 @@
+Folder 032. API By Typescript nói về việc tạo API bằng Typescript
+Để Typescript nhận ra được các cú pháp từ thư viện Express, ta cần cài đặt các thư viện sau:
+    npm install {module}
+    npm install --save-dev @types/{module} // thư viện này để Typescript nhận ra các cú pháp từ Express
+Ngoài ra cần chỉnh sửa file tsconfig.json như sau (tsc --init):
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true
+    }
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+Trong đó:
+    - target: phiên bản Javascript mà Typescript sẽ chuyển đổi sang
+    - module: phiên bản module mà Typescript sẽ chuyển đổi sang
+    - outDir: thư mục chứa các file Javascript sau khi chuyển đổi
+    - rootDir: thư mục chứa các file Typescript
+    - strict: kiểm tra các cú pháp trong Typescript
+    - esModuleInterop: chuyển đổi các module sang ES6
+    - skipLibCheck: bỏ qua các thư viện kiểm tra
+    - forceConsistentCasingInFileNames: kiểm tra tên file
+    - include: thư mục chứa các file Typescript
+    - exclude: thư mục bỏ qua
+
+Cú pháp biên dịch: "tsc && node dist/index.js"
+    - tsc: biên dịch các file Typescript
+    - node dist/index.js: chạy file Javascript
+
+Trong Typescript, việc import các thư viện phải sử dụng cấu trúc ES Module, không dùng Import (vì Typescript là ngôn ngữ ở browser, client side)
