@@ -1,0 +1,5 @@
+{
+    "exec": "tsc && node dist/server.js",
+    "watch": ["src"],
+    "ext": "ts"
+}

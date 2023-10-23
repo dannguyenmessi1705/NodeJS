@@ -1,0 +1,63 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <section data-aos="fade" class="bg-dark-subtle shadow-sm py-4">
+        <div class="container py-2 d-flex align-items-center justify-content-center">
+            <div data-reflow-type="product" data-bss-dynamic-product data-bss-dynamic-product-param="product">
+                <div class="bg-light-subtle d-flex flex-column flex-md-row align-items-center justify-content-center p-1 m-1 border rounded-3 shadow-lg">
+                    <div class="ref-media my-2">
+                        <div class="w-100 ref-preview">
+                            <img class="w-100 ref-image active px-4 m-auto" src="/<%=item.url%>" data-reflow-preview-type="image" />
+                        </div>
+                    </div>
+                    <div class="ref-product-data px-4">
+                        <h2 class="ref-name"><%= item.name %></h2>
+                        <div class="ref-categories">
+                            <span class="ref-category"></span>
+                        </div>
+                        <strong class="ref-price ref-on-sale fs-3">
+                            <s class="ref-original-price"></s>$<%= item.price %>
+                        </strong>
+                            <div class="reflow-add-to-cart my-2 d-flex flex-row justify-content-center align-items-center">
+                                <!-- POST CHAT -->
+                                <!-- Nếu chưa đăng nhập hoặc đây không phải là sản phẩm chính acc này tạo ra thì mới hiện chat -->
+                                <% if (!userID || item.userId.toString() !== userID.toString()) { %> 
+                                <form action="<%if(authenticate){%>/chat<%}else{%>/login<%}%>" method="<%if(authenticate){%>POST<%}else{%>GET<%}%>"> 
+                                    <!-- TOKEN CSRF -->
+                                    <%if(authenticate){%>
+                                        <input type="hidden" name="_csrf" value="<%=csrfToken%>">
+                                        <input type="hidden" name="id" value="<%= item._id %>" > 
+                                        <input type="hidden" name="url" value="<%= item.url %>" > 
+                                        <input type="hidden" name="sender" value="<%= userID %>" > 
+                                        <input type="hidden" name="receiver" value="<%= item.userId %>" > 
+                                    <%}%>
+                                        <button class="btn btn-primary mx-1" type="submit">Chat</button>
+                                    <!-- thẻ input được ẩn nhằm mục đích chỉ lấy id cua sản phẩm để đưa vào POST trong controller  -->
+                                </form>
+                                <% } %>
+                                <!-- POST CART  -->
+                                <%- include('../includes/addCart.ejs', {item: item}) %>
+                            </div>
+                        <div class="ref-description my-4"><%= item.description %></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <style>
+        .ref-preview {
+            position: relative;
+            width: 480px;
+            height: 300px;
+            overflow: hidden;
+        }
+        
+        .ref-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+<%- include('../includes/end.ejs') %>

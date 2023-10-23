@@ -13,12 +13,6 @@ Ngoài ra cần chỉnh sửa file tsconfig.json như sau (tsc --init):
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true
     }
-    "include": [
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
 Trong đó:
     - target: phiên bản Javascript mà Typescript sẽ chuyển đổi sang
     - module: phiên bản module mà Typescript sẽ chuyển đổi sang
