@@ -1,26 +1,33 @@
+const { loginFtp, logoutFtp } = require("../utils/ftpConfig");
+
 const postLogin = (req, res) => {
   try {
     const { username, password } = req.body;
-    const ftpOptions = {
-      host: process.env.FTP_HOST || "localhost",
-      port: process.env.FTP_PORT || 21,
-      user: username,
-      password: password,
-    };
-    const ftp = require("ftp");
-    const client = new ftp();
-    client.on("ready", () => {
-      console.log("FTP login successful");
-      res.cookie("ftpConnection", "aaaa", {sign: true});
-      res.status(200).json({ message: "FTP login successful" });
+    loginFtp({ username, password }, (err, client) => {
+      if (err) {
+        res.status(401).json({ message: "Invalid username or password" });
+      } else {
+        req.session.username = username;
+        req.session.password = password;
+        req.session.save(() => {
+          console.log("FTP login successful");
+          res.status(200).json({ message: "FTP login successful" });
+          client.end();
+        });
+      }
     });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-    client.on("error", (err) => {
-      console.error("FTP login error:", err);
-      res.status(401).json({ message: "Invalid username or password" });
+const postLogout = (req, res) => {
+  try {
+    const { client } = req.session;
+    logoutFtp(client);
+    req.session.destroy(() => {
+      res.status(200).json({ message: "FTP logout successful" });
     });
-
-    client.connect(ftpOptions);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -28,4 +35,5 @@ const postLogin = (req, res) => {
 
 module.exports = {
   postLogin,
+  postLogout,
 };

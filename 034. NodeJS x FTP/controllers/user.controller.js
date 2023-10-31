@@ -1,36 +1,64 @@
 const fs = require("fs");
-
+const { loginFtp, logoutFtp } = require("../utils/ftpConfig");
 const showList = (req, res) => {
   try {
-    const client = req.ftpConnection;
-    console.log(client);
-    client.list((err, list) => {
+    const username = req.username;
+    const password = req.password;
+    loginFtp({ username, password }, (err, client) => {
       if (err) {
-        console.log("FTP list error:", err);
-        res.status(500).json({ message: "Error retrieving FTP listing" });
+        console.log("FTP login error:", err);
+        res.status(500).json({ message: "Error connecting to FTP Server" });
         return;
+      } else {
+        client.list((err, list) => {
+          if (err) {
+            console.log("FTP list error:", err);
+            res.status(500).json({ message: "Error retrieving FTP listing" });
+            return;
+          }
+          client.end();
+          const folders = [];
+          const files = [];
+          list.forEach((item) => {
+            if (item.type === "d") {
+              folders.push({
+                name: item.name,
+              });
+            } else if (item.type === "-") {
+              files.push({
+                name: item.name,
+              });
+            }
+          });
+          res.status(200).json({ folders, files });
+        });
       }
-      client.end();
-      const folders = [];
-      const files = [];
-      list.forEach((item) => {
-        if (item.type === "d") {
-          folders.push({
-            name: item.name,
-          });
-        } else if (item.type === "-") {
-          file.push({
-            name: item.name,
-          });
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const accessFile = (req, res) => {
+  try {
+    const username = req.username;
+    const password = req.password;
+    const remoteFilePath = req.params.remoteFilePath;
+    loginFtp({ username, password }, (err, client) => {
+      client.get(remoteFilePath, (err, stream) => {
+        if (err) {
+          console.log("FTP get error:", err);
+          res.status(500).json({ message: "Error retrieving file" });
+          return;
         }
+        stream.once("close", () => {
+          client.end();
+        });
+
+        stream.pipe(res);
       });
-      res.status(200).json({ folders, files });
+      client.end();
     });
-    client.on("error", (err) => {
-      console.log("FTP error: ", err);
-      res.status(500).json({ message: "Error connecting to FTP Server" });
-    });
-    client.connect();
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -38,19 +66,28 @@ const showList = (req, res) => {
 
 const uploadFile = (req, res) => {
   try {
+    const username = req.username;
+    const password = req.password;
     const remoteFilePath = req.params.remoteFilePath;
     const file = req.file;
     if (!file) {
       res.status(400).json({ message: "No file uploaded" });
     }
-    const client = req.ftpClient;
-    client.put(file.path, remoteFilePath, (err) => {
+    loginFtp({ username, password }, (err, client) => {
       if (err) {
-        console.error(err);
-        res.status(500).json({ message: "Internal server error" });
-      } else {
-        res.status(200).json({ message: "File uploaded" });
+        console.log("FTP login error:", err);
+        res.status(500).json({ message: "Error connecting to FTP Server" });
+        return;
       }
+      client.put(file.path, remoteFilePath, (err) => {
+        if (err) {
+          console.log("FTP put error:", err);
+          res.status(500).json({ message: "Error uploading file" });
+          return;
+        }
+        client.end();
+        res.status(200).json({ message: "File uploaded" });
+      });
       fs.unlinkSync(file.path);
     });
   } catch (error) {
@@ -60,5 +97,6 @@ const uploadFile = (req, res) => {
 
 module.exports = {
   showList,
+  accessFile,
   uploadFile,
 };
