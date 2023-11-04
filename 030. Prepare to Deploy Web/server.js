@@ -219,11 +219,13 @@ const authRouteAPI = require("./api/routes/auth");
 const adminRouteAPI = require("./api/routes/admin");
 const personRouteAPI = require("./api/routes/user");
 const paymentRouteAPI = require("./api/routes/payment");
+const chatRouteAPI = require("./api/routes/chat");
 app.use("/api", adminRouteAPI);
 app.use("/api", personRouteAPI);
 // {LOGIN ROUTE} //
 app.use("/api", authRouteAPI);
 app.use("/api", paymentRouteAPI);
+app.use("/api", chatRouteAPI);
 
 // Phải đặt các route lỗi ở cuối cùng
 app.use(errorRoute);

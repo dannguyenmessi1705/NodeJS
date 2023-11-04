@@ -4,6 +4,7 @@ const endpointsFiles = [
   "./api/routes/auth.js",
   "./api/routes/admin.js",
   "./api/routes/user.js",
+  "./api/routes/chat.js",
   "./api/routes/payment.js",
 ]; // Tạo file orders.js
 // Mặc định các đường dẫn tới file này phải trỏ từ thư mục gốc của project
@@ -46,6 +47,10 @@ const doc = {
     {
       name: "User",
       description: "API for User in the system",
+    },
+    {
+      name: "Chat",
+      description: "API for Chat in the system",
     },
     {
       name: "Payment",
